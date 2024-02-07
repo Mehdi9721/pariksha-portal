@@ -1,4 +1,4 @@
-# pariksha-portal
+# pariksha-portal 👔✨
 ## BY 3SD
 
 # Contribution Guid
