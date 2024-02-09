@@ -1,0 +1,96 @@
+HLD (High level Design)
+A- React
+1- Admin Panel:
+-> Login Page
+-> Admin Home
+-> Create Exam
+-> Upload Question Paper
+-> View Created Exams
+-> Add Student Details
+-> View Student Results
+
+2- Student Panel:
+-> Exam Page
+-> Student Login Form
+-> Warning Alerts (Tab switching, noise, unauthorized camera use)
+
+B- Backend (Spring Boot):
+1- Authentication and Authorization:
+-> Admin login
+-> Student login
+
+2- Exam Management:
+-> Create Exam
+-> Upload Question Paper
+-> Store Questions in Database
+-> Manage Exam Status (Completed or Ongoing)
+-> Student Management: -> Add Student Details
+-> Verify Student Credentials
+-> Monitor Live Exam Participation
+
+3- Result Management:
+-> Store Student Results
+-> View Student Results
+
+4- Real-time Monitoring:
+-> Track Active Exams
+-> Monitor Students' Activities (camera, microphone, tab-switching, noise detection)
+
+C- Database (MySQL):
+1- Tables:
+-> Admin (admin_id, password)
+-> Exams (exam_id, exam_name, exam_date, duration, subject_name, status)
+-> Questions (question_id, exam_id, question_text, option_A, option_B, option_C, option_D, correct_option)
+-> Students (student_prn, student_password)
+-> Exam_Participation (exam_id, student_prn, start_time, end_time, status)
+-> Results (exam_id, student_prn, score, status)
+
+Workflow:
+A-Admin Workflow:
+-> Log in to the admin panel.
+-> Create exams, upload question papers, and manage exam details.
+-> Add student details.
+-> Monitor live exams and view student results.
+
+B-Student Workflow:
+-> Log in to the student panel.
+-> Access the exam page on the specified date.
+-> Complete the exam by answering the questions.
+-> Allow camera and microphone access.
+-> Receive warnings for tab switching, noise, and unauthorized camera use.
+
+C-Real-time Monitoring:
+-> Admin can see the list of active exams and the number of students participating.
+-> Admin can view live camera feeds of students during the exam.
+
+Integration Points:
+A-Frontend-Backend Integration:
+-> React frontend communicates with Spring Boot backend through REST APIs.
+
+B- Database Integration:
+-> Spring Boot uses JPA to interact with the MySQL database to store and retrieve data.
+
+C- Real-time Monitoring Integration:
+-> WebSocket or a similar technology can be used for real-time communication between the frontend and backend to monitor live activities.
+
+D- External Libraries/Tools:
+-> Use libraries/tools for webcam and microphone access, tab-switching detection, and noise detection.
+
+Technologies:
+Frontend:
+ReactJS
+
+Backend:
+Spring Boot (Java)
+
+Database:
+MySQL
+
+Real-time Communication:
+WebSocket
+
+Security:
+HTTPS, JWT (JSON Web Tokens)
+
+External Libraries/Tools:
+Webcam and microphone access libraries, noise detection tools.
