@@ -2,7 +2,7 @@
 ## BY 3SD
 
 # Contribution Guid
-Setup Project in React and STS-4 <br>
+Setup Project in React (use [git pull --rebase origin master] then [push the changes to main]) <br>
 React used for frontend along with bootstrap for styling <br>
 ### For Setting VS Code
 install -> "axios": "^1.6.7" (npm install axios) <br>
