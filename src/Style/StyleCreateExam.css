@@ -1,0 +1,52 @@
+/* Add your custom styles here */
+
+.FormCreateExam {
+    max-width: 400px;
+    margin:10px 0 0 80px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: -10px 10px 1px rgba(0, 0, 0, 0.1);
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  
+  .FormCreateExam label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+   .FormCreateExam input,
+  textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+  
+  .FormCreateExam button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 90px;
+    height: 40px;
+  }
+  
+  .FormCreateExam button:hover {
+    background-color: #0056b3;
+  }
+  
+  p {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #888;
+  }
+  .AddStuTitle{
+    font-size: 20px;
+    font-weight: bold;
+     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+  
