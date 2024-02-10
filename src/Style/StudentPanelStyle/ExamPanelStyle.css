@@ -1,0 +1,77 @@
+.exam-panel {
+    width: 100%;
+    margin: auto;
+ 
+  }
+  
+  .header {
+    background-color: aqua;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .timer {
+    font-weight: bold;
+  }
+  
+  .question-list {
+    background-color: blue;
+    float: left;
+    margin-right: 20px;
+    width: 200px;
+    height: 300px;
+  }
+  
+  .question-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .question-list li {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    margin-bottom: 5px;
+  }
+  
+  .question-list li.active {
+    background-color: #007bff;
+  }
+  
+  .question-container {
+    background-color: cadetblue;
+    width: 100%;
+    height: 500px;
+    
+  }
+  
+  .answer-options {
+    margin-top: 10px;
+  }
+  
+  .option {
+    margin-bottom: 10px;
+  }
+  
+  .submit-button {
+    float: left;
+  }
+  .submit-button button{
+    width: 110px;
+    position: fixed;
+    bottom: 0;
+    margin-left: 6px;
+    margin-bottom: 5px;
+  }
+  .button-warning{
+    position: fixed;
+    bottom: 0;
+    margin-left: 156px;
+    margin-bottom: 5px;
+    color: red;
+  }

@@ -1,0 +1,56 @@
+.StudentDashboard {
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: -10px 10px 1px rgba(0, 0, 0, 0.1);
+    font-family:Georgia, 'Times New Roman', Times, serif;
+  }
+  
+  .StudentDashboard h2 {
+    text-align: center;
+  }
+  
+  .StudentDashboard form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .StudentDashboard  label {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+  
+  .StudentDashboard  input {
+    padding: 8px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .StudentDashboard  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .StudentDashboard  button:hover {
+    background-color: #45a049;
+  }
+  
+.error {
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+  }
+.header-stdn-login{
+  display: flex;
+  column-gap: 60px;
+align-items: center;
+width: 100%;
+}

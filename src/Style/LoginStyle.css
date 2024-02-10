@@ -9,7 +9,7 @@ background-size:cover;
 background-repeat: no-repeat;
 height: 900px;
 }
-.header{
+.adminheader{
     display: flex;
     /* background: linear-gradient(to bottom, #87CEEB, #ffffff); */
     /* background: linear-gradient(rgb(245, 236, 119),rgb(99, 86, 86),rgb(182, 182, 106)); */

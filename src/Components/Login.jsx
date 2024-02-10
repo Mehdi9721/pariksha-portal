@@ -49,7 +49,7 @@ const divStyle = {
   {/* complete body of home */}
   <div className='body'>
   {/* only header */}
-<div className='header'>
+<div className='adminheader'>
     <img src={img} alt='logo' className='logoHeader'/>
 <div className='BrandName'>Pariksha Portal</div>
 </div>
