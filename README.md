@@ -1,4 +1,4 @@
-Link to Backend Repo 
+Link to Backend Repo of pariksha portal
 https://github.com/Mehdi9721/pariksha-portal-backend
 
 # pariksha-portal 👔✨ (Frontend Only)
