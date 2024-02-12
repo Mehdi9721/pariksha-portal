@@ -1,0 +1,18 @@
+.StudentViewTable{
+    width: 100%;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.DeleteAll button{
+color: red;
+width: 90px;
+font-size: 13px;
+font-weight: bold;
+}
+.DeleteAll button:hover{
+    background-color: azure;
+}
+.AddStuTitle{
+    font-size: 20px;
+    font-weight: bold;
+     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
