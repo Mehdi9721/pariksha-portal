@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import '../Style/StyleAdminHome.css'
-import AddStudent from './AdminDashBoard/AddStudent'
-import CreateExam from './AdminDashBoard/CreateExam'
-import ViewExam from './AdminDashBoard/ViewExam'
-import ViewResult from './AdminDashBoard/ViewResult'
-import ViewStudent from './AdminDashBoard/ViewStudent'
+import '../../Style/AdminPagesStyle/StyleAdminHome.css'
+import AddStudent from './AddStudent'
+import CreateExam from './CreateExam'
+import ViewExam from './ViewExam'
+import ViewResult from './ViewResult'
+import ViewStudent from './ViewStudent'
 function AdminHome() {
     const [NewExam,setNewExam]=useState(false);
     const [AddStu,setAddStu]=useState(false);

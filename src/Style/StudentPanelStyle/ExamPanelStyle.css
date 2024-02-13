@@ -3,7 +3,9 @@
     margin: auto;
  
   }
-  
+  .btn2{
+    width: 70px;
+  }
   .header {
     background-color: aqua;
     display: flex;
@@ -75,3 +77,9 @@
     margin-bottom: 5px;
     color: red;
   }
+  .button-save-next btn1 {
+    width: 70px;
+    height: 20px;
+    background-color: aqua;
+  }
+ 

@@ -97,6 +97,10 @@ const ExamPanel = () => {
             </div>
           ))}
         </div>
+        <div className='button-save-next'>
+          <button className='btn1'>Previous</button>
+          <button className='btn2'> Save & Next</button>
+        </div>
         </div>
       <div className="submit-button">
         <button onClick={handleSubmit}>Submit Exam</button>
