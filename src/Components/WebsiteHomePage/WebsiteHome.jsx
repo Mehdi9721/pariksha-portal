@@ -1,26 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Login from "../WebsiteHomePage/LoginForm"; // Assuming you have a Login component
-import Signup from "../WebsiteHomePage/Signup"; // Assuming you have a Signup component
+import Login from "../WebsiteHomePage/LoginForm";
+import Signup from "../WebsiteHomePage/SignupForm"; 
 import "../../Style/WebsiteHomePageStyle/LoginStyle.css";
 import img from "../../ImagesAndLogo/_7c3d9119-90a8-48d0-99cc-9b1d57e27157.jpeg";
+import '../../Style/WebsiteHomePageStyle/StyleWebsiteHome.css'
 
 function Home() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const navigate = useNavigate();
-   const handleLoginClick = () => {
-    setShowLogin(true);
-    setShowSignup(false);
+
+  const handleLoginClick = () => {
+    setShowLogin(!showLogin);
+    setShowSignup(false); 
   };
 
   const handleSignupClick = () => {
-    setShowLogin(false);
-    setShowSignup(true);
+    setShowSignup(!showSignup);
+    setShowLogin(false); 
   };
 
   const handleHelpClick = () => {
-    // Handle help click, you can add your logic here
+   
   };
 
   return (
@@ -31,16 +33,19 @@ function Home() {
           <div className='BrandName'>Pariksha Portal</div>
         </div>
 
-        <div className='navbar'>
-          <button onClick={handleLoginClick}>Login</button>
-          <button onClick={handleSignupClick}>Signup</button>
-          <button onClick={handleHelpClick}>Help</button>
+        <div className='navbar-websiteHome'>
+          <button className='btn-websitehome' onClick={handleLoginClick}>
+            {showLogin ? 'Hide' : 'Login'}
+          </button>
+          <button className='btn-websitehome' onClick={handleSignupClick}>
+            {showSignup ? 'Hide' : 'Signup'}
+          </button>
+          <button className='btn-websitehome' onClick={handleHelpClick}>Help</button>
         </div>
         <div>
-        {showLogin && <Login/>}
-      {showSignup && <Signup/>}
+          {showLogin && <Login/>}
+          {showSignup && <Signup/>}
         </div>
-       
         <div className='footer'>
           <p className='footerFont'>
             !!!! Click For Help And Suggestion  
@@ -49,7 +54,6 @@ function Home() {
           </p>
         </div>
       </div>
-     
     </>
   );
 }

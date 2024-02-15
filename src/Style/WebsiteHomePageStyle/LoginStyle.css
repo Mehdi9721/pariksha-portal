@@ -1,93 +1,46 @@
-.body{
-    font-family:Georgia, 'Times New Roman', Times, serif;
-   display: flex;
-   flex-direction: column;
-align-items: center;
-/* background-color: rgba(166, 245, 212, 0.671); */
-background-image:url('https://cdn.pixabay.com/photo/2017/03/17/18/03/bokeh-2152298_1280.jpg');
-background-size:cover;
-background-repeat: no-repeat;
-height: 900px;
-}
-.adminheader{
-    display: flex;
-    /* background: linear-gradient(to bottom, #87CEEB, #ffffff); */
-    /* background: linear-gradient(rgb(245, 236, 119),rgb(99, 86, 86),rgb(182, 182, 106)); */
-    /* background-color: #cbf0e5; */
-    column-gap: 60px;
-  align-items: center;
-  width: 100%;
-}
-.BrandName{
-  color: rgb(17, 16, 3);
-    font-size: larger;
-    font-size: 55px;
-    font-weight: bold;
-    text-shadow: -4px 2px 0.2px rgba(110, 96, 96, 0.39);
-}
-.logoHeader{
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;  
+/* LoginForm styles */
+.loginForm {
+  width: 450px; /* Set the width to 450px */
+  max-width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 17px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: rgb(0, 0, 0);
 }
 
-.footer{
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-    background-color: black;
-    height: 40px;
+.loginForm label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 17px;
+  font-weight: 500;
+  color: white;
+}
 
+.loginForm input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border-radius: 17px;
+  font-size: 14px;
+    font-weight:bold;
+    padding-left: 10px;
 }
-.footerFont{
-    color: white
+
+.loginForm button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
-.FormBody{
-    font-family: Arial, sans-serif;
-    width: 300px ;
-    height: 230px ;
-    margin: 25px auto;
-    padding: 20px;
-    /* background: linear-gradient(rgb(101, 117, 121),white); */
-    background-color:white;
-    border-radius: 8px;
-    box-shadow: -10px 10px 1px rgba(0, 0, 0, 0.1);
+
+.loginForm button:hover {
+  background-color: #45a049;
 }
-form{
- 
-    display: flex;
-    flex-direction: column;
+
+.loginForm span {
+  cursor: pointer;
 }
-input {
-    padding: 10px;
-    margin-bottom: 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: bold;
-  }
-  button {
-    background-color: #06020a;
-    color: #fff;
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 70px;
-  }
-  button:hover {
-    background-color: #0c8f72;
-  }
-  label{
- 
-font-size: 20px;
-font-weight: bold;
-  }
-  .btnOfEye{
-    height:5px;
-    width: 5px;
-  }
-  span:hover{
-   background-color: rgb(104, 100, 100); 
-cursor: pointer;
-  }

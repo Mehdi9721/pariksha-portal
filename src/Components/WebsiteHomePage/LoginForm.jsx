@@ -1,110 +1,75 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-function LoginForm() {
-  const [UserName, setUserName] = useState('');
-  const [UserPass, setUserPass] = useState('');
-  const [seepass, setSeePass] = useState(false);
-  const [visibleErrorInfo, setVisibleErrorInfo] = useState(false);
-  const [visibleLogInfo, setVisibleLogInfo] = useState(false);
-  const navigate = useNavigate();
-const handleSubmit = (e) => {
+
+const LoginForm = () => {
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginMessage, setLoginMessage] = useState('');
+const navigate=useNavigate();
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check credentials (replace this with your actual authentication logic)
-    if (UserName === 'ulkajoshi' && UserPass === 'admin') {
-     navigate("/adminhomepage");
-    } else {
-      // Failed login logic
-      setVisibleErrorInfo(true);
+    try {
+      const response = await axios.put('http://localhost:8080/api/adminLogin', {
+        adminEmail,
+        adminPassword,
+      });
+
+      if (response.data === 0) {
+        setLoginMessage('Wrong admin or password');
+      } else {
+        setLoginMessage('Login successful');
+        navigate("/adminhomepage")
+        // Handle further actions upon successful login
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      setLoginMessage('An error occurred during login');
     }
   };
 
-  const handleId = (e) => {
-    setUserName(e.target.value);
-    setVisibleErrorInfo(false); // Hide error message when user is typing
-  };
-
-  const handlePass = (e) => {
-    setUserPass(e.target.value);
-    setVisibleErrorInfo(false); // Hide error message when user is typing
-  };
-
-  const togglePassVisibility = () => {
-    setSeePass(!seepass);
-  };
-
-  const divStyle = {
-    color: 'red',
-    marginTop: '5px',
-  };
-
   return (
-    <div>
-      <div className='FormBody'>
-        <form onSubmit={handleSubmit}>
-          <label>
-            UserName:
-            <input
-              type='text'
-              value={UserName}
-              onChange={handleId}
-              required
-            />
-          </label>
-          <label>
-            Password:
-            <input
-              type={seepass ? 'text' : 'password'}
-              value={UserPass}
-              onChange={handlePass}
-              required
-            />
-            <span onClick={togglePassVisibility}> 👁️ </span>
-          </label>
-          {visibleErrorInfo && (
-            <label style={divStyle}>
-              Incorrect Username or Password. Please try again.
-            </label>
-          )}
-          {visibleLogInfo && (
-            <label style={divStyle}>
-              If having problems with login, please contact admin.
-            </label>
-          )}
-          <button type="submit">Login</button>
-        </form>
+    <form className='loginForm' onSubmit={handleSubmit}>
+      <label htmlFor="username">Email:</label>
+      <input
+        type="text"
+        id="username"
+        value={adminEmail}
+        placeholder='Username'
+        required
+        onChange={(e) => setAdminEmail(e.target.value)}
+      />
+
+      <br />
+      <label htmlFor="password">Password:</label>
+      <div style={{ display: 'flex' }}>
+        <input
+          type={showPassword ? 'text' : 'password' }
+          id="password"
+          value={adminPassword}
+          placeholder='Password'
+          required
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <span
+          style={{ cursor: 'pointer', marginLeft: '5px' }}
+          onClick={togglePasswordVisibility}
+        >
+          {showPassword ? '🙈' : '👁️'}
+        </span>
       </div>
-    </div>
+      <br />
+      <button type="submit">Submit</button>
+
+      {loginMessage && <p>{loginMessage}</p>}
+    </form>
   );
-}
+};
 
 export default LoginForm;
-
-
-
-
-
-
-
-// import React from 'react'
-
-// function LoginForm() {
-//   return (
-//     <div>
-// <div className='FormBody'>
-// <form onSubmit={handleSubmit}>
-//     <label>UserName:</label>
-//     <input type='text' value={UserName} onChange={handleId}></input>
-//     <label>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span onClick={x}> 👁️  </span> </label>
-//     <input type={seepass?'text':'password'}  value={UserPass}  onChange={handlePass}></input>
-//     {visibleErrorInfo &&(<label style={divStyle}>
-//     Please Check Id and Password!!!</label>)}
-//    {visibleLogInfo &&(<label style={divStyle}>If having problem with Login then kindly contact admin!!!</label>)}
-//     <button>Login</button>   
-// </form>
-// </div>
-// </div>
-//   )
-// }
-
-// export default LoginForm
