@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../Style/StudentPanelStyle/ExamPanelStyle.css";
 import { useNavigate } from 'react-router-dom';
+
 const questionsData = [
   {
     id: 1,
@@ -14,16 +15,17 @@ const questionsData = [
     options: ['Java', 'JavaScript', 'Python', 'C++'],
     correctAnswer: 'JavaScript',
   },
-  // Add more questions as needed
 ];
 
 const ExamPanel = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [timer, setTimer] = useState(900); // 15 minutes in seconds (900 seconds)
-  const studentName = 'John Doe';
+  const [selectedAnswerStyle, setSelectedAnswerStyle] = useState({});
+  const [timer, setTimer] = useState(900);
+  const studentName = 'Mohammad Mehdi';
   const studentPrn = '12345';
-  const navigate =useNavigate();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer((prevTimer) => prevTimer - 1);
@@ -41,11 +43,14 @@ const ExamPanel = () => {
       ...prevSelectedAnswers,
       [currentQuestionIndex]: answer,
     }));
+
+    setSelectedAnswerStyle((prevSelectedAnswerStyle) => ({
+      ...prevSelectedAnswerStyle,
+      [currentQuestionIndex]: 'green',
+    }));
   };
 
   const handleSubmit = () => {
-    // Handle the submission logic here, you can check selected answers, etc.
-    // You can use the selectedAnswers state to send data to the database
     console.log('Selected Answers:', selectedAnswers);
     alert('Exam Submitted!');
     navigate("/examsuccess");
@@ -53,9 +58,17 @@ const ExamPanel = () => {
 
   useEffect(() => {
     if (timer <= 0) {
-      handleSubmit(); // Automatically submit the exam when the timer reaches 0
+      handleSubmit();
     }
   }, [timer]);
+
+  const handleFinalSubmit = () => {
+    const confirmSubmit = window.confirm('Are you sure you want to submit the exam?');
+
+    if (confirmSubmit) {
+      handleSubmit();
+    }
+  };
 
   return (
     <div className="exam-panel">
@@ -84,7 +97,10 @@ const ExamPanel = () => {
         <h2>{questionsData[currentQuestionIndex].question}</h2>
         <div className="answer-options">
           {questionsData[currentQuestionIndex].options.map((option, index) => (
-            <div key={index} className="option">
+            <div
+              key={index}
+              className={`option ${selectedAnswerStyle[currentQuestionIndex] === 'green' ? 'selected' : ''}`}
+            >
               <input
                 type="radio"
                 id={`option-${index}`}
@@ -98,14 +114,18 @@ const ExamPanel = () => {
           ))}
         </div>
         <div className='button-save-next'>
-          <button className='btn1'>Previous</button>
-          <button className='btn2'> Save & Next</button>
+          <button className='btn1' onClick={() => handleQuestionClick(Math.max(currentQuestionIndex - 1, 0))}>
+            Previous!!
+          </button>
+          <button className='btn2' onClick={() => handleQuestionClick(Math.min(currentQuestionIndex + 1, questionsData.length - 1))}>
+            Next!!
+          </button>
         </div>
-        </div>
-      <div className="submit-button">
-        <button onClick={handleSubmit}>Submit Exam</button>
       </div>
-      <div className='button-warning'>Warnnig!!! Do not Click on Submit Button before giving answers of all questions</div>
+      <div className="submit-button">
+        <button onClick={handleFinalSubmit}>Submit Exam</button>
+      </div>
+      <div className='button-warning'>Warning!!! Do not Click on Submit Button before giving answers to all questions</div>
     </div>
   );
 };

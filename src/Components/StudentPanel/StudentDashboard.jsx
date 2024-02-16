@@ -2,18 +2,25 @@ import React, { useState } from 'react';
 import '../../Style/StudentPanelStyle/StudentDashboardStyle.css'
 import img from "../../ImagesAndLogo/_7c3d9119-90a8-48d0-99cc-9b1d57e27157.jpeg"
 import { useNavigate  } from 'react-router-dom';
+import axios from 'axios';
 const StudentDashboard = () => {
-  const [prn, setPrn] = useState('');
+  const [studentPrn, setPrn] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate ();
-  const handleLogin = () => {
-    if (prn === '123456789123' || password === '123456789123') {
-      navigate('/stndexam');
-    }
-    setPrn('');
-    setPassword('');
-    setError('');
+  const handleLogin = async(e) => {
+    e.preventDefault();
+    try{
+   const response= await axios.get(`http://localhost:8080/api/getStudentByPrn/${studentPrn}`)
+   console.log(response.data.studentPrn);
+   if(response.data.studentPrn===studentPrn){
+    navigate("/stndexam");
+   }else{
+    setError("Please check PRN: ");
+   }
+  }catch(e){
+console.log(e);
+  }
   };
 
   return (
@@ -24,13 +31,13 @@ const StudentDashboard = () => {
 </div>
       <div className='StudentDashboard'>
       <h2>Student Dashboard</h2>
-      <form >
+      <form onSubmit={handleLogin}>
         <div>
           <label htmlFor="prn">Enter PRN:</label>
           <input
             type="number"
             id="prn"
-            value={prn}
+            value={studentPrn}
             required
             onChange={(e) => setPrn(e.target.value)}
           />
@@ -45,7 +52,7 @@ const StudentDashboard = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="button" onClick={handleLogin}>
+        <button>
           Login
         </button>
         {error && <p style={{ color: 'red' }}>{error}</p>}

@@ -1,85 +1,133 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+}
+
 .exam-panel {
-    width: 100%;
-    margin: auto;
- 
-  }
-  .btn2{
-    width: 70px;
-  }
-  .header {
-    background-color: aqua;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .timer {
-    font-weight: bold;
-  }
-  
-  .question-list {
-    background-color: blue;
-    float: left;
-    margin-right: 20px;
-    width: 200px;
-    height: 300px;
-  }
-  
-  .question-list ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .question-list li {
-    width: 30px;
-    height: 30px;
-    background-color: #ccc;
-    color: #fff;
-    text-align: center;
-    line-height: 30px;
-    cursor: pointer;
-    margin-bottom: 5px;
-  }
-  
-  .question-list li.active {
-    background-color: #007bff;
-  }
-  
-  .question-container {
-    background-color: cadetblue;
-    width: 100%;
-    height: 500px;
-    
-  }
-  
-  .answer-options {
-    margin-top: 10px;
-  }
-  
-  .option {
-    margin-bottom: 10px;
-  }
-  
-  .submit-button {
-    float: left;
-  }
-  .submit-button button{
-    width: 110px;
-    position: fixed;
-    bottom: 0;
-    margin-left: 6px;
-    margin-bottom: 5px;
-  }
-  .button-warning{
-    position: fixed;
-    bottom: 0;
-    margin-left: 156px;
-    margin-bottom: 5px;
-    color: red;
-  }
-  .button-save-next btn1 {
-    width: 70px;
-    height: 20px;
-    background-color: aqua;
-  }
- 
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  background-color: #fff;
+}
+
+.header {
+  background-color: #007bff;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 2px solid #0056b3;
+}
+
+.timer {
+  font-weight: bold;
+}
+
+.question-list {
+  width: 20%;
+  max-width: 200px;
+  background-color: #f0f8ff;
+  border-right: 2px solid #ddd;
+  overflow-y: auto;
+}
+
+.question-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.question-list li {
+  width: 30px;
+  height: 30px;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.question-list li.active {
+  background-color: #0056b3;
+}
+
+.question-container {
+  flex-grow: 1;
+  background-color: #87ceeb;
+  padding: 20px;
+}
+
+.answer-options {
+  margin-top: 20px;
+}
+
+.option {
+  margin-bottom: 10px;
+}
+
+.option input {
+  margin-right: 10px;
+}
+
+.submit-button {
+  margin-top: 20px;
+}
+
+.submit-button button {
+  width: 150px;
+  height: 40px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.submit-button button :hover {
+  width: 150px;
+  height: 40px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-warning {
+  margin-top: 20px;
+  color: red;
+}
+
+.button-save-next {
+padding: 10px;
+}
+
+.button-save-next button {
+  width: 80px;
+  height: 30px;
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  margin-right: 20px;
+  transition: transform 0.3s ease;
+}
+.button-save-next button:hover {
+  transform: scale(1.1);
+  width: 90px;
+  height: 30px;
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  margin-right: 20px;
+}
