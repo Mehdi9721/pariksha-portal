@@ -35,11 +35,12 @@ function Home() {
 
         <div className='navbar-websiteHome'>
           <button className='btn-websitehome' onClick={handleLoginClick}>
-            {showLogin ? 'Hide' : 'Login'}
+            {showLogin ? 'Hide' : 'Admin Login'}
           </button>
           <button className='btn-websitehome' onClick={handleSignupClick}>
-            {showSignup ? 'Hide' : 'Signup'}
+            {showSignup ? 'Hide' : 'Admin Signup'}
           </button>
+          <button className='btn-websitehome' onClick={()=>{navigate("/studentLogin")}}>Student Login</button>
           <button className='btn-websitehome' onClick={handleHelpClick}>Help</button>
         </div>
         <div>

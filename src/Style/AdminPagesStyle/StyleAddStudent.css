@@ -44,10 +44,14 @@
   .tableAddStudent .FileAreaOfAddStudent {
     margin-top: 16px;
   }
-  
-  .tableAddStudent .warningPrn {
-    color: red;
-    font-size: 14px;
-    margin-top: 8px;
+  .successMessage{
+    color: green;
+    font-size: 17px;
+    font-weight: 700;
   }
+.errorMessage{
+  color: rgb(253, 7, 7);
+  font-size: 17px;
+  font-weight: 700;
+}
   

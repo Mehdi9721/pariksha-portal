@@ -8,24 +8,9 @@ const StudentDashboard = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate ();
   const handleLogin = () => {
-    // Validation
-    if (prn === '' || password === '') {
-      setError('Both PRN and password are required');
-      return;
-    }
-
-    if (prn.length!== 12) {
-      setError('PRN must be equal to 12 Digits');
-      return;
-    }
-
-    // Perform login logic here
     if (prn === '123456789123' || password === '123456789123') {
       navigate('/stndexam');
     }
-
-
-    // If successful, you can clear the form and error
     setPrn('');
     setPassword('');
     setError('');
@@ -41,28 +26,28 @@ const StudentDashboard = () => {
       <h2>Student Dashboard</h2>
       <form >
         <div>
-          <label htmlFor="prn">PRN:</label>
+          <label htmlFor="prn">Enter PRN:</label>
           <input
             type="number"
             id="prn"
             value={prn}
+            required
             onChange={(e) => setPrn(e.target.value)}
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">Enter Password:</label>
           <input
             type="number"
             id="password"
             value={password}
+            required
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
         <button type="button" onClick={handleLogin}>
           Login
         </button>
-
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
     </div>

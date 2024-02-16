@@ -16,3 +16,13 @@ font-weight: bold;
     font-weight: bold;
      font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
+.imgref{
+    width: 20px;
+    height: 18px;
+    margin-left: 10px;
+}
+.refresh-btn{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}

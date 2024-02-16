@@ -1,61 +1,54 @@
 import React, { useState } from 'react';
-import '../../Style/StyleAddStudent.css';
-
+import '../../Style/AdminPagesStyle/StyleAddStudent.css';
+import axios from 'axios';
 function AddStudent() {
-  const [studentName, setStudentName] = useState('');
-  const [studentPRN, setStudentPRN] = useState('');
-  const [confirmPRN, setConfirmPRN] = useState('');
-  const [CheckconfirmPRN, setCheckConfirmPRN] = useState(false);
-  const handleForm = (e) => {
+  const [student_name, setStudentName] = useState('');
+  const [student_prn, setStudentPRN] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const handleForm = async (e) => {
     e.preventDefault();
-
-    // Add your logic to handle form submission
-    if(studentPRN!==confirmPRN){
-      setCheckConfirmPRN(true);
-        }else{
-          setCheckConfirmPRN(false);
-    console.log('Form submitted:', {
-      studentName,
-      studentPRN,
-      confirmPRN,
-    });
-  }
+    try {
+      const response = await axios.post("http://localhost:8080/api/saveStudent", {
+        student_name,
+        student_prn
+      });
+      console.log(response.data);
+      setSuccessMessage(`Data of ${student_name} added successfully!`);
+      setErrorMessage('');
+    } catch (e) {
+      console.log(e);
+      setSuccessMessage('');
+      setErrorMessage('Error adding student. Please try again.');
+    }
   };
 
   return (
     <div>
       <div className='AddStuTitle'>Add Student:</div>
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       <form className='tableAddStudent' onSubmit={handleForm}>
         <label>Enter Student Name:</label>
         <br />
         <input
           type='text'
-          value={studentName}
+          value={student_name}
           onChange={(e) => setStudentName(e.target.value)}
-        required/>
+          required />
         <label>Enter Student PRN:</label>
         <br />
         <input
           type='number'
-          value={studentPRN}
+          value={student_prn}
           onChange={(e) => setStudentPRN(e.target.value)}
-          required/>
-        <label>Confirm Student PRN:</label>
-        <br />
-        { CheckconfirmPRN && <label className='warningPrn'>Recheck PRN</label>}
-        <input
-          type='number'
-          value={confirmPRN}
-          onChange={(e) => setConfirmPRN(e.target.value)}
-          required/>
+          required />
         <button>Add !!!</button>
-      
       </form>
       <h4>Or Select File to fill details Automatically!!</h4>
       <div className='FileAreaOfAddStudent'>
         <input type='file' />
         <button>Add !!!!</button>
-
       </div>
     </div>
   );

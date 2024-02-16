@@ -25,7 +25,8 @@ const navigate=useNavigate();
         setLoginMessage('Wrong admin or password');
       } else {
         setLoginMessage('Login successful');
-        navigate("/adminhomepage")
+        const adminName = response.data.adminName;
+        navigate("/adminhomepage");
         // Handle further actions upon successful login
       }
     } catch (error) {
