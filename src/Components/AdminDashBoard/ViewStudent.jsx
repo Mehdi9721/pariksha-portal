@@ -3,11 +3,12 @@ import '../../Style/AdminPagesStyle/StyleStudentView.css';
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
 
+
 function ViewStudent() {
   const [stdData, setdata] = useState([]);
   const [searchPRN, setSearchPRN] = useState('');
-
-  const handleStudentData = async () => {
+  const [foundStudents,setFoundStudents]=useState({});
+const handleStudentData = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/getAllStudent');
       setdata(response.data);
@@ -17,24 +18,30 @@ function ViewStudent() {
     }
   };
 
-  const handleDeleteAll = () => {
-    const al = window.confirm('Are you sure you want to delete all students?');
+  const handleDeleteAll = async ()=> {
+    const al = window.confirm('Do you want to delete all students?');
     if (al) {
-      console.log("delete all executed");
+    try {
+        const response = await axios.delete('http://localhost:8080/api/deleteAll');
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       console.log("delete all discarded");
     }
   };
 
   const handleSearch = () => {
-    const foundStudents = stdData.filter((std) =>std.student_prn===searchPRN);
-  console.log(foundStudents);
+  setFoundStudents( stdData.filter((std) =>std.studentPrn===searchPRN));
+  console.log(foundStudents[0]);
   };
 
   const resetSearch = () => {
     setSearchPRN('');
     handleStudentData();
   };
+
+
 
   return (
     <>
@@ -54,6 +61,17 @@ function ViewStudent() {
           <button onClick={handleSearch}>Search</button>
           <button onClick={resetSearch}>Reset</button>
         </div>
+        
+       {foundStudents.length>0 && (<table border={"1px solid black"} className='StudentViewTable'>
+        <thead>
+            <tr>
+              <th>Student Name:</th>
+              <th>Student PRN:</th>
+              <th>Update Student:</th>
+              <th>Delete Student:</th>
+            </tr>
+          </thead>
+        </table>) } 
         <br />
         <div>Total Number Of Students: {stdData.length}</div>
         <table border={"1px solid black"} className='StudentViewTable'>
@@ -66,7 +84,7 @@ function ViewStudent() {
             </tr>
           </thead>
           <tbody>
-            {stdData.map((std) => (
+            {stdData?.map((std) => (
               <tr>
                 <td>{std.studentName}</td>
                 <td>{std.studentPrn}</td>

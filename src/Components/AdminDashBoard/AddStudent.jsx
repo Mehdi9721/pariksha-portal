@@ -2,26 +2,61 @@ import React, { useState } from 'react';
 import '../../Style/AdminPagesStyle/StyleAddStudent.css';
 import axios from 'axios';
 function AddStudent() {
-  const [student_name, setStudentName] = useState('');
-  const [student_prn, setStudentPRN] = useState('');
+  const [studentName, setStudentName] = useState('');
+  const [studentPrn, setStudentPRN] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
   const handleForm = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:8080/api/saveStudent", {
-        student_name,
-        student_prn
+       studentName,
+      studentPrn
       });
       console.log(response.data);
-      setSuccessMessage(`Data of ${student_name} added successfully!`);
+      setSuccessMessage(`Data of ${studentName} added successfully!`);
       setErrorMessage('');
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 2000);
     } catch (e) {
       console.log(e);
       setSuccessMessage('');
       setErrorMessage('Error adding student. Please try again.');
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 2000);
     }
   };
+
+
+  const handleUpload = () => {
+    const formData = new FormData();
+    formData.append('file', file);
+    try{
+      axios.post('http://localhost:8080/api/upload', formData);
+      setSuccessMessage(`Data of Students added successfully!`);
+      setErrorMessage('');
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 2000);
+    }catch(e){
+      setSuccessMessage('');
+      setErrorMessage('Error adding student. Please try again.');
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 2000);
+    }
+  
+ 
+  }
 
   return (
     <div>
@@ -33,22 +68,22 @@ function AddStudent() {
         <br />
         <input
           type='text'
-          value={student_name}
+          value={studentName}
           onChange={(e) => setStudentName(e.target.value)}
           required />
         <label>Enter Student PRN:</label>
         <br />
         <input
           type='number'
-          value={student_prn}
+          value={studentPrn}
           onChange={(e) => setStudentPRN(e.target.value)}
           required />
         <button>Add !!!</button>
       </form>
       <h4>Or Select File to fill details Automatically!!</h4>
       <div className='FileAreaOfAddStudent'>
-        <input type='file' />
-        <button>Add !!!!</button>
+        <input type='file'  onChange={handleFileChange }/>
+        <button onClick={handleUpload }> Add !!!!</button>
       </div>
     </div>
   );
