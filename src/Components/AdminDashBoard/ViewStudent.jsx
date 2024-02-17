@@ -6,9 +6,7 @@ import refreshicon from '../../ImagesAndLogo/refresh.png';
 function ViewStudent() {
   const [stdData, setdata] = useState([]);
   const [searchPRN, setSearchPRN] = useState('');
-  useEffect(() => {
-    handleStudentData();
-  }, []);
+
   const handleStudentData = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/getAllStudent');
@@ -69,9 +67,9 @@ function ViewStudent() {
           </thead>
           <tbody>
             {stdData.map((std) => (
-              <tr key={std.student_prn}>
-                <td>{std.student_name}</td>
-                <td>{std.student_prn}</td>
+              <tr>
+                <td>{std.studentName}</td>
+                <td>{std.studentPrn}</td>
                 <td><button>Update</button></td>
                 <td><button>Delete</button></td>
               </tr>
