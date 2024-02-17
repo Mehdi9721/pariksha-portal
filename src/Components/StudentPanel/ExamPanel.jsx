@@ -40,8 +40,8 @@ const ExamPanel = () => {
   const [isMicrophoneAllowed, setMicrophoneAllowed] = useState(false);
   const [isNoiseHigh, setIsNoiseHigh] = useState(false);
   const [noiseWarningCount, setNoiseWarningCount] = useState(0);
-  const studentName = 'Mohammad Mehdi';
-  const studentPrn = '12345';
+  const studentName = 'Dwarkesh Virkhare';
+  const studentPrn = '230943120027';
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const ExamPanel = () => {
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
-          const noiseThreshold = 55; // change this on need
+          const noiseThreshold = 60; // change this on need
              console.log(averageAmplitude);
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
           
