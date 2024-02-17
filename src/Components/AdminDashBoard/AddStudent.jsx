@@ -25,14 +25,14 @@ function AddStudent() {
       setErrorMessage('');
       setTimeout(() => {
         setSuccessMessage('');
-      }, 2000);
+      }, 4000);
     } catch (e) {
       console.log(e);
       setSuccessMessage('');
       setErrorMessage('Error adding student. Please try again.');
       setTimeout(() => {
         setSuccessMessage('');
-      }, 2000);
+      }, 4000);
     }
   };
 
@@ -46,13 +46,13 @@ function AddStudent() {
       setErrorMessage('');
       setTimeout(() => {
         setSuccessMessage('');
-      }, 2000);
+      }, 4000);
     }catch(e){
       setSuccessMessage('');
       setErrorMessage('Error adding student. Please try again.');
       setTimeout(() => {
         setSuccessMessage('');
-      }, 2000);
+      }, 4000);
     }
   
  

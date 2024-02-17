@@ -1,7 +1,11 @@
 .StudentViewTable{
-    width: 100%;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     margin: 4px;
+    font-weight: 600;
+    min-width: 800px;
+}
+.StudentViewTable td{
+padding: 10px;
 }
 .DeleteAll button{
 color: red;
@@ -10,7 +14,8 @@ font-size: 13px;
 font-weight: bold;
 }
 .DeleteAll button:hover{
-    background-color: azure;
+    background-color: rgb(255, 0, 0);
+    color: white;
 }
 .AddStuTitle{
     font-size: 20px;
@@ -26,4 +31,8 @@ font-weight: bold;
     display: flex;
     align-items: center;
     cursor: pointer;
+    margin-left: 10px;
+}
+.searchBox{
+    padding-left: 10px;
 }

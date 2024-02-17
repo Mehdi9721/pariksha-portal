@@ -51,6 +51,7 @@ const handleStudentData = async () => {
         <button className='refresh-btn' onClick={handleStudentData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
+        <br></br>
         <div className='searchBox'>
           <input
             type="text"
@@ -61,25 +62,41 @@ const handleStudentData = async () => {
           <button onClick={handleSearch}>Search</button>
           <button onClick={resetSearch}>Reset</button>
         </div>
-        
-       {foundStudents.length>0 && (<table border={"1px solid black"} className='StudentViewTable'>
+        <br></br>
+       {foundStudents.length>0 && (
+       <table border={"1px solid black"} className='StudentViewTable'>
         <thead>
             <tr>
               <th>Student Name:</th>
               <th>Student PRN:</th>
-              <th>Update Student:</th>
+             
               <th>Delete Student:</th>
             </tr>
           </thead>
+          <tbody>
+          
+              <tr>
+                <td>{foundStudents[0].studentName}</td>
+                <td>{foundStudents[0].studentPrn}</td>
+
+                <td><button>Delete</button></td>
+              </tr>
+      
+          </tbody>
+
         </table>) } 
         <br />
-        <div>Total Number Of Students: {stdData.length}</div>
+        <div>Total Number Of Students: {stdData.length}
+        
+        <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
+
+        </div>
         <table border={"1px solid black"} className='StudentViewTable'>
           <thead>
             <tr>
               <th>Student Name:</th>
               <th>Student PRN:</th>
-              <th>Update Student:</th>
+             
               <th>Delete Student:</th>
             </tr>
           </thead>
@@ -88,13 +105,13 @@ const handleStudentData = async () => {
               <tr>
                 <td>{std.studentName}</td>
                 <td>{std.studentPrn}</td>
-                <td><button>Update</button></td>
+               
                 <td><button>Delete</button></td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
+       
       </div>
     </>
   );
