@@ -19,14 +19,11 @@ const CreateExamForm = () => {
       setExamId(examId);
 
       // const timestamp = new Date(examDate).getTime();
-
-<<<<<<< HEAD
       const response = await axios.post('http://localhost:8080/api/createExam', {
         examId,
         examName,
         examDate,
         examDuration
-=======
       });
       // console.log(response.data);
       console.log(response.data);
