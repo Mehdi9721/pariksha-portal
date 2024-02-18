@@ -27,13 +27,6 @@ const CreateExamForm = () => {
         examDate,
         examDuration
 =======
-      const response = await axios.post('/api/exams', {
-        id: generatedID,
-        name: examName,
-        date: timestamp,
-        duration:examDuration,
-        questions:questions,
->>>>>>> 4a853a1a2477d07742ac85760a9922e1ce3bfccd
       });
       // console.log(response.data);
       console.log(response.data);
