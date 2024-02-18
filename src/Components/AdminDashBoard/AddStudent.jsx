@@ -25,14 +25,14 @@ function AddStudent() {
       setErrorMessage('');
       setTimeout(() => {
         setSuccessMessage('');
-      }, 4000);
+      }, 3500);
     } catch (e) {
       console.log(e);
       setSuccessMessage('');
       setErrorMessage('Error adding student. Please try again.');
       setTimeout(() => {
         setSuccessMessage('');
-      }, 4000);
+      }, 3500);
     }
   };
 
@@ -40,21 +40,30 @@ function AddStudent() {
   const handleUpload = () => {
     const formData = new FormData();
     formData.append('file', file);
-    try{
-      axios.post('http://localhost:8080/api/upload', formData);
-      setSuccessMessage(`Data of Students added successfully!`);
-      setErrorMessage('');
-      setTimeout(() => {
+    if(file!==null){
+      try{
+        axios.post('http://localhost:8080/api/upload', formData);
+        setSuccessMessage(`Data of Students added successfully!`);
+        setErrorMessage('');
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 3500);
+      }catch(e){
         setSuccessMessage('');
-      }, 4000);
-    }catch(e){
+        setErrorMessage('Error adding student. Please try again.');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3500);
+      }
+    
+    }else{
       setSuccessMessage('');
-      setErrorMessage('Error adding student. Please try again.');
-      setTimeout(() => {
-        setSuccessMessage('');
-      }, 4000);
+        setErrorMessage('Please Select File.');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3500);
     }
-  
+   
  
   }
 
