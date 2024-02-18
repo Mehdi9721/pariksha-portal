@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
-//import { useNavigate } from 'react-router-dom';
-import '../../Style/StyleCreateExam.css'
-=======
 import { useNavigate } from 'react-router-dom';
 import '../../Style/AdminPagesStyle/StyleCreateExam.css'
 >>>>>>> 4a853a1a2477d07742ac85760a9922e1ce3bfccd
