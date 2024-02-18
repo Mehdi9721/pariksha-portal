@@ -12,13 +12,17 @@ const StudentDashboard = () => {
     e.preventDefault();
     try{
    const response= await axios.get(`http://localhost:8080/api/getStudentByPrn/${studentPrn}`)
-   console.log(response.data.studentPrn);
+   const studentName=response.data.studentName;
+   console.log(studentName);
    if(response.data.studentPrn===studentPrn){
-    navigate("/stndexam");
+    navigate("/stndexam",{ state: { studentName, studentPrn } });
    }else{
     setError("Please check PRN: ");
+    console.log(Error);
    }
   }catch(e){
+    setError("Please check PRN: ");
+    console.log(Error);
 console.log(e);
   }
   };

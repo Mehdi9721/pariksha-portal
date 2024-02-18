@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../../Style/StudentPanelStyle/ExamPanelStyle.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation  } from 'react-router-dom';
 import * as faceapi from 'face-api.js';
 
 const questionsData = [
@@ -31,6 +31,12 @@ const questionsData = [
 ];
 
 const ExamPanel = () => {
+  const location = useLocation();
+  const { state } = location;
+  const { studentName, studentPrn } = state || {};
+  console.log("name "+studentName);
+  console.log("prn "+studentPrn);
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [selectedAnswerStyle, setSelectedAnswerStyle] = useState({});
@@ -40,8 +46,7 @@ const ExamPanel = () => {
   const [isMicrophoneAllowed, setMicrophoneAllowed] = useState(false);
   const [isNoiseHigh, setIsNoiseHigh] = useState(false);
   const [noiseWarningCount, setNoiseWarningCount] = useState(0);
-  const studentName = 'Dwarkesh Virkhare';
-  const studentPrn = '230943120027';
+ 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -76,8 +81,11 @@ const ExamPanel = () => {
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
+
           const noiseThreshold = 60; // change this on need
              console.log(averageAmplitude);
+
+
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
           
           if (averageAmplitude > noiseThreshold) {
@@ -171,6 +179,7 @@ const ExamPanel = () => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         setWarningCount((prevCount) => prevCount + 1);
+        alert('Warning!!!!  Exam Tab was not open');
       }
     };
 
@@ -232,6 +241,19 @@ const ExamPanel = () => {
     }
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWarningCount((prevCount) => prevCount + 1);
+      alert('Changes detected on Screen Size. warning!!!!');
+    };
+  
+    window.addEventListener('resize', handleResize);
+  
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div className="exam-panel">
       <div className="header">
@@ -242,9 +264,10 @@ const ExamPanel = () => {
         </div>
       </div>
 
+{/* 
       {isCameraAllowed && isMicrophoneAllowed && (
         <div className="camera-container" id="camera-container"></div>
-      )}
+      )} */}
 
       <div className="question-list">
         <ul>
