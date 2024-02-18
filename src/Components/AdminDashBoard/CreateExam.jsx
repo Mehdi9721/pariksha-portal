@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../../Style/StyleCreateExam.css'
+import '../../Style/AdminPagesStyle/StyleCreateExam.css'
 const CreateExamForm = () => {
   const [examName, setExamName] = useState('');
   const [examDate, setExamDate] = useState('');
@@ -21,14 +21,12 @@ const CreateExamForm = () => {
         id: generatedID,
         name: examName,
         date: timestamp,
-        duration: examDuration,
-        questions: questions,
+        duration:examDuration,
+        questions:questions,
       });
 
       const examLink = `/exam/${generatedID}`;
       console.log('Exam Link:', examLink);
-
-      navigate(examLink);
     } catch (error) {
       console.error('Error creating exam:', error);
     }
@@ -37,22 +35,21 @@ const CreateExamForm = () => {
   return (
     <div>
       <div className='AddStuTitle'>Create New Exam:</div>
-      <form className='FormCreateExam'>
+      <form className='FormCreateExam' onSubmit={handleCreateExam}>
         <label>Exam Name:</label>
-        <input type="text" value={examName} onChange={(e) => setExamName(e.target.value)} />
+        <input type="text" value={examName} onChange={(e) => setExamName(e.target.value)} required/>
 
         <label>Exam Date:</label>
-        <input type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} />
+        <input type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} required/>
 
         <label>Exam Duration (minutes):</label>
-        <input type="number" value={examDuration} onChange={(e) => setExamDuration(e.target.value)} />
+        <input type="number" value={examDuration} onChange={(e) => setExamDuration(e.target.value)} required />
 
         <label>Questions:</label>
-        <textarea value={questions} onChange={(e) => setQuestions(e.target.value)} />
-
-        <button type="button" onClick={handleCreateExam}>Create Exam</button>
+      <input type="file" required className='file'></input>
+      <br></br>
+        <button className='buttonForPaper'>Create Exam</button>
       </form>
-
       <p>Generated Exam ID: {uniqueID}</p>
     </div>
   );
