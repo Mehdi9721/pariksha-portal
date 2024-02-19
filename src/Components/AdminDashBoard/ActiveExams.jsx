@@ -92,7 +92,7 @@ function ActiveExams() {
                             <th>Exam Date:</th>
                             <th>Student Name:</th>
                             <th>Student PRN:</th>
-                            <th>Action</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -102,7 +102,7 @@ function ActiveExams() {
                                 <td>{exam.examDate}</td>
                                 <td>{exam.studentName}</td>
                                 <td>{exam.studentPrn}</td>
-                                <td> <button> Monitor Student </button>  </td>
+                               
                             </tr>
                         ))}
                     </tbody>

@@ -105,7 +105,7 @@ function ViewResult() {
                 <td>{foundResults[0].examName}</td>
                 <td>{foundResults[0].examDate}</td>
                 <td>{foundResults[0].studentResultDownloadLink}</td>
-                <td><button>Delete</button></td>
+                <td><button onClick={() => handleDeleteResult(foundResults[0].studentPrn)}>Delete</button></td>
               </tr>
             </tbody>
           </table>)}

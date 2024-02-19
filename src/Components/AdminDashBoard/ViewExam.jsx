@@ -5,64 +5,51 @@ import refreshicon from '../../ImagesAndLogo/refresh.png';
 
 
 function ViewExam() {
+  const [examData, setExamData] = useState([]);
 
-const [examData , setexamData] = useState([]);
-// const [searchExambyuniqueID , setexamuniqueID] = useState('');
-useEffect(() => {
-  handleEaxmData();
-}, []);
+  useEffect(() => {
+    handleEaxmData(); // Fetch data when the component mounts
+  }, []);
 
-
-const handleEaxmData = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/api/getAllExams');
-    setexamData(response.data);
-    console.log(response.data);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-
-
-const handleDeleteAll = async () => {
-  try {
-    const al = window.confirm('Are you sure you want to delete all Exam Data ?');
-    if (al) {
-      window.confirm("Are you Sure want to Delete All Exam Records ?");
-      await axios.delete('http://localhost:8080/api/deleteAllExams');
-    // After successful deletion, you may want to refresh the exam data
-    //handleEaxmData();
-    
-    console.log('All exams deleted successfully from DataBase !');
-      
-    } else {
-      console.log("delete all discarded");
+  const handleEaxmData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/getAllExams');
+      setExamData(response.data);
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
     }
+  };
 
-  } catch (error) {
-    console.error('Error deleting exams:', error);
-  }
-};
-
-
-const handleDeleteById = async (examId ) => {
-  try {
-    const al = window.confirm(`Are you Sure want to Delete ${examId} Exam Record ?`);
-    if (al) {
-      await axios.delete(`http://localhost:8080/api/deleteExam/${examId}`);
-    // After successful deletion, you may want to refresh the exam data
-    handleEaxmData();
-    window.confirm(`Are you Sure want to Delete ${examId} Exam Record ?`)
-    console.log(`Exam name  with ID ${examId} deleted successfully.`);
-    } else {
-      console.log("delete all discarded");
+  const handleDeleteAll = async () => {
+    try {
+      const al = window.confirm('Are you sure you want to delete all Exam Data ?');
+      if (al) {
+        await axios.delete('http://localhost:8080/api/deleteAllExams');
+        console.log('All exams deleted successfully from the database!');
+        handleEaxmData(); // Refresh exam data after successful deletion
+      } else {
+        console.log("Delete all discarded");
+      }
+    } catch (error) {
+      console.error('Error deleting exams:', error);
     }
-  } catch (error) {
-    console.error(`Error deleting exam with ID ${examId}:`, error);
-  }
-};
+  };
 
+  const handleDeleteById = async (examId) => {
+    try {
+      const al = window.confirm(`Are you sure you want to delete the ${examId} Exam Record ?`);
+      if (al) {
+        await axios.delete(`http://localhost:8080/api/deleteExam/${examId}`);
+        console.log(`Exam with ID ${examId} deleted successfully.`);
+        handleEaxmData(); // Refresh exam data after successful deletion
+      } else {
+        console.log("Delete discarded");
+      }
+    } catch (error) {
+      console.error(`Error deleting exam with ID ${examId}:`, error);
+    }
+  };
 
 
 return (

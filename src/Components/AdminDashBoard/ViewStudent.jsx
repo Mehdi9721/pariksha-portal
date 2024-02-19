@@ -96,7 +96,9 @@ function ViewStudent() {
               <tr>
                 <td>{foundStudents[0].studentName}</td>
                 <td>{foundStudents[0].studentPrn}</td>
-                <td><button>Delete</button></td>
+                
+                <td><button onClick={() => handleDeleteStudent(foundStudents[0].studentPrn)}>Delete</button></td>
+              
               </tr>
             </tbody>
           </table>)}

@@ -35,17 +35,17 @@ height: 900px;
 
 .btn-websitehome {
   display: inline-block;
-  border-radius: 8px; 
-  background-color: #5a5a5a; 
-  color: #bfbfbf; 
+  border-radius: 8px;
+  background-color: #5a5a5a;
+  color: #bfbfbf;
   text-decoration: none;
   transition: color 0.3s, border 0.3s, transform 0.3s;
   font-weight: 700;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 15px;
-  width: 110px;
-  height: 30px;
-  margin-right: 10px; 
+  width: 175px;
+  height: 53px;
+  margin-right: 10px;
   
 }
 
