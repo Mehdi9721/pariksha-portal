@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
-//import { useNavigate } from 'react-router-dom';
-=======
 import { useNavigate } from 'react-router-dom';
->>>>>>> e2f2f5c18d80d3032e1af9537d8df6134cb23a0c
 import '../../Style/AdminPagesStyle/StyleCreateExam.css'
 const CreateExamForm = () => {
   const [examName, setExamName] = useState('');
   const [examDate, setExamDate] = useState('');
   const [examDuration, setExamDuration] = useState('');
-  //const [questions, setQuestions] = useState('');
   const [examId, setExamId] = useState('');
-  // const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -23,10 +17,6 @@ const CreateExamForm = () => {
       setExamId(examId);
 
       // const timestamp = new Date(examDate).getTime();
-<<<<<<< HEAD
-
-=======
->>>>>>> e2f2f5c18d80d3032e1af9537d8df6134cb23a0c
       const response = await axios.post('http://localhost:8080/api/createExam', {
         examId,
         examName,
@@ -40,22 +30,12 @@ const CreateExamForm = () => {
 
       const examLink = `/exam/${examId}`;
       console.log('Exam Link:', examLink);
-
-      //  navigate(examLink);
     } catch (e) {
       console.log(e);
       setSuccessMessage('');
       setErrorMessage('Error adding Exam, Please try again.');
-      // console.error('Error creating exam:', error);
     }
   };
-
-
-
-
-
-
-
   return (
     <div>
       <div className='AddStuTitle'>Create New Exam:</div>
@@ -74,16 +54,9 @@ const CreateExamForm = () => {
         <label>Questions:</label>
       <input type="file" required className='file'></input>
       <br></br>
-        
-
         <div>
           <button  className='buttonForPaper' type="button" onClick={handleCreateExam}  >Create Exam</button>
-          {/* <button type="button" >Add Questions</button> */}
         </div>
-
-
-
-
       </form>
 
       <p>Generated Exam ID: {examId}</p>
