@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
 //import { useNavigate } from 'react-router-dom';
+=======
+import { useNavigate } from 'react-router-dom';
+>>>>>>> e2f2f5c18d80d3032e1af9537d8df6134cb23a0c
 import '../../Style/AdminPagesStyle/StyleCreateExam.css'
 const CreateExamForm = () => {
   const [examName, setExamName] = useState('');
@@ -19,7 +23,10 @@ const CreateExamForm = () => {
       setExamId(examId);
 
       // const timestamp = new Date(examDate).getTime();
+<<<<<<< HEAD
 
+=======
+>>>>>>> e2f2f5c18d80d3032e1af9537d8df6134cb23a0c
       const response = await axios.post('http://localhost:8080/api/createExam', {
         examId,
         examName,
