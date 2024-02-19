@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import '../../Style/AdminPagesStyle/StyleCreateExam.css';
 
+=======
+import '../../Style/AdminPagesStyle/StyleCreateExam.css'
+>>>>>>> 47fc9e72c7781047bec38bd35d17735ba56fa47d
 const CreateExamForm = () => {
   const [examName, setExamName] = useState('');
   const [examDate, setExamDate] = useState('');
@@ -19,6 +23,7 @@ const CreateExamForm = () => {
     try {
       const examId = Math.random().toString(36).substring(2, 10);
       setExamId(examId);
+<<<<<<< HEAD
   
       // Combine date and time into a single string
       const formattedDateTime = `${examDate} ${examTime}`;
@@ -37,6 +42,10 @@ const CreateExamForm = () => {
         return;
       }
   
+=======
+
+      // const timestamp = new Date(examDate).getTime();
+>>>>>>> 47fc9e72c7781047bec38bd35d17735ba56fa47d
       const response = await axios.post('http://localhost:8080/api/createExam', {
         examId,
         examName,

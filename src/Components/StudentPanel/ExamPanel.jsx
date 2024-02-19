@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import "../../Style/StudentPanelStyle/ExamPanelStyle.css";
 import { useNavigate, useLocation  } from 'react-router-dom';
 import * as faceapi from 'face-api.js';
-
+import { FaceMesh } from "@mediapipe/face_mesh";
+import * as cam from "@mediapipe/camera_utils";
+import Webcam from "react-webcam";
 const questionsData = [
   {
     id: 1,
@@ -46,10 +48,14 @@ const ExamPanel = () => {
   const [isNoiseHigh, setIsNoiseHigh] = useState(false);
   const [noiseWarningCount, setNoiseWarningCount] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  //const videoRef = useRef();
+  const [isWebcamReady, setWebcamReady] = useState(false);
+  const [refreshcam,setrefreshcam]=useState(0);
   const timeForFullScreen = useRef(null);
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 47fc9e72c7781047bec38bd35d17735ba56fa47d
   const handleFullScreenClick = () => {
     if (!isFullScreen) {
       const elem = document.documentElement;
@@ -104,31 +110,32 @@ const ExamPanel = () => {
     return () => {
       clearTimeout(timeForFullScreen.current);
     };
-  }, [isFullScreen]);
+  }, []);
   //----------------------------------------------
 
 
   const navigate = useNavigate();
   let Submitcount=5;
+
+ 
   useEffect(() => {
-    const loadFaceApi = async () => {
-      await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-      await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-      await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
-    };
+    // const loadFaceApi = async () => {
+    //   await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+    //   await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
+    //   await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+    //   await faceapi.nets.tinyYolov2.loadFromUri('/models');
+    // };
 
     const requestMediaPermissions = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }    
         setCameraAllowed(true);
         setMicrophoneAllowed(true);
 
-// i have removed this becouse user was listening his own voice
-        // const video = document.createElement('video');
-        // video.srcObject = stream;
-        // video.play();
-        // const cameraContainer = document.getElementById('camera-container');
-        // cameraContainer.appendChild(video);
+        // Removed code related to creating a new video element, as it seems unnecessary
 
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const analyser = audioContext.createAnalyser();
@@ -142,13 +149,15 @@ const ExamPanel = () => {
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
+<<<<<<< HEAD
           const noiseThreshold = 200; // change this on need
+=======
+          const noiseThreshold = 70; // change this on need
+>>>>>>> 47fc9e72c7781047bec38bd35d17735ba56fa47d
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
-          
           if (averageAmplitude > noiseThreshold) {
             console.log("yes noise is high");
-            setNoiseWarningCount((prevCount) => prevCount + 1); 
-            alert('High noise detected!');
+            setNoiseWarningCount((prevCount) => prevCount + 1);
           }
 
           requestAnimationFrame(checkNoise);
@@ -156,66 +165,24 @@ const ExamPanel = () => {
 
         checkNoise();
 
-
-
-        ////for faces
-        
-        const detectMotion = async () => { 
-          try {
-            const video = document.querySelector('video');
-            const canvas = faceapi.createCanvasFromMedia(video);
-            const displaySize = { width: video.width, height: video.height };
-            faceapi.matchDimensions(canvas, displaySize);
-        
-            document.getElementById('camera-container').appendChild(canvas);
-        
-            const motionThreshold = 0.5; // Adjust this value based on your needs
-        
-            const motionDetection = async () => {
-              const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
-              const motionDetected = detections.length > 0;
-        
-              console.log('Number of faces detected:', detections.length);
-        
-              if (motionDetected) {
-                console.log('Motion detected!');
-                // Trigger your warning logic here
-              }
-        
-              faceapi.draw.drawDetections(canvas, detections.map(det => det.detection));
-              faceapi.draw.drawFaceLandmarks(canvas, detections.map(det => det.landmarks));
-        
-              requestAnimationFrame(motionDetection);
-            };
-        
-            video.addEventListener('play', motionDetection);
-          } catch (error) {
-            console.error('Error detecting motion:', error);
-          }
-        };
-        
-        detectMotion();
-      } catch (error) {
-        console.error('Error accessing camera and microphone:', error);
-      }
-    };
-
-//above 
-
-    const checkPermissionsAndInitialize = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        setCameraAllowed(true);
-        setMicrophoneAllowed(true);
-        loadFaceApi();
-        requestMediaPermissions();
-
       } catch (error) {
         console.error('Error accessing camera and microphone:', error);
         // Handle error, show a message to the user, etc.
       }
     };
 
+    const checkPermissionsAndInitialize = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        setCameraAllowed(true);
+        setMicrophoneAllowed(true);
+        setWebcamReady(true);
+        requestMediaPermissions();
+      } catch (error) {
+        console.error('Error accessing camera and microphone:', error);
+        // Handle error, show a message to the user, etc.
+      }
+    };
     // Check permissions and initialize
     checkPermissionsAndInitialize();
   }, []);
@@ -290,8 +257,10 @@ const ExamPanel = () => {
       ...prevSelectedAnswerStyle,
       [currentQuestionIndex]: 'green',
     }));
+    const listItems = document.querySelectorAll('.question-list li');
+    listItems[currentQuestionIndex].style.backgroundColor = 'green';
   };
-
+  
   const handleSubmit = () => {
     console.log('Selected Answers:', selectedAnswers);
     navigate("/examsuccess");
@@ -314,17 +283,6 @@ const ExamPanel = () => {
   useEffect(() => {
     const handleResize = () => {
       setWarningCount((prevCount) => prevCount + 1);
-      //alert('Changes detected on Screen Size. warning!!!!');
-        //changes made
-//         setTimeout(() => {
-//           Submitcount--;
-//         }, 4000);
-// if(Submitcount<=0){
-//   handleSubmit();
-// }else{
-//   Submitcount=5;
-// }
-   
     };
   
     window.addEventListener('resize', handleResize);
@@ -333,6 +291,88 @@ const ExamPanel = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+
+  //for camera
+  const webcamRef = useRef(null);
+  const canvasRef = useRef(null);
+  let camera = null;
+  const handlerefreshcam =()=>{
+    setrefreshcam((pre)=>pre+1);
+    console.log(refreshcam);
+      }
+  useEffect(() => {
+    const initializeCameraAndFaceMesh = async () => {
+      const faceMesh = new FaceMesh({
+        locateFile: (file) => {
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+        },
+      });
+
+      faceMesh.setOptions({
+        maxNumFaces: 50,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+      });
+
+      faceMesh.onResults(onResults);
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        setCameraAllowed(true);
+        setMicrophoneAllowed(true);
+        setWebcamReady(true);
+
+        if (webcamRef.current) {
+          webcamRef.current.srcObject = stream;
+        }
+
+       const onFrame= async () => {
+         if (webcamRef.current) {
+    await faceMesh.send({ image: webcamRef.current.video });
+  }
+        },
+        camera = new cam.Camera(webcamRef.current?.video, {
+          onFrame,
+          width: 640,
+          height: 480,
+        });
+
+        camera.start();
+      } catch (error) {
+        console.error('Error accessing camera and microphone:', error);
+        // Handle error, show a message to the user, etc.
+      }
+    };
+
+    if (webcamRef.current) {
+      initializeCameraAndFaceMesh();
+    }
+  }, [refreshcam]);
+
+  const onResults = (results) => {
+    const videoWidth = webcamRef.current.video.videoWidth;
+    const videoHeight = webcamRef.current.video.videoHeight;
+  
+    canvasRef.current.width = videoWidth;
+    canvasRef.current.height = videoHeight;
+  
+    const canvasElement = canvasRef.current;
+    const canvasCtx = canvasElement.getContext("2d");
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(
+      results.image,
+      0,
+      0,
+      canvasElement.width,
+      canvasElement.height
+    );
+  
+    if (results.multiFaceLandmarks) {
+      console.log(`Number of faces detected: ${results.multiFaceLandmarks.length}`);
+    }
+  };
+
 
   return (
     <div className={`exam-panel ${isFullScreen ? 'full-screen' : ''}`}>
@@ -344,9 +384,7 @@ const ExamPanel = () => {
           <div className="student-info">
             {studentName} - PRN: {studentPrn}
           </div>
-        </div>
-
-        <video ref={videoRef} autoPlay muted width={500} height={500}></video>
+        </div>      
         <div className="question-list">
         <ul>
           {questionsData.map((question, index) => (
@@ -397,9 +435,37 @@ const ExamPanel = () => {
       <div className='button-warning'>
         Warning!!! Do not Click on Submit Button before giving answers to all questions.
       </div>
+     
+  <center  className="small-screen"> 
+<button className="refCambutton" onClick={handlerefreshcam}>Refresh Cam</button>
+          <div >
+            <Webcam
+              ref={webcamRef}
+              style={{
+                textAlign: "center",
+                zIndex: 9,
+                width: "300px",
+                height: "auto",
+                display: "none",
+              }}
+            />
+            <canvas
+              ref={canvasRef}
+              className="output_canvas"
+              style={{
+                zIndex: 9,
+                width: "300px",
+                height: "auto",
+              }}
+            ></canvas>
+          </div>
+        </center>
+
+
 </div>
       ) : (
         <div className='before-screen'>
+        
         <div className="fullscreen-button">
           <button onClick={handleFullScreenClick}>Enter Full Screen</button>
           
