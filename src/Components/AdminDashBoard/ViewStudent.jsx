@@ -11,7 +11,7 @@ function ViewStudent() {
   useEffect(() => {
     // Fetch student data when the component mounts
     handleStudentData();
-  }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+  }, [stdData,searchPRN,foundStudents]); // Empty dependency array ensures this effect runs only once when the component mounts
 
   const handleStudentData = async () => {
     try {
