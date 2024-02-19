@@ -51,11 +51,6 @@ const ExamPanel = () => {
   const [isWebcamReady, setWebcamReady] = useState(false);
   const [refreshcam,setrefreshcam]=useState(0);
   const timeForFullScreen = useRef(null);
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 47fc9e72c7781047bec38bd35d17735ba56fa47d
   const handleFullScreenClick = () => {
     if (!isFullScreen) {
       const elem = document.documentElement;
@@ -149,11 +144,7 @@ const ExamPanel = () => {
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
-<<<<<<< HEAD
           const noiseThreshold = 200; // change this on need
-=======
-          const noiseThreshold = 70; // change this on need
->>>>>>> 47fc9e72c7781047bec38bd35d17735ba56fa47d
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
           if (averageAmplitude > noiseThreshold) {
             console.log("yes noise is high");

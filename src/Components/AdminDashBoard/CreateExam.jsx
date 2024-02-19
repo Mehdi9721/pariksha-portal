@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import '../../Style/AdminPagesStyle/StyleCreateExam.css';
 
-=======
-import '../../Style/AdminPagesStyle/StyleCreateExam.css'
->>>>>>> 47fc9e72c7781047bec38bd35d17735ba56fa47d
 const CreateExamForm = () => {
   const [examName, setExamName] = useState('');
   const [examDate, setExamDate] = useState('');
@@ -16,14 +12,13 @@ const CreateExamForm = () => {
   const [examId, setExamId] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  
+  const navigate = useNavigate();
 
   const handleCreateExam = async (e) => {
     e.preventDefault();
     try {
       const examId = Math.random().toString(36).substring(2, 10);
       setExamId(examId);
-<<<<<<< HEAD
   
       // Combine date and time into a single string
       const formattedDateTime = `${examDate} ${examTime}`;
@@ -38,14 +33,10 @@ const CreateExamForm = () => {
   
       if (selectedDate < currentDate) {
         // If the selected date is before today, show a prompt and do not proceed
-        alert("Please Enter the Date either Today's Date or Day After Today Only !!");
+        alert("Please Enter the Date of either Today's Date or Day After Current Date Only !!");
         return;
       }
   
-=======
-
-      // const timestamp = new Date(examDate).getTime();
->>>>>>> 47fc9e72c7781047bec38bd35d17735ba56fa47d
       const response = await axios.post('http://localhost:8080/api/createExam', {
         examId,
         examName,
@@ -53,11 +44,11 @@ const CreateExamForm = () => {
         examDuration
       });
   
-      console.log(response.data);
+     
       setSuccessMessage(`Data of ${examName} added successfully!`);
       setErrorMessage('');
   
-      const examLink = `/exam/${examId}`;
+      const examLink = `http://localhost:3000/studentLogin/${examId}`;
       console.log('Exam Link:', examLink);
     } catch (e) {
       console.log(e);
