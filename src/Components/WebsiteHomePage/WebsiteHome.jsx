@@ -24,7 +24,7 @@ function Home() {
   const handleHelpClick = () => {
    
   };
-
+const examId=12;
   return (
     <>
       <div className='body'>
@@ -40,7 +40,7 @@ function Home() {
           <button className='btn-websitehome' onClick={handleSignupClick}>
             {showSignup ? 'Hide' : 'Admin Signup'}
           </button>
-          <button className='btn-websitehome' onClick={()=>{navigate("/studentLogin")}}>Student Login</button>
+          <button className='btn-websitehome' onClick={()=>{navigate(`/studentLogin/${examId}`)}}>Student Login</button>
           <button className='btn-websitehome' onClick={handleHelpClick}>Help</button>
         </div>
         <div>

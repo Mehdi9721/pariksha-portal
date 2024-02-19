@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "../../Style/StudentPanelStyle/ExamPanelStyle.css";
 import { useNavigate, useLocation  } from 'react-router-dom';
 import * as faceapi from 'face-api.js';
@@ -34,9 +34,8 @@ const ExamPanel = () => {
   const location = useLocation();
   const { state } = location;
   const { studentName, studentPrn } = state || {};
-  console.log("name "+studentName);
-  console.log("prn "+studentPrn);
 
+  const videoRef=useRef(); 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [selectedAnswerStyle, setSelectedAnswerStyle] = useState({});
@@ -47,7 +46,7 @@ const ExamPanel = () => {
   const [isNoiseHigh, setIsNoiseHigh] = useState(false);
   const [noiseWarningCount, setNoiseWarningCount] = useState(0);
   const navigate = useNavigate();
-
+  let Submitcount=5;
   useEffect(() => {
     const loadFaceApi = async () => {
       await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
@@ -60,12 +59,12 @@ const ExamPanel = () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setCameraAllowed(true);
         setMicrophoneAllowed(true);
-        const video = document.createElement('video');
-        video.srcObject = stream;
-        video.play();
-       
-        
-        const cameraContainer = document.getElementById('camera-container');
+
+// i have removed this becouse user was listening his own voice
+        // const video = document.createElement('video');
+        // video.srcObject = stream;
+        // video.play();
+        // const cameraContainer = document.getElementById('camera-container');
         // cameraContainer.appendChild(video);
 
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -80,7 +79,7 @@ const ExamPanel = () => {
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
-          const noiseThreshold = 555; // change this on need
+          const noiseThreshold = 200; // change this on need
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
           
           if (averageAmplitude > noiseThreshold) {
@@ -95,8 +94,10 @@ const ExamPanel = () => {
         checkNoise();
 
 
+
         ////for faces
-        const detectMotion = async () => {
+        
+        const detectMotion = async () => { 
           try {
             const video = document.querySelector('video');
             const canvas = faceapi.createCanvasFromMedia(video);
@@ -166,13 +167,25 @@ const ExamPanel = () => {
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-      const message = 'Are you sure you want to leave the page? Your progress may be lost.';
+      const message = 'You want to leave the page? Your progress may be lost.';
       event.returnValue = message;
       return message;
     };
 
+    
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
+
+        // changes made
+        setTimeout(() => {
+          Submitcount--;
+         
+        }, 4000);
+
+        if(Submitcount<=0){handleSubmit()
+        }else{
+          Submitcount=5;
+        };  
         setWarningCount((prevCount) => prevCount + 1);
         alert('Warning!!!!  Exam Tab was not open');
       }
@@ -180,7 +193,6 @@ const ExamPanel = () => {
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     document.addEventListener('visibilitychange', handleVisibilityChange);
-
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -229,7 +241,7 @@ const ExamPanel = () => {
   }, [timer]);
 
   const handleFinalSubmit = () => {
-    const confirmSubmit = window.confirm('Are you sure you want to submit the exam?');
+    const confirmSubmit = window.confirm('Do you want to submit the exam?');
 
     if (confirmSubmit) {
       handleSubmit();
@@ -238,6 +250,15 @@ const ExamPanel = () => {
 
   useEffect(() => {
     const handleResize = () => {
+        //changes made
+        setTimeout(() => {
+          Submitcount--;
+        }, 4000);
+if(Submitcount<=0){
+  handleSubmit();
+}else{
+  Submitcount=5;
+}
       setWarningCount((prevCount) => prevCount + 1);
       alert('Changes detected on Screen Size. warning!!!!');
     };
@@ -253,16 +274,18 @@ const ExamPanel = () => {
     <div className="exam-panel">
       <div className="header">
         <div className="timer">Timer: {Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</div>
-        <div className='warningCount'> Warning count: {warningCount} NoiseCount : {noiseWarningCount}</div>
+        <div className='warningCount'> Warning count: {warningCount} NoiseCount : {noiseWarningCount} </div>
         <div className="student-info">
           {studentName} - PRN: {studentPrn}
         </div>
       </div>
 
+<video ref={videoRef} autoPlay muted width={500} height={500}></video>
 {/* 
       {isCameraAllowed && isMicrophoneAllowed && (
         <div className="camera-container" id="camera-container"></div>
       )} */}
+
 
       <div className="question-list">
         <ul>
