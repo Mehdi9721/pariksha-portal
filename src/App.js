@@ -13,7 +13,7 @@ function App() {
        <Routes>
       <Route path="/" element={<Home></Home>} />
       <Route path="/adminhomepage" element={<AdminHome/>} />
-      <Route path="/studentLogin" element={<StudentDashbord></StudentDashbord>} />
+      <Route path="/studentLogin/:uniqueID" element={<StudentDashbord></StudentDashbord>} />
       <Route path="/stndexam" element={<ExamPanel></ExamPanel>}></Route>
       <Route path="/ctest" element={<CameraComponent></CameraComponent>}></Route>
       <Route path="/examsuccess" element={<ExamSuccess></ExamSuccess>}></Route>

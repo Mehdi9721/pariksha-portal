@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "../../Style/StudentPanelStyle/ExamPanelStyle.css";
 import { useNavigate, useLocation  } from 'react-router-dom';
 import * as faceapi from 'face-api.js';
@@ -34,9 +34,8 @@ const ExamPanel = () => {
   const location = useLocation();
   const { state } = location;
   const { studentName, studentPrn } = state || {};
-  console.log("name "+studentName);
-  console.log("prn "+studentPrn);
 
+  const videoRef=useRef(); 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [selectedAnswerStyle, setSelectedAnswerStyle] = useState({});
@@ -46,9 +45,76 @@ const ExamPanel = () => {
   const [isMicrophoneAllowed, setMicrophoneAllowed] = useState(false);
   const [isNoiseHigh, setIsNoiseHigh] = useState(false);
   const [noiseWarningCount, setNoiseWarningCount] = useState(0);
+<<<<<<< HEAD
  
   const navigate = useNavigate();
+=======
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  //const videoRef = useRef();
+  const timeForFullScreen = useRef(null);
+>>>>>>> b5a2a57037f025a0101c519ec5efa9590e2b89c8
 
+
+  const handleFullScreenClick = () => {
+    if (!isFullScreen) {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      setIsFullScreen(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+    };
+    if (isFullScreen) {
+      clearTimeout(timeForFullScreen.current);
+    }
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullScreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
+    document.addEventListener('msfullscreenchange', handleFullScreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('msfullscreenchange', handleFullScreenChange);
+    };
+  }, [isFullScreen]);
+
+  useEffect(() => {
+    if (!isFullScreen) {
+      timeForFullScreen.current = setTimeout(() => {
+        handleSubmit();
+      }, 6000);
+    }
+    return () => {
+      clearTimeout(timeForFullScreen.current);
+    };
+  }, [isFullScreen]);
+  //----------------------------------------------
+
+
+  const navigate = useNavigate();
+  let Submitcount=5;
   useEffect(() => {
     const loadFaceApi = async () => {
       await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
@@ -61,12 +127,12 @@ const ExamPanel = () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setCameraAllowed(true);
         setMicrophoneAllowed(true);
-        const video = document.createElement('video');
-        video.srcObject = stream;
-        video.play();
-       
-        
-        const cameraContainer = document.getElementById('camera-container');
+
+// i have removed this becouse user was listening his own voice
+        // const video = document.createElement('video');
+        // video.srcObject = stream;
+        // video.play();
+        // const cameraContainer = document.getElementById('camera-container');
         // cameraContainer.appendChild(video);
 
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -81,11 +147,15 @@ const ExamPanel = () => {
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
+<<<<<<< HEAD
 
           const noiseThreshold = 60; // change this on need
              console.log(averageAmplitude);
 
 
+=======
+          const noiseThreshold = 200; // change this on need
+>>>>>>> b5a2a57037f025a0101c519ec5efa9590e2b89c8
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
           
           if (averageAmplitude > noiseThreshold) {
@@ -100,8 +170,10 @@ const ExamPanel = () => {
         checkNoise();
 
 
+
         ////for faces
-        const detectMotion = async () => {
+        
+        const detectMotion = async () => { 
           try {
             const video = document.querySelector('video');
             const canvas = faceapi.createCanvasFromMedia(video);
@@ -171,21 +243,32 @@ const ExamPanel = () => {
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-      const message = 'Are you sure you want to leave the page? Your progress may be lost.';
+      const message = 'You want to leave the page? Your progress may be lost.';
       event.returnValue = message;
       return message;
     };
 
+    
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         setWarningCount((prevCount) => prevCount + 1);
         alert('Warning!!!!  Exam Tab was not open');
+        // changes made
+        const timeoutId = setTimeout(() => {
+          handleSubmit();
+        }, 4000);
+        const clearTimer = () => {
+          clearTimeout(timeoutId);
+        };
+        document.addEventListener('visibilitychange', clearTimer);
+        setTimeout(() => {
+          document.removeEventListener('visibilitychange', clearTimer);
+        }, 4000);
       }
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     document.addEventListener('visibilitychange', handleVisibilityChange);
-
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -234,7 +317,7 @@ const ExamPanel = () => {
   }, [timer]);
 
   const handleFinalSubmit = () => {
-    const confirmSubmit = window.confirm('Are you sure you want to submit the exam?');
+    const confirmSubmit = window.confirm('Do you want to submit the exam?');
 
     if (confirmSubmit) {
       handleSubmit();
@@ -244,7 +327,17 @@ const ExamPanel = () => {
   useEffect(() => {
     const handleResize = () => {
       setWarningCount((prevCount) => prevCount + 1);
-      alert('Changes detected on Screen Size. warning!!!!');
+      //alert('Changes detected on Screen Size. warning!!!!');
+        //changes made
+//         setTimeout(() => {
+//           Submitcount--;
+//         }, 4000);
+// if(Submitcount<=0){
+//   handleSubmit();
+// }else{
+//   Submitcount=5;
+// }
+   
     };
   
     window.addEventListener('resize', handleResize);
@@ -255,21 +348,19 @@ const ExamPanel = () => {
   }, []);
 
   return (
-    <div className="exam-panel">
-      <div className="header">
-        <div className="timer">Timer: {Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</div>
-        <div className='warningCount'> Warning count: {warningCount} NoiseCount : {noiseWarningCount}</div>
-        <div className="student-info">
-          {studentName} - PRN: {studentPrn}
+    <div className={`exam-panel ${isFullScreen ? 'full-screen' : ''}`}>
+      {isFullScreen ? (
+        <div>
+        <div className="header">
+          <div className="timer">Timer: {Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</div>
+          <div className='warningCount'> Warning count: {warningCount} NoiseCount: {noiseWarningCount} </div>
+          <div className="student-info">
+            {studentName} - PRN: {studentPrn}
+          </div>
         </div>
-      </div>
 
-{/* 
-      {isCameraAllowed && isMicrophoneAllowed && (
-        <div className="camera-container" id="camera-container"></div>
-      )} */}
-
-      <div className="question-list">
+        <video ref={videoRef} autoPlay muted width={500} height={500}></video>
+        <div className="question-list">
         <ul>
           {questionsData.map((question, index) => (
             <li
@@ -312,12 +403,25 @@ const ExamPanel = () => {
           </button>
         </div>
       </div>
-      <div className="submit-button">
+   <div className="submit-button">
         <button onClick={handleFinalSubmit}>Submit Exam</button>
       </div>
+
       <div className='button-warning'>
         Warning!!! Do not Click on Submit Button before giving answers to all questions.
       </div>
+</div>
+      ) : (
+        <div className='before-screen'>
+        <div className="fullscreen-button">
+          <button onClick={handleFullScreenClick}>Enter Full Screen</button>
+          
+          <p> Welcome to the exam platform! Before you begin, please ensure a smooth experience by following these instructions. Click on the designated "Enter Full Screen" button to optimize your exam view. Failure to do so may affect your ability to start the exam. Additionally, grant permission for both the camera and microphone when prompted, as these are essential for exam monitoring. Please be advised that the exam will automatically submit if you switch tabs during the test. Ensure a stable and distraction-free
+             environment to make the most of your exam session. Good luck!</p>
+
+        </div>
+        </div>
+      )}
     </div>
   );
 };
