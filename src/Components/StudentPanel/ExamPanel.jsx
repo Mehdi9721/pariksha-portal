@@ -346,7 +346,7 @@ const ExamPanel = () => {
           </div>
         </div>
 
-        <video ref={videoRef} autoPlay muted width={500} height={500}></video>
+        {/* <video ref={videoRef} autoPlay muted width={500} height={500}></video> */}
         <div className="question-list">
         <ul>
           {questionsData.map((question, index) => (

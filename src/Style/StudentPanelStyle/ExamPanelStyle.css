@@ -35,14 +35,14 @@ body {
   border-right: 2px solid #ddd;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column; 
+  align-items: flex-start; 
 }
-
 .question-list ul {
   list-style: none;
   padding: 0;
   margin: 10px 0;
 }
-
 .question-list li {
   box-sizing: border-box; 
   width: 30px;
@@ -52,6 +52,7 @@ body {
   text-align: center;
   line-height: 30px;
   cursor: pointer;
+  margin-right: 5px;
   margin-bottom: 5px;
   border-radius: 5px;
   flex-shrink: 0;
