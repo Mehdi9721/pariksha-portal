@@ -45,14 +45,9 @@ const ExamPanel = () => {
   const [isMicrophoneAllowed, setMicrophoneAllowed] = useState(false);
   const [isNoiseHigh, setIsNoiseHigh] = useState(false);
   const [noiseWarningCount, setNoiseWarningCount] = useState(0);
-<<<<<<< HEAD
- 
-  const navigate = useNavigate();
-=======
   const [isFullScreen, setIsFullScreen] = useState(false);
   //const videoRef = useRef();
   const timeForFullScreen = useRef(null);
->>>>>>> b5a2a57037f025a0101c519ec5efa9590e2b89c8
 
 
   const handleFullScreenClick = () => {
