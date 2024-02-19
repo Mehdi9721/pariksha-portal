@@ -5,6 +5,7 @@ import CreateExam from './CreateExam';
 import ViewExam from './ViewExam';
 import ViewResult from './ViewResult';
 import ViewStudent from './ViewStudent';
+import ActiveExams from './ActiveExams';
 
 function AdminHome() {
     const [activeButton, setActiveButton] = useState(null);
@@ -26,6 +27,7 @@ function AdminHome() {
                         <tr><td><button className={activeButton === 'AddStu' ? 'active' : ''} onClick={() => { handleButtonClick('AddStu'); }}>Add Students</button></td></tr>
                         <tr><td><button className={activeButton === 'ViewStudent' ? 'active' : ''} onClick={() => { handleButtonClick('ViewStudent'); }}>  View Students</button></td></tr>
                         <tr><td><button className={activeButton === 'ViewResult' ? 'active' : ''} onClick={() => { handleButtonClick('ViewResult'); }}>  View Results</button></td></tr>
+                        <tr><td><button className={activeButton === 'ActiveExams' ? 'active' : ''} onClick={() => { handleButtonClick('ActiveExams'); }}> Active Exams</button></td></tr>
                     </table>
                 </div>
                 <div className='container2'>
@@ -34,6 +36,7 @@ function AdminHome() {
                     {activeButton === 'ViewExam' && <ViewExam />}
                     {activeButton === 'ViewResult' && <ViewResult />}
                     {activeButton === 'ViewStudent' && <ViewStudent />}
+                    {activeButton === 'ActiveExams' && <ActiveExams />}
                 </div>
             </div>
         </>

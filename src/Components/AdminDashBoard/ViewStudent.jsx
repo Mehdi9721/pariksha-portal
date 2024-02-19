@@ -3,12 +3,17 @@ import '../../Style/AdminPagesStyle/StyleStudentView.css';
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
 
-
 function ViewStudent() {
   const [stdData, setdata] = useState([]);
   const [searchPRN, setSearchPRN] = useState('');
-  const [foundStudents,setFoundStudents]=useState({});
-const handleStudentData = async () => {
+  const [foundStudents, setFoundStudents] = useState({});
+
+  useEffect(() => {
+    // Fetch student data when the component mounts
+    handleStudentData();
+  }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+
+  const handleStudentData = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/getAllStudent');
       setdata(response.data);
@@ -18,10 +23,10 @@ const handleStudentData = async () => {
     }
   };
 
-  const handleDeleteAll = async ()=> {
+  const handleDeleteAll = async () => {
     const al = window.confirm('Do you want to delete all students?');
     if (al) {
-    try {
+      try {
         const response = await axios.delete('http://localhost:8080/api/deleteAll');
       } catch (e) {
         console.log(e);
@@ -32,8 +37,8 @@ const handleStudentData = async () => {
   };
 
   const handleSearch = () => {
-  setFoundStudents( stdData.filter((std) =>std.studentPrn===searchPRN));
-  console.log(foundStudents[0]);
+    setFoundStudents(stdData.filter((std) => std.studentPrn === searchPRN));
+    console.log(foundStudents[0]);
   };
 
   const resetSearch = () => {
@@ -41,7 +46,22 @@ const handleStudentData = async () => {
     handleStudentData();
   };
 
+  const handleDeleteStudent = async (prn) => {
+    const confirmDelete = window.confirm(`Do you want to delete the student with PRN: ${prn}?`);
 
+    if (confirmDelete) {
+      try {
+        // Make an API call to delete the student
+        await axios.delete(`http://localhost:8080/api/deleteStudent/${prn}`);
+
+        // Update the state to reflect the changes
+        setdata((prevData) => prevData.filter((std) => std.studentPrn !== prn));
+      } catch (error) {
+        console.error('Error deleting student:', error);
+        // Display an error message to the user
+      }
+    }
+  };
 
   return (
     <>
@@ -63,55 +83,47 @@ const handleStudentData = async () => {
           <button onClick={resetSearch}>Reset</button>
         </div>
         <br></br>
-       {foundStudents.length>0 && (
-       <table border={"1px solid black"} className='StudentViewTable'>
-        <thead>
-            <tr>
-              <th>Student Name:</th>
-              <th>Student PRN:</th>
-             
-              <th>Delete Student:</th>
-            </tr>
-          </thead>
-          <tbody>
-          
+        {foundStudents.length > 0 && (
+          <table border={"1px solid black"} className='StudentViewTable'>
+            <thead>
+              <tr>
+                <th>Student Name:</th>
+                <th>Student PRN:</th>
+                <th>Delete Student:</th>
+              </tr>
+            </thead>
+            <tbody>
               <tr>
                 <td>{foundStudents[0].studentName}</td>
                 <td>{foundStudents[0].studentPrn}</td>
-
-                <td><button>Delete</button></td>
+                
+                <td><button onClick={() => handleDeleteStudent(foundStudents[0].studentPrn)}>Delete</button></td>
+              
               </tr>
-      
-          </tbody>
-
-        </table>) } 
+            </tbody>
+          </table>)}
         <br />
         <div>Total Number Of Students: {stdData.length}
-        
-        <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
-
+          <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
         </div>
         <table border={"1px solid black"} className='StudentViewTable'>
           <thead>
             <tr>
               <th>Student Name:</th>
               <th>Student PRN:</th>
-             
               <th>Delete Student:</th>
             </tr>
           </thead>
           <tbody>
             {stdData?.map((std) => (
-              <tr>
+              <tr key={std.studentPrn}>
                 <td>{std.studentName}</td>
                 <td>{std.studentPrn}</td>
-               
-                <td><button>Delete</button></td>
+                <td><button onClick={() => handleDeleteStudent(std.studentPrn)}>Delete</button></td>
               </tr>
             ))}
           </tbody>
         </table>
-       
       </div>
     </>
   );

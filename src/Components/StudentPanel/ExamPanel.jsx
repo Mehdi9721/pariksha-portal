@@ -49,7 +49,6 @@ const ExamPanel = () => {
   //const videoRef = useRef();
   const timeForFullScreen = useRef(null);
 
-
   const handleFullScreenClick = () => {
     if (!isFullScreen) {
       const elem = document.documentElement;
