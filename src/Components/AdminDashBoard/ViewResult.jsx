@@ -67,9 +67,9 @@ function ViewResult() {
   return (
     <>
       <div className='viewBody'>
-        <div className='ResultViewTitle'> <h1><b><i> View Results of Student </i>  </b>  </h1></div>
+        <div className='ResultViewTitle'> <h4><b> View Result of Students </b>  </h4></div>
         <br />
-        <button className='refresh-btn' onClick={handleResultData}>
+        <button type="button" class="btn btn-outline-secondary" onClick={handleResultData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
         <br></br>
@@ -80,21 +80,21 @@ function ViewResult() {
             value={searchPRN}
             onChange={(e) => setSearchPRN(e.target.value)}
           />
-          <button onClick={handleSearch}>Search</button>
-          <button onClick={resetSearch}>Reset</button>
+          <button onClick={handleSearch}   type="button" class="btn btn-primary"  style={{ margin: "10px" }}  >Search</button>
+          <button onClick={resetSearch}   type="button" class="btn btn-primary"  style={{ margin: "10px" }}   >Reset</button>
         </div>
         <br></br>
         {foundResults.length > 0 && (
-          <table border={"1px solid black"} className='ResultViewTable'>
+          <table border={"5px solid black"} class="table table-striped">
             <thead>
               <tr>
                 
-                <th>Student PRN:</th>
-                <th>Student Name:</th>
-                <th>Exam Name:</th>
-                <th>Exam Date:</th>
-                <th>Result Download Link:</th>
-                <th>Delete Result:</th>
+                <th>Student PRN</th>
+                <th>Student Name</th>
+                <th>Exam Name</th>
+                <th>Exam Date</th>
+                <th>Result Download Link</th>
+                <th>Delete Result</th>
               </tr>
             </thead>
             <tbody>
@@ -105,24 +105,24 @@ function ViewResult() {
                 <td>{foundResults[0].examName}</td>
                 <td>{foundResults[0].examDate}</td>
                 <td>{foundResults[0].studentResultDownloadLink}</td>
-                <td><button onClick={() => handleDeleteResult(foundResults[0].studentPrn)}>Delete</button></td>
+                <td><button  type="button" class="btn btn-danger"    onClick={() => handleDeleteResult(foundResults[0].studentPrn)}>Delete</button></td>
               </tr>
             </tbody>
           </table>)}
         <br />
         <div>Total Number Of Results: {resultData.length}
-          <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
+          <div><button   type="button" class="btn btn-danger"   style={{ margin: "10px" }}   onClick={handleDeleteAll}>Delete All</button></div>
         </div>
-        <table border={"1px solid black"} className='ResultViewTable'>
+        <table border={"5px solid black"} class="table table-striped">
           <thead>
             <tr>
             
-              <th>Student PRN:</th>
-              <th>Student Name:</th>
-              <th>Exam Name:</th>
-              <th>Exam Date:</th>
-              <th>Result Download Link:</th>
-              <th>Delete Result:</th>
+              <th>Student PRN</th>
+              <th>Student Name</th>
+              <th>Exam Name</th>
+              <th>Exam Date</th>
+              <th>Result Download Link</th>
+              <th>Delete Result</th>
             </tr>
           </thead>
           <tbody>
@@ -134,7 +134,7 @@ function ViewResult() {
                 <td>{result.examName}</td>
                 <td>{result.examDate}</td>
                 <td>{result.studentResultDownloadLink}</td>
-                <td><button onClick={() => handleDeleteResult(result.studentPrn)}>Delete</button></td>
+                <td><button    type="button" class="btn btn-danger"   onClick={() => handleDeleteResult(result.studentPrn)}>Delete</button></td>
               </tr>
             ))}
           </tbody>

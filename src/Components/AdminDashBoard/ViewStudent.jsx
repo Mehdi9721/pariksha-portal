@@ -11,7 +11,7 @@ function ViewStudent() {
   useEffect(() => {
     // Fetch student data when the component mounts
     handleStudentData();
-  }, [stdData,searchPRN,foundStudents]); // Empty dependency array ensures this effect runs only once when the component mounts
+  }, [stdData, searchPRN, foundStudents]); // Empty dependency array ensures this effect runs only once when the component mounts
 
   const handleStudentData = async () => {
     try {
@@ -68,7 +68,7 @@ function ViewStudent() {
       <div className='viewBody'>
         <div className='AddStuTitle'>View Student:</div>
         <br />
-        <button className='refresh-btn' onClick={handleStudentData}>
+        <button  type="button" class="btn btn-outline-secondary"  onClick={handleStudentData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
         <br></br>
@@ -79,39 +79,39 @@ function ViewStudent() {
             value={searchPRN}
             onChange={(e) => setSearchPRN(e.target.value)}
           />
-          <button onClick={handleSearch}>Search</button>
-          <button onClick={resetSearch}>Reset</button>
+          <button onClick={handleSearch} type="button" class="btn btn-outline-primary"style={{ margin: "10px" }}  >Search</button>
+          <button onClick={resetSearch} type="button" class="btn btn-outline-primary" style={{ margin: "10px" }}>Reset</button>
         </div>
         <br></br>
         {foundStudents.length > 0 && (
-          <table border={"1px solid black"} className='StudentViewTable'>
+          <table border={"5px solid black"} class="table table-striped">
             <thead>
               <tr>
-                <th>Student Name:</th>
-                <th>Student PRN:</th>
-                <th>Delete Student:</th>
+                <th>Student Name</th>
+                <th>Student PRN</th>
+                <th>Delete Student</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>{foundStudents[0].studentName}</td>
                 <td>{foundStudents[0].studentPrn}</td>
-                
-                <td><button onClick={() => handleDeleteStudent(foundStudents[0].studentPrn)}>Delete</button></td>
-              
+
+                <td><button onClick={() => handleDeleteStudent(foundStudents[0].studentPrn)} type="button" class="btn btn-danger"   >Delete</button></td>
+
               </tr>
             </tbody>
           </table>)}
         <br />
         <div>Total Number Of Students: {stdData.length}
-          <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
+          <div><button onClick={handleDeleteAll} type="button" class="btn btn-danger"  style={{ margin: "10px" }}  >Delete All</button></div>
         </div>
-        <table border={"1px solid black"} className='StudentViewTable'>
+        <table border={"5px solid black"} class="table table-striped">
           <thead>
             <tr>
-              <th>Student Name:</th>
-              <th>Student PRN:</th>
-              <th>Delete Student:</th>
+              <th>Student Name</th>
+              <th>Student PRN</th>
+              <th>Delete Student</th>
             </tr>
           </thead>
           <tbody>
@@ -119,7 +119,7 @@ function ViewStudent() {
               <tr key={std.studentPrn}>
                 <td>{std.studentName}</td>
                 <td>{std.studentPrn}</td>
-                <td><button onClick={() => handleDeleteStudent(std.studentPrn)}>Delete</button></td>
+                <td><button onClick={() => handleDeleteStudent(std.studentPrn)} type="button" class="btn btn-danger"    >Delete</button></td>
               </tr>
             ))}
           </tbody>

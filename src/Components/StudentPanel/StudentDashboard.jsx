@@ -28,13 +28,13 @@ console.log(e);
   };
 
   return (
-    <div >
+    <div className='BodybackgroudImage'>
       <div className='header-stdn-login'>
-    <img src={img} alt='logo' className='logoHeader'/>
+      <img src={img} alt='logo' className='logoHeader rotating-logo' />
 <div className='BrandName'>Pariksha Portal</div>
 </div>
       <div className='StudentDashboard'>
-      <h2>Student Dashboard</h2>
+      <h3><b>Student Dashboard</b></h3>
       <form onSubmit={handleLogin}>
         <div>
           <label htmlFor="prn">Enter PRN:</label>

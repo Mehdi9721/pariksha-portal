@@ -60,20 +60,20 @@ function ViewExam() {
       <div className='viewBody'>
         <div className='AddStuTitle'>View Exam Data:</div>
         <br />
-        <button className='refresh-btn' onClick={handleExamData}>
+        <button  type="button" class="btn btn-outline-secondary"   style={{ margin: "10px" }} onClick={handleExamData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
 
         <br />
-        <div>Total Number Of Exams: {examData.length}</div>
-        <table border={"1px solid black"} className='StudentViewTable'>
+        <div>  <h5> <b>  Total Number Of Exams: {examData.length}  </b> </h5>  </div>
+        <table border={"5px solid black"} class="table table-striped">
           <thead>
             <tr>
-              <th>Exam Name:</th>
-              <th>Exam Schedule:</th>
-              <th>Exam Duration:</th>
-              <th>Exam ID:</th>
-              <th>Exam Link:</th>
+              <th>Exam Name</th>
+              <th>Exam Schedule</th>
+              <th>Exam Duration(mins)</th>
+              <th>Exam ID</th>
+              <th>Exam Link</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -86,7 +86,7 @@ function ViewExam() {
                 <td>{exam.examId}</td>
                 <td> http://localhost:3000/studentLogin/{exam.examId}</td>
                 <td>
-                  <button onClick={() => handleDeleteById(exam.examId)}>
+                  <button  type="button" class="btn btn-danger"  onClick={() => handleDeleteById(exam.examId)}>
                     Delete
                   </button>
                 </td>
@@ -94,7 +94,7 @@ function ViewExam() {
             ))}
           </tbody>
         </table>
-        <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
+        <div><button  type="button" class="btn btn-danger"  onClick={handleDeleteAll}>Delete All</button></div>
       </div>
     </>
   );
