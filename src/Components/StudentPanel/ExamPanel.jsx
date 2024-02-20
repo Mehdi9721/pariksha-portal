@@ -42,7 +42,7 @@ const ExamPanel = () => {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [selectedAnswerStyle, setSelectedAnswerStyle] = useState({});
   const [timer, setTimer] = useState(900);
-  const [warningCount, setWarningCount] = useState(0);
+  const [warningCount, setWarningCount] = useState(-1);
   const [isCameraAllowed, setCameraAllowed] = useState(false);
   const [isMicrophoneAllowed, setMicrophoneAllowed] = useState(false);
   const [isNoiseHigh, setIsNoiseHigh] = useState(false);
@@ -51,6 +51,8 @@ const ExamPanel = () => {
   const [isWebcamReady, setWebcamReady] = useState(false);
   const [refreshcam,setrefreshcam]=useState(0);
   const timeForFullScreen = useRef(null);
+  const [OneFaceWarning,setOneFaceWarning]=useState(false);
+  const [TwoFaceWarning,setTwoFaceWarning]=useState(false);
   const handleFullScreenClick = () => {
     if (!isFullScreen) {
       const elem = document.documentElement;
@@ -87,7 +89,6 @@ const ExamPanel = () => {
     document.addEventListener('mozfullscreenchange', handleFullScreenChange);
     document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
     document.addEventListener('msfullscreenchange', handleFullScreenChange);
-
     return () => {
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
       document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
@@ -97,7 +98,7 @@ const ExamPanel = () => {
   }, [isFullScreen]);
 
   useEffect(() => {
-    if (!isFullScreen) {
+    if (!isFullScreen && warningCount>0) {
       timeForFullScreen.current = setTimeout(() => {
         handleSubmit();
       }, 6000);
@@ -105,7 +106,7 @@ const ExamPanel = () => {
     return () => {
       clearTimeout(timeForFullScreen.current);
     };
-  }, []);
+  }, [isFullScreen]);
   //----------------------------------------------
 
 
@@ -144,7 +145,8 @@ const ExamPanel = () => {
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
-          const noiseThreshold = 200; // change this on need
+          const noiseThreshold = 444; // change this on need
+          console.log(averageAmplitude);
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
           if (averageAmplitude > noiseThreshold) {
             console.log("yes noise is high");
@@ -221,7 +223,7 @@ const ExamPanel = () => {
   }, []);
 
   useEffect(() => {
-    if (warningCount === 4) {
+    if (warningCount === 10) {
       alert('Automatic submission due to excessive warnings.');
       handleSubmit();
     }
@@ -288,10 +290,15 @@ const ExamPanel = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   let camera = null;
+
   const handlerefreshcam =()=>{
     setrefreshcam((pre)=>pre+1);
-    console.log(refreshcam);
       }
+      useEffect(() => {
+        const timeoutId = setTimeout(handlerefreshcam, 20000);
+        return () => clearInterval(timeoutId);
+      }, []);
+
   useEffect(() => {
     const initializeCameraAndFaceMesh = async () => {
       const faceMesh = new FaceMesh({
@@ -358,8 +365,18 @@ const ExamPanel = () => {
       canvasElement.width,
       canvasElement.height
     );
-  
+
     if (results.multiFaceLandmarks) {
+      if(results.multiFaceLandmarks.length>1){
+        setTwoFaceWarning(true);
+      }else{
+        setTwoFaceWarning(false);
+      }
+      if(results.multiFaceLandmarks.length<=0){
+        setOneFaceWarning(true);
+      }else{
+        setOneFaceWarning(false);
+      }
       console.log(`Number of faces detected: ${results.multiFaceLandmarks.length}`);
     }
   };
@@ -389,6 +406,14 @@ const ExamPanel = () => {
           ))}
         </ul>
       </div>
+
+{
+  OneFaceWarning && (<div className='noFace'>Warning!!!!!!! No Face on camera</div>) 
+}
+{
+    TwoFaceWarning && (<div className='noFace'>Warning!!!!!!! Multiple Faces on camera</div>) 
+}
+
 
       <div className="question-container">
         <h2>{questionsData[currentQuestionIndex].question}</h2>
