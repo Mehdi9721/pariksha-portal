@@ -3,15 +3,14 @@ import '../../Style/AdminPagesStyle/StyleStudentView.css';
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
 
-
 function ViewExam() {
   const [examData, setExamData] = useState([]);
 
   useEffect(() => {
-    handleEaxmData(); // Fetch data when the component mounts
+    handleExamData(); // Fetch data when the component mounts
   }, []);
 
-  const handleEaxmData = async () => {
+  const handleExamData = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/getAllExams');
       setExamData(response.data);
@@ -23,11 +22,11 @@ function ViewExam() {
 
   const handleDeleteAll = async () => {
     try {
-      const al = window.confirm('Are you sure you want to delete all Exam Data ?');
-      if (al) {
+      const confirmDelete = window.confirm('Are you sure you want to delete all Exam Data?');
+      if (confirmDelete) {
         await axios.delete('http://localhost:8080/api/deleteAllExams');
         console.log('All exams deleted successfully from the database!');
-        handleEaxmData(); // Refresh exam data after successful deletion
+        handleExamData(); // Refresh exam data after successful deletion
       } else {
         console.log("Delete all discarded");
       }
@@ -38,11 +37,11 @@ function ViewExam() {
 
   const handleDeleteById = async (examId) => {
     try {
-      const al = window.confirm(`Are you sure you want to delete the ${examId} Exam Record ?`);
-      if (al) {
+      const confirmDelete = window.confirm(`Are you sure you want to delete the ${examId} Exam Record?`);
+      if (confirmDelete) {
         await axios.delete(`http://localhost:8080/api/deleteExam/${examId}`);
         console.log(`Exam with ID ${examId} deleted successfully.`);
-        handleEaxmData(); // Refresh exam data after successful deletion
+        handleExamData(); // Refresh exam data after successful deletion
       } else {
         console.log("Delete discarded");
       }
@@ -51,51 +50,54 @@ function ViewExam() {
     }
   };
 
+  const formatTimestamp = (timestamp) => {
+    const formattedDate = new Date(timestamp).toLocaleString();
+    return formattedDate;
+  };
 
-return (
-  <>
-    <div className='viewBody'>
-      <div className='AddStuTitle'>View Exam Data:</div>
-      <br />
-      <button className='refresh-btn' onClick={handleEaxmData}>
-        Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
-      </button>
-     
-      <br />
-      <div>Total Number Of Exams : {examData.length}</div>
-      <table border={"1px solid black"} className='StudentViewTable'>
-        <thead>
-          <tr>
-            <th>Exam Name:</th>
-            <th>Exam Date:</th>
-            <th>Exam Duration:</th>
-            <th>Exam ID:</th>
-            <th>Exam Link:</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {examData.map((E) => (
-            <tr key={E.examId}>
-              <td>{E.examName}</td>
-              <td>{E.examDate}</td>
-              <td>{E.examDuration}</td>
-              <td>{E.examId}</td>
-              <td> http://localhost:3000/studentLogin/{E.examId}</td>
-              <td>
-        <button onClick={() => handleDeleteById(E.examId)}>
-          Delete
+  return (
+    <>
+      <div className='viewBody'>
+        <div className='AddStuTitle'>View Exam Data:</div>
+        <br />
+        <button className='refresh-btn' onClick={handleExamData}>
+          Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
-      </td>
-      
+
+        <br />
+        <div>Total Number Of Exams: {examData.length}</div>
+        <table border={"1px solid black"} className='StudentViewTable'>
+          <thead>
+            <tr>
+              <th>Exam Name:</th>
+              <th>Exam Schedule:</th>
+              <th>Exam Duration:</th>
+              <th>Exam ID:</th>
+              <th>Exam Link:</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
-    </div>
-  </>
-);
+          </thead>
+          <tbody>
+            {examData.map((exam) => (
+              <tr key={exam.examId}>
+                <td>{exam.examName}</td>
+                <td>{formatTimestamp(exam.examSchedule)}</td>
+                <td>{exam.examDuration}</td>
+                <td>{exam.examId}</td>
+                <td> http://localhost:3000/studentLogin/{exam.examId}</td>
+                <td>
+                  <button onClick={() => handleDeleteById(exam.examId)}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className='DeleteAll'><button onClick={handleDeleteAll}>Delete All</button></div>
+      </div>
+    </>
+  );
 }
 
-export default ViewExam
+export default ViewExam;

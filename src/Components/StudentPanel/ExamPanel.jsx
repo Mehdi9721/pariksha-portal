@@ -144,7 +144,7 @@ const ExamPanel = () => {
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
-          const noiseThreshold = 70; // change this on need
+          const noiseThreshold = 200; // change this on need
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
           if (averageAmplitude > noiseThreshold) {
             console.log("yes noise is high");
