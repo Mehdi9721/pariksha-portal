@@ -13,30 +13,28 @@ const CreateExamForm = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  //file change
+  const [file, setFile] = useState(null);
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
 
+  ////////////
   const handleCreateExam = async (e) => {
     e.preventDefault();
     try {
       const examId = Math.random().toString(36).substring(2, 10);
       setExamId(examId);
-  
-      // Combine date and time into a single string
       const formattedDateTime = `${examDate} ${examTime}`;
-  
-      // Parse the formatted date and time to a string
       const examScheduleString = new Date(formattedDateTime).toISOString();
-  
-      // Check if the selected date is today or in the future
       const selectedDate = new Date(examDate);
       const currentDate = new Date();
       currentDate.setHours(0, 0, 0, 0);
   
       if (selectedDate < currentDate) {
-        // If the selected date is before today, show a prompt and do not proceed
         alert("Please Enter the Date of either Today's Date or Day After Current Date Only !!");
         return;
       }
-  
       const response = await axios.post('http://localhost:8080/api/createExam', {
         examId,
         examName,
@@ -44,25 +42,37 @@ const CreateExamForm = () => {
         examDuration
       });
   
-     
+     //sending data for file 
+      const formData = new FormData();
+      formData.append('file', file);
+      console.log(file);
+      if(file!==null){
+        try{
+         axios.post('http://localhost:8080/api/uploadQuestionPaper', formData);
+        }catch(e){
+      console.log(e);
+        }
+      }
+     //``````````````````
       setSuccessMessage(`Data of ${examName} added successfully!`);
       setErrorMessage('');
   
       const examLink = `http://localhost:3000/studentLogin/${examId}`;
-      console.log('Exam Link:', examLink);
     } catch (e) {
       console.log(e);
       setSuccessMessage('');
       setErrorMessage('Error adding Exam, Please try again.');
     }
+
   };
+
 
   return (
     <div>
       <div className='AddStuTitle'>Create New Exam:</div>
       {successMessage && <div className="successMessage">{successMessage}</div>}
       {errorMessage && <div className="errorMessage">{errorMessage}</div>}
-      <form className='FormCreateExam'>
+      <form className='FormCreateExam' onSubmit={handleCreateExam}>
         <label>Exam Name:</label>
         <input type="text" value={examName} onChange={(e) => setExamName(e.target.value)} required />
 
@@ -87,13 +97,12 @@ const CreateExamForm = () => {
 
         <label>Exam Duration (minutes):</label>
         <input type="number" value={examDuration} onChange={(e) => setExamDuration(e.target.value)} required />
-
         <label>Questions:</label>
-        <input type="file" required className='file'></input>
+        <input type="file" onChange={handleFileChange}  className='file' required></input>
         <br></br>
 
         <div>
-          <button type="button" class="btn btn-success"  onClick={handleCreateExam}>Create Exam</button>
+          <button className="btn btn-success" >Create Exam</button>
         </div>
       </form>
 

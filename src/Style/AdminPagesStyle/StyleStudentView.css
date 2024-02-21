@@ -2,7 +2,7 @@
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     margin: 4px;
     font-weight: 600;
-    min-width: 800px;
+  width: 100%;
 }
 .StudentViewTable td{
 padding: 10px;

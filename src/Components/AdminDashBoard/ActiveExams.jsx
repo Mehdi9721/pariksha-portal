@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import '../../Style/AdminPagesStyle/StyleStudentView.css';
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
-
 function ActiveExams() {
     const [examData, setExamData] = useState([]);
     const [searchExamName, setSearchExamName] = useState('');
     const [foundExams, setFoundExams] = useState({});
 
     useEffect(() => {
-
         handleExamData();
-    }, []);
+    }, [examData,foundExams]);
 
     const handleExamData = async () => {
         try {
@@ -22,7 +20,6 @@ function ActiveExams() {
             console.log(e);
         }
     };
-
     const handleSearch = () => {
         setFoundExams(examData.filter((exam) => exam.examName === searchExamName));
         console.log(foundExams[0]);
@@ -40,12 +37,8 @@ function ActiveExams() {
             try {
                 // Make an API call to delete the exam
                 await axios.delete(`http://localhost:8080/api/deleteAllActiveExamData`);
-
-
-
             } catch (error) {
                 console.error('Error deleting exam:', error);
-
             }
         }
     };

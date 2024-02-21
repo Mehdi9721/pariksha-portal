@@ -70,10 +70,18 @@ body {
   flex-grow: 1;
   background-color: #87ceeb;
   padding: 20px;
+  height:600px;
 }
-
+.question-container  h2{
+  font-weight: 700;
+  margin-bottom: 50px;
+}
 .answer-options {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  font-weight: 700;
 }
 
 .option {
@@ -239,4 +247,7 @@ box-shadow: 2px -2px  6px black;
   color: blue;
   padding-top: 30px;
   font-weight: 700;
+}
+.answerInput{
+  margin: 10px;
 }
