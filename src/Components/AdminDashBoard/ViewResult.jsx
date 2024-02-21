@@ -9,9 +9,8 @@ function ViewResult() {
   const [foundResults, setFoundResults] = useState({});
 
   useEffect(() => {
-    // Fetch result data when the component mounts
     handleResultData();
-  }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+  }, [resultData,searchPRN,foundResults]); 
 
   const handleResultData = async () => {
     try {
@@ -88,9 +87,9 @@ function ViewResult() {
           <table border={"5px solid black"} class="table table-striped">
             <thead>
               <tr>
-                
                 <th>Student PRN</th>
                 <th>Student Name</th>
+                <th>Student MARKS</th>
                 <th>Exam Name</th>
                 <th>Exam Date</th>
                 <th>Result Download Link</th>
@@ -103,6 +102,7 @@ function ViewResult() {
                
                 <td>{foundResults[0].studentPrn}</td>
                 <td>{foundResults[0].studentName}</td>
+                <td>{foundResults[0].studentMarks}</td>
                 <td>{foundResults[0].examName}</td>
                 <td>{foundResults[0].examDate}</td>
                 <td>{foundResults[0].studentResultDownloadLink}</td>
@@ -121,6 +121,7 @@ function ViewResult() {
             
               <th>Student PRN</th>
               <th>Student Name</th>
+              <th>Student Marks</th>
               <th>Exam Name</th>
               <th>Exam Date</th>
               <th>Result Download Link</th>
@@ -134,6 +135,7 @@ function ViewResult() {
                 
                 <td>{result.studentPrn}</td>
                 <td>{result.studentName}</td>
+                <td>{result.studentMarks}</td>
                 <td>{result.examName}</td>
                 <td>{result.examDate}</td>
                 <td>{result.studentResultDownloadLink}</td>

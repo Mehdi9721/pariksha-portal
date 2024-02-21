@@ -84,7 +84,7 @@ function ViewStudent() {
         </div>
         <br></br>
         {foundStudents.length > 0 && (
-          <table border={"5px solid black"} class="table table-bordered">
+          <table border={"5px solid black"} class="table table-striped StudentViewTable">
             <thead>
               <tr>
                 <th>Student Name</th>

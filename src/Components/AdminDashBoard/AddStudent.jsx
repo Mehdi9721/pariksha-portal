@@ -8,7 +8,6 @@ function AddStudent() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const [file, setFile] = useState(null);
-
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
@@ -87,9 +86,9 @@ function AddStudent() {
           value={studentPrn}
           onChange={(e) => setStudentPRN(e.target.value)}
           required />
-        <button   type="button" class="btn btn-primary active" >Add Student</button>
+        <button    class="btn btn-primary active" >Add Student</button>
       </form>
-
+      <br></br>
       <br></br>
       <h6>Or Select File to fill details Automatically!!</h6>
       <div className='FileAreaOfAddStudent'>

@@ -70,10 +70,18 @@ body {
   flex-grow: 1;
   background-color: #87ceeb;
   padding: 20px;
+  height:600px;
 }
-
+.question-container  h2{
+  font-weight: 700;
+  margin-bottom: 50px;
+}
 .answer-options {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  font-weight: 700;
 }
 
 .option {
@@ -157,7 +165,7 @@ padding: 10px;
   justify-content: center;
 }
 .fullscreen-button{
-  width: 300px;
+  width: 400px;
   height: 300px;
 background-color: rgb(255, 255, 255);
 display: flex;
@@ -168,7 +176,7 @@ border-radius: 30px;
 box-shadow: 2px -2px  6px black;
 }
 .fullscreen-button button{
-  width: 140px;
+  width: 150px;
   height: 30px;
   border-radius: 30px;
   background-color:  rgb(180, 223, 240);
@@ -178,7 +186,7 @@ box-shadow: 2px -2px  6px black;
   transition: all 0.3s ease-out; 
 }
 .fullscreen-button button:hover{
-  width: 150px;
+  width: 160px;
   height: 30px;
   border-radius: 30px;
   background-color:lightgreen;
@@ -239,4 +247,7 @@ box-shadow: 2px -2px  6px black;
   color: blue;
   padding-top: 30px;
   font-weight: 700;
+}
+.answerInput{
+  margin: 10px;
 }

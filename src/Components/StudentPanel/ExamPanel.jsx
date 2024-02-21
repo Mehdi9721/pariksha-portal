@@ -6,32 +6,8 @@ import { FaceMesh } from "@mediapipe/face_mesh";
 import * as cam from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
 import axios from 'axios';
-const questionsData = [
-  {
-    id: 1,
-    question: 'What is the capital of France?',
-    options: ['Paris', 'Berlin', 'London', 'Madrid'],
-    correctAnswer: 'Paris',
-  },
-  {
-    id: 2,
-    question: 'Which programming language is React built with?',
-    options: ['Java', 'JavaScript', 'Python', 'C++'],
-    correctAnswer: 'JavaScript',
-  },
-  {
-    id: 3, 
-    question: 'What is the capital of Germany?',
-    options: ['Berlin', 'Paris', 'London', 'Madrid'],
-    correctAnswer: 'Berlin',
-  },
-  {
-    id: 4,  
-    question: 'Which programming language is Angular built with?',
-    options: ['Java', 'JavaScript', 'Python', 'TypeScript'],
-    correctAnswer: 'TypeScript',
-  },
-];
+
+
 
 const ExamPanel = () => {
   //getting details of students from navigated link
@@ -56,9 +32,10 @@ const ExamPanel = () => {
   const [OneFaceWarning,setOneFaceWarning]=useState(false);
   const [TwoFaceWarning,setTwoFaceWarning]=useState(false);
   const [examDuration,setexamDuration]=useState(0);
- const [examSchedule,setExmexamSchedule]=useState("");
-
- const [timeRemainingToStart,stetimmerLessToStart]=useState(false);
+  const [examSchedule,setExmexamSchedule]=useState("");
+  const [ExamName,setExamName]=useState("");
+  const [timeRemainingToStart,stetimmerLessToStart]=useState(false);
+  const [questionsData,setquestionsData] = useState([]);
   //handling exam id from url to show exam related data from db
   const {examId}=useParams(); 
   useEffect(()=>{
@@ -110,6 +87,10 @@ const ExamPanel = () => {
   }, [isFullScreen]);
 
   useEffect(() => {
+    if (!timeRemainingToStart) {
+      return; 
+    }
+
     if (!isFullScreen && warningCount>0) {
       timeForFullScreen.current = setTimeout(() => {
         handleSubmit();
@@ -133,10 +114,42 @@ const ExamPanel = () => {
         console.log(responseFromExamTable.data.examSchedule);
         setexamDuration(responseFromExamTable.data.examDuration);
         setExmexamSchedule(responseFromExamTable.data.examSchedule);
+        setExamName(responseFromExamTable.data.examName);
+
+///////////////////putting data to active exam second time i alrady did this below
+// try{
+//   if(examSchedule!=null){
+//   const responseActiveExam=await axios.post("http://localhost:8080/api/postActiveExamData",{
+//     examDate:examSchedule,
+//     examName:ExamName,
+//     studentName:studentName,
+//     studentPrn:studentPrn
+//   });
+// }
+//   }catch(e){
+//   console.log(e);
+// }
+
+////////// 
+// fetching questions
+
+
+
       } catch (e) {
         console.error(e);
       }
     };
+const examPaper=async()=>{
+  try{
+const examPaperResponse=await axios.get("http://localhost:8080/api/getAllQuestions");
+console.log(examPaperResponse.data);
+setquestionsData(examPaperResponse.data);
+  }catch(e){
+    console.log(e);
+  }
+
+}
+    examPaper();
     fetchData(); 
   }, [isFullScreen]);
 
@@ -146,14 +159,13 @@ const ExamPanel = () => {
   const [timeOfStartingExam,settimeOfStartingExam]=useState(0);
   // ...
   useEffect(() => {
-    const calculateRemainingTime = () => {
+const calculateRemainingTime = () => {
       const currentTime = new Date();
       const examScheduleTime = new Date(examSchedule);
       const timeDifferenceInSeconds = Math.floor((currentTime - examScheduleTime) / 1000);
       const updatedRemainingTimeInSec = examDuration * 60 - timeDifferenceInSeconds;
       setRemainingMinutes(Math.floor(updatedRemainingTimeInSec / 60));
       setRemainingSeconds(updatedRemainingTimeInSec % 60);
-  
       // If the remaining time is less than or equal to 0, automatically submit the exam
       if (updatedRemainingTimeInSec <= 0) {
         handleSubmit();
@@ -166,15 +178,47 @@ settimeOfStartingExam(Math.floor(updatedRemainingTimeInSec/60)-examDuration);
       }
     };
     const intervalId = setInterval(calculateRemainingTime, 1000);
-
     return () => clearInterval(intervalId);
   }, [remainingMinutes, remainingSeconds, examSchedule, examDuration]);
+
+  const [dataSent, setDataSent] = useState(false);
+//Putting Data to active exam api
+useEffect( ()=>{
+  if (!timeRemainingToStart || dataSent) {
+    return; 
+  }
+  const addToActiveExam=async()=>{
+    try{
+      if(examSchedule!=null){
+        const examScheduleTime = new Date(examSchedule);
+        const istOptions = { timeZone: 'Asia/Kolkata' };
+        const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
+      const responseActiveExam=await axios.post("http://localhost:8080/api/postActiveExamData",{
+        examDate:istDateString,
+        examName:ExamName,
+        studentName:studentName,
+        studentPrn:studentPrn
+      });
+    }
+    setDataSent(true);
+      }catch(e){
+      console.log(e);
+    }
+      }
+      addToActiveExam();
+},[warningCount])
+
 
 //getting media of user
 
   const navigate = useNavigate();
   let Submitcount=5;
 useEffect(() => {
+
+  if (!timeRemainingToStart) {
+    return; 
+  }
+
     const requestMediaPermissions = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -296,8 +340,38 @@ useEffect(() => {
     listItems[currentQuestionIndex].style.backgroundColor = 'green';
   };
   
-  const handleSubmit = () => {
-    console.log('Selected Answers:', selectedAnswers);
+  const handleSubmit = async() => {
+    const correctAnswersCount = questionsData.reduce((count, question, index) => {
+      const selectedAnswer = selectedAnswers[index];
+      const correctAnswer = question.answer; // Assuming you have a property named 'correctAnswer' in your question data
+      if (selectedAnswer === correctAnswer) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
+
+try{
+  const examScheduleTime = new Date(examSchedule);
+  const istOptions = { timeZone: 'Asia/Kolkata' };
+  const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
+  console.log('Indian Standard Time (IST):', istDateString);
+const saveStudentData=axios.post("http://localhost:8080/api/postStudentResultData",{
+  studentName:studentName,
+  studentPrn:studentPrn,
+  studentResultDownloadLink:"abc/test",
+  studentMarks:correctAnswersCount,
+  examName:ExamName,
+  examDate:istDateString
+})
+console.log(saveStudentData.data);
+}catch(e){
+  console.log(e);
+}
+try{
+const deletActiveStudent=axios.delete(`http://localhost:8080/api/deleteActiveExamByStudentPrn/${studentPrn}`);
+}catch(e){
+console.log(e);
+}
     navigate("/examsuccess");
   };
 
@@ -317,6 +391,7 @@ useEffect(() => {
   };
 
   useEffect(() => {
+
     const handleResize = () => {
       setWarningCount((prevCount) => prevCount + 1);
     };
@@ -343,6 +418,11 @@ useEffect(() => {
       }, []);
 
   useEffect(() => {
+
+    if (!timeRemainingToStart) {
+      return; 
+    }
+
     const initializeCameraAndFaceMesh = async () => {
       const faceMesh = new FaceMesh({
         locateFile: (file) => {
@@ -419,19 +499,21 @@ useEffect(() => {
       }else{
         setOneFaceWarning(false);
       }
-     // console.log(`Number of faces detected: ${results.multiFaceLandmarks.length}`);
     }
   };
 ////////////////////////////////////////////////////////////////////////////
- console.log(timeRemainingToStart);
-  return (
+return (
     <div>
-    {!timeRemainingToStart ? (<div className='examNotStarted'>Exam Is Not Started Yet !!!! come back in {timeOfStartingExam} Minutes</div>):(  
+   
+    {!timeRemainingToStart ? (
+   isNaN(timeOfStartingExam) ? (<div className='examNotStarted'>There is no exam</div>):(
+    <div className='examNotStarted'>Exam Is Not Started Yet !!!! come back in {timeOfStartingExam} Minutes</div>
+   )   
+    ):(  
     <div className={`exam-panel ${isFullScreen ? 'full-screen' : ''}`}>
       {isFullScreen ? (
         <div>
         <div className="header">
-
         <div className="timer">
   Timer: {String(remainingMinutes).padStart(2, '0')}:{String(remainingSeconds).padStart(2, '0')} minutes
 </div>
@@ -441,6 +523,7 @@ useEffect(() => {
           </div>
         </div>      
         <div className="question-list">
+        {questionsData.length>0 ?(  
         <ul>
           {questionsData.map((question, index) => (
             <li
@@ -451,7 +534,10 @@ useEffect(() => {
               {index + 1}
             </li>
           ))}
-        </ul>
+        </ul>):(
+            <div>Loading questions...</div>
+        )
+}
       </div>
 
 {
@@ -463,34 +549,38 @@ useEffect(() => {
 
 
       <div className="question-container">
-        <h2>{questionsData[currentQuestionIndex].question}</h2>
-        <div className="answer-options">
-          {questionsData[currentQuestionIndex].options.map((option, index) => (
-            <div
-              key={index}
-              className={`option ${selectedAnswerStyle[currentQuestionIndex] === 'green' ? 'selected' : ''}`}
-            >
-              <input
-                type="radio"
-                id={`option-${index}`}
-                name="answer"
-                value={option}
-                checked={selectedAnswers[currentQuestionIndex] === option}
-                onChange={() => handleAnswerSelect(option)}
-              />
-              <label htmlFor={`option-${index}`}>{option}</label>
-            </div>
-          ))}
-        </div>
-        <div className='button-save-next'>
-          <button className='btn1' onClick={() => handleQuestionClick(Math.max(currentQuestionIndex - 1, 0))}>
-            Previous!!
-          </button>
-          <button className='btn2' onClick={() => handleQuestionClick(Math.min(currentQuestionIndex + 1, questionsData.length - 1))}>
-            Next!!
-          </button>
-        </div>
+
+    {questionsData.length > 0 ? (
+  <div>
+    <h3> {currentQuestionIndex + 1} - {questionsData[currentQuestionIndex].question}</h3>
+    <div className="answer-options">
+      {['optionA', 'optionB', 'optionC', 'optionD'].map((option, index) => (
+        <label key={index}>
+          <input className='answerInput'
+            type="radio"
+            name={`answer-${currentQuestionIndex}`}
+            value={questionsData[currentQuestionIndex][option]}
+            checked={selectedAnswers[currentQuestionIndex] === questionsData[currentQuestionIndex][option]}
+            onChange={() => handleAnswerSelect(questionsData[currentQuestionIndex][option])}
+          />
+          {questionsData[currentQuestionIndex][option]}
+        </label>
+      ))}
+    </div>
+    <div className='button-save-next'>
+      <button className='btn1' onClick={() => handleQuestionClick(Math.max(currentQuestionIndex - 1, 0))}>
+        Previous!!
+      </button>
+      <button className='btn2' onClick={() => handleQuestionClick(Math.min(currentQuestionIndex + 1, questionsData.length - 1))}>
+        Next!!
+      </button>
+    </div>
+  </div>
+) : (
+  <div>Loading questions...</div>
+)}
       </div>
+
    <div className="submit-button">
         <button onClick={handleFinalSubmit}>Submit Exam</button>
       </div>
@@ -523,8 +613,6 @@ useEffect(() => {
             ></canvas>
           </div>
         </center>
-
-
 </div>
       ) : (
         <div className='before-screen'>     
@@ -533,12 +621,9 @@ useEffect(() => {
           <button  onClick={handleFullScreenClick}>Enter Full Screen</button>  
           <p> Welcome to the exam platform! Before you begin, please ensure a smooth experience by following these instructions. Click on the designated "Enter Full Screen" button to optimize your exam view. Failure to do so may affect your ability to start the exam. Additionally, grant permission for both the camera and microphone when prompted, as these are essential for exam monitoring. Please be advised that the exam will automatically submit if you switch tabs during the test. Ensure a stable and distraction-free
              environment to make the most of your exam session. Good luck!</p>
-
         </div>
         </div>
       )}
-
-      
     </div>
 )}
    </div>

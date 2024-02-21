@@ -64,7 +64,7 @@ const navigate=useNavigate();
         onChange={(e) => setPassword(e.target.value)}
       />
       <span
-        style={{ cursor: 'pointer', marginLeft: '5px' }}
+        style={{ cursor: 'pointer', marginLeft: '5px'}}
         onClick={togglePasswordVisibility}
       >
          {showPassword ? '🔓' : '🔒'}
