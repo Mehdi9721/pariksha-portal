@@ -24,28 +24,30 @@ function Home() {
   const handleHelpClick = () => {
    
   };
-const examId=12;
+  
+  const examId = 12;
+
   return (
     <>
       <div className='body'>
         <div className='adminheader'>
-          <img src={img} alt='logo' className='logoHeader'/>
+          <img src={img} alt='logo' className='logoHeader rotating-logo' />
           <div className='BrandName'>Pariksha Portal</div>
         </div>
 
-        <div className='navbar-websiteHome'>
-          <button className='btn-websitehome' onClick={handleLoginClick}>
+        <div className='navbar-websiteHome animated-buttons'>
+          <button className={`btn-websitehome ${showLogin ? 'hidden' : ''}`} onClick={handleLoginClick}>
             {showLogin ? 'Hide' : 'Admin Login'}
           </button>
-          <button className='btn-websitehome' onClick={handleSignupClick}>
+          <button className={`btn-websitehome ${showSignup ? 'hidden' : ''}`} onClick={handleSignupClick}>
             {showSignup ? 'Hide' : 'Admin Signup'}
           </button>
-          <button className='btn-websitehome' onClick={()=>{navigate(`/studentLogin/${examId}`)}}>Student Login</button>
+          <button className='btn-websitehome' onClick={() => { navigate(`/studentLogin/${examId}`) }}>Student Login</button>
           <button className='btn-websitehome' onClick={handleHelpClick}>Help</button>
         </div>
         <div>
-          {showLogin && <Login/>}
-          {showSignup && <Signup/>}
+          {showLogin && <Login />}
+          {showSignup && <Signup />}
         </div>
         <div className='footer'>
           <p className='footerFont'>

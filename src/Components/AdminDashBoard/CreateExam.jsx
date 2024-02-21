@@ -93,11 +93,13 @@ const CreateExamForm = () => {
         <br></br>
 
         <div>
-          <button className='buttonForPaper' type="button" onClick={handleCreateExam}>Create Exam</button>
+          <button type="button" class="btn btn-success"  onClick={handleCreateExam}>Create Exam</button>
         </div>
       </form>
 
       <p>Generated Exam ID: {examId}</p>
+
+      
     </div>
   );
 };

@@ -36,40 +36,61 @@ const navigate=useNavigate();
   };
 
   return (
+  
     <form className='loginForm' onSubmit={handleSubmit}>
-      <label htmlFor="username">Email:</label>
+     {/* Email input */}
+  <div className="form-outline mb-4">
+    <label htmlFor="username" className="form-label">Email address:</label>
+    <input
+      type="text"
+      id="username"
+      className="form-control"
+      placeholder='EmailID'
+      required
+      onChange={(e) => setAdminEmail(e.target.value)}
+    />
+  </div>
+
+       {/* Password input */}
+  <div className="form-outline mb-4">
+    <label htmlFor="password" className="form-label">Password:</label>
+    <div style={{ display: 'flex' }}>
       <input
-        type="text"
-        id="username"
-        value={adminEmail}
-        placeholder='Username'
+        type={showPassword ? 'text' : 'password' }
+        id="password"
+        className="form-control"
+        placeholder='Password'
         required
-        onChange={(e) => setAdminEmail(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
       />
+      <span
+        style={{ cursor: 'pointer', marginLeft: '5px' }}
+        onClick={togglePasswordVisibility}
+      >
+         {showPassword ? '🔓' : '🔒'}
+      </span>
+      <br></br>
+     
+    </div>
+  </div>
+      {/* 2 column grid layout for inline styling */}
+  <div className="row mb-4">
+    <div className="col d-flex justify-content-center">
+    
+    </div>
 
-      <br />
-      <label htmlFor="password">Password:</label>
-      <div style={{ display: 'flex' }}>
-        <input
-          type={showPassword ? 'text' : 'password' }
-          id="password"
-          value={adminPassword}
-          placeholder='Password'
-          required
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <span
-          style={{ cursor: 'pointer', marginLeft: '5px' }}
-          onClick={togglePasswordVisibility}
-        >
-          {showPassword ? '🙈' : '👁️'}
-        </span>
-      </div>
-      <br />
-      <button type="submit">Submit</button>
+    <div >
+      {/* Simple link */}
+     
+      <button type="submit" className="btn btn-primary btn-block mb-4">Sign in</button>
+    </div>
+  </div>
 
+  {/* Submit button */}
+  
       {loginMessage && <p>{loginMessage}</p>}
     </form>
+    
   );
 };
 

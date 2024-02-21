@@ -64,10 +64,22 @@
     color: #888;
   }
   .AddStuTitle{
-    font-size: 20px;
+    font-size: 50px;
     font-weight: bold;
      font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 .file{
   cursor: pointer;
+}
+
+.create-exam-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping to the next line if needed */
+}
+
+
+.image-container {
+  flex: 1; /* Allow the image container to grow and take available space */
+  height: 50%;
+  width: 50%;
 }

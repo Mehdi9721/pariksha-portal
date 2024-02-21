@@ -53,15 +53,15 @@ function ActiveExams() {
     return (
         <>
             <div className='activeExamsBody'>
-                <div className='ActiveExamsTitle'><h1><b><i> Active Exams Data </i>  </b>  </h1></div>
+                <div className='ActiveExamsTitle'><h4><b> Active Exams Data  </b>  </h4></div>
                 <br />
-                <button className='refresh-btn' onClick={handleExamData}>
+                <button type="button" class="btn btn-outline-secondary" onClick={handleExamData}>
                     Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
                 </button>
                 <br></br>
              
                 {foundExams.length > 0 && (
-                    <table border={"1px solid black"} className='ActiveExamsTable'>
+                    <table border={"5px solid black"} class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Exam Name:</th>
@@ -83,9 +83,9 @@ function ActiveExams() {
                     </table>)}
                 <br />
                 <div>Total Number Of Active Exams: {examData.length}
-                    <div className='DeleteAll'><button onClick={handleDeleteAllExam}>Delete All</button></div>
+                    <div><button type="button" class="btn btn-danger"  onClick={handleDeleteAllExam}>Delete All</button></div>
                 </div>
-                <table border={"1px solid black"} className='ActiveExamsTable'>
+                <table border={"5px solid black"} class="table table-striped">
                     <thead>
                         <tr>
                             <th>Exam Name:</th>

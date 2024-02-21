@@ -69,7 +69,7 @@ function AddStudent() {
 
   return (
     <div>
-      <div className='AddStuTitle'>Add Student:</div>
+      <div className='AddStuTitle'>Student Entry to the DataBase :</div>
       {successMessage && <div className="successMessage">{successMessage}</div>}
       {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       <form className='tableAddStudent' onSubmit={handleForm}>
@@ -87,12 +87,14 @@ function AddStudent() {
           value={studentPrn}
           onChange={(e) => setStudentPRN(e.target.value)}
           required />
-        <button>Add !!!</button>
+        <button   type="button" class="btn btn-primary active" >Add Student</button>
       </form>
-      <h4>Or Select File to fill details Automatically!!</h4>
+
+      <br></br>
+      <h6>Or Select File to fill details Automatically!!</h6>
       <div className='FileAreaOfAddStudent'>
         <input type='file'  onChange={handleFileChange }/>
-        <button onClick={handleUpload }> Add !!!!</button>
+        <button onClick={handleUpload }   type="button" class="btn btn-primary active">Add Students List File</button>
       </div>
     </div>
   );
