@@ -190,8 +190,11 @@ useEffect( ()=>{
   const addToActiveExam=async()=>{
     try{
       if(examSchedule!=null){
+        const examScheduleTime = new Date(examSchedule);
+        const istOptions = { timeZone: 'Asia/Kolkata' };
+        const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
       const responseActiveExam=await axios.post("http://localhost:8080/api/postActiveExamData",{
-        examDate:examSchedule,
+        examDate:istDateString,
         examName:ExamName,
         studentName:studentName,
         studentPrn:studentPrn
@@ -337,12 +340,38 @@ useEffect(() => {
     listItems[currentQuestionIndex].style.backgroundColor = 'green';
   };
   
-  const handleSubmit = () => {
-    console.log('Selected Answers:', selectedAnswers);
+  const handleSubmit = async() => {
+    const correctAnswersCount = questionsData.reduce((count, question, index) => {
+      const selectedAnswer = selectedAnswers[index];
+      const correctAnswer = question.answer; // Assuming you have a property named 'correctAnswer' in your question data
+      if (selectedAnswer === correctAnswer) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
 
-    
-
-
+try{
+  const examScheduleTime = new Date(examSchedule);
+  const istOptions = { timeZone: 'Asia/Kolkata' };
+  const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
+  console.log('Indian Standard Time (IST):', istDateString);
+const saveStudentData=axios.post("http://localhost:8080/api/postStudentResultData",{
+  studentName:studentName,
+  studentPrn:studentPrn,
+  studentResultDownloadLink:"abc/test",
+  studentMarks:correctAnswersCount,
+  examName:ExamName,
+  examDate:istDateString
+})
+console.log(saveStudentData.data);
+}catch(e){
+  console.log(e);
+}
+try{
+const deletActiveStudent=axios.delete(`http://localhost:8080/api/deleteActiveExamByStudentPrn/${studentPrn}`);
+}catch(e){
+console.log(e);
+}
     navigate("/examsuccess");
   };
 
@@ -475,7 +504,12 @@ useEffect(() => {
 ////////////////////////////////////////////////////////////////////////////
 return (
     <div>
-    {!timeRemainingToStart ? (<div className='examNotStarted'>Exam Is Not Started Yet !!!! come back in {timeOfStartingExam} Minutes</div>):(  
+   
+    {!timeRemainingToStart ? (
+   isNaN(timeOfStartingExam) ? (<div className='examNotStarted'>There is no exam</div>):(
+    <div className='examNotStarted'>Exam Is Not Started Yet !!!! come back in {timeOfStartingExam} Minutes</div>
+   )   
+    ):(  
     <div className={`exam-panel ${isFullScreen ? 'full-screen' : ''}`}>
       {isFullScreen ? (
         <div>
@@ -587,7 +621,6 @@ return (
           <button  onClick={handleFullScreenClick}>Enter Full Screen</button>  
           <p> Welcome to the exam platform! Before you begin, please ensure a smooth experience by following these instructions. Click on the designated "Enter Full Screen" button to optimize your exam view. Failure to do so may affect your ability to start the exam. Additionally, grant permission for both the camera and microphone when prompted, as these are essential for exam monitoring. Please be advised that the exam will automatically submit if you switch tabs during the test. Ensure a stable and distraction-free
              environment to make the most of your exam session. Good luck!</p>
-
         </div>
         </div>
       )}
