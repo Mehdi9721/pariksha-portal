@@ -1,0 +1,89 @@
+.instructions-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.h1{
+    text-align: center;
+}
+.p{
+    color: #050505;
+    font-size: 16px;
+}
+
+.exam-instructions-container {
+    background-color: #dedfdf;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 80%;
+    max-width: 800px;
+}
+
+.exam-instructions-container h1 {
+    color: #010101;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.instructions {
+    margin-bottom: 30px;
+}
+
+.instructions h2 {
+    color: #505050;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.instructions ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.instructions li {
+    color: #0e0d0d;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.additional-info {
+    margin-top: 40px;
+}
+
+.additional-info h2 {
+    color: #555;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.additional-info p {
+    color: #040404;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.btn-success{
+    color: #080808;
+    border: none;
+    padding: 10px 20px; 
+    font-size: 1.2rem;
+    border-radius: 10px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.instructionForm{
+display: flex;
+flex-direction:column;
+align-items: center;
+justify-content: center;
+}
+.btn-success{
+    background-color: lightgreen;
+  cursor: pointer;
+}
+.btn-success:hover{
+    background-color: rgb(27, 170, 27);
+}

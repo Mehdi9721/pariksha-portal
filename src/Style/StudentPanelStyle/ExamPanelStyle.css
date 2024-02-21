@@ -232,3 +232,11 @@ box-shadow: 2px -2px  6px black;
     opacity: 1;
   }
 }
+.examNotStarted{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: blue;
+  padding-top: 30px;
+  font-weight: 700;
+}

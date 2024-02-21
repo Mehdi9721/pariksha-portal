@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import "../../Style/StudentPanelStyle/ExamPanelStyle.css";
-import { useNavigate, useLocation  } from 'react-router-dom';
+import { useNavigate, useLocation, useParams  } from 'react-router-dom';
 import * as faceapi from 'face-api.js';
 import { FaceMesh } from "@mediapipe/face_mesh";
 import * as cam from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
+import axios from 'axios';
 const questionsData = [
   {
     id: 1,
@@ -33,6 +34,7 @@ const questionsData = [
 ];
 
 const ExamPanel = () => {
+  //getting details of students from navigated link
   const location = useLocation();
   const { state } = location;
   const { studentName, studentPrn } = state || {};
@@ -53,6 +55,16 @@ const ExamPanel = () => {
   const timeForFullScreen = useRef(null);
   const [OneFaceWarning,setOneFaceWarning]=useState(false);
   const [TwoFaceWarning,setTwoFaceWarning]=useState(false);
+  const [examDuration,setexamDuration]=useState(0);
+ const [examSchedule,setExmexamSchedule]=useState("");
+
+ const [timeRemainingToStart,stetimmerLessToStart]=useState(false);
+  //handling exam id from url to show exam related data from db
+  const {examId}=useParams(); 
+  useEffect(()=>{
+    console.log(examId);
+  },[examId])
+  //checking screen size of student
   const handleFullScreenClick = () => {
     if (!isFullScreen) {
       const elem = document.documentElement;
@@ -107,21 +119,62 @@ const ExamPanel = () => {
       clearTimeout(timeForFullScreen.current);
     };
   }, [isFullScreen]);
+  
   //----------------------------------------------
 
+  //Loading details of question paper
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responseFromExamTable = await axios.get(`http://localhost:8080/api/getExamByExamId/${examId}`);
+        console.log(responseFromExamTable.data.examName);
+        console.log(responseFromExamTable.data.examDuration);
+        console.log(responseFromExamTable.data.examSchedule);
+        setexamDuration(responseFromExamTable.data.examDuration);
+        setExmexamSchedule(responseFromExamTable.data.examSchedule);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchData(); 
+  }, [isFullScreen]);
+
+
+  const [remainingMinutes, setRemainingMinutes] = useState(0);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [timeOfStartingExam,settimeOfStartingExam]=useState(0);
+  // ...
+  useEffect(() => {
+    const calculateRemainingTime = () => {
+      const currentTime = new Date();
+      const examScheduleTime = new Date(examSchedule);
+      const timeDifferenceInSeconds = Math.floor((currentTime - examScheduleTime) / 1000);
+      const updatedRemainingTimeInSec = examDuration * 60 - timeDifferenceInSeconds;
+      setRemainingMinutes(Math.floor(updatedRemainingTimeInSec / 60));
+      setRemainingSeconds(updatedRemainingTimeInSec % 60);
+  
+      // If the remaining time is less than or equal to 0, automatically submit the exam
+      if (updatedRemainingTimeInSec <= 0) {
+        handleSubmit();
+      }
+
+//checking if exam is started or not
+settimeOfStartingExam(Math.floor(updatedRemainingTimeInSec/60)-examDuration);
+      if((updatedRemainingTimeInSec)/60 <= examDuration){
+        stetimmerLessToStart(true);
+      }
+    };
+    const intervalId = setInterval(calculateRemainingTime, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [remainingMinutes, remainingSeconds, examSchedule, examDuration]);
+
+//getting media of user
 
   const navigate = useNavigate();
   let Submitcount=5;
-
- 
-  useEffect(() => {
-    // const loadFaceApi = async () => {
-    //   await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-    //   await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-    //   await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
-    //   await faceapi.nets.tinyYolov2.loadFromUri('/models');
-    // };
-
+useEffect(() => {
     const requestMediaPermissions = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -130,23 +183,19 @@ const ExamPanel = () => {
         }    
         setCameraAllowed(true);
         setMicrophoneAllowed(true);
-
-        // Removed code related to creating a new video element, as it seems unnecessary
-
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const analyser = audioContext.createAnalyser();
         const microphone = audioContext.createMediaStreamSource(stream);
         microphone.connect(analyser);
-
         analyser.fftSize = 256;
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
 
+        //analysing microphone
         const checkNoise = () => {
           analyser.getByteFrequencyData(dataArray);
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
           const noiseThreshold = 444; // change this on need
-          console.log(averageAmplitude);
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
           if (averageAmplitude > noiseThreshold) {
             console.log("yes noise is high");
@@ -160,10 +209,10 @@ const ExamPanel = () => {
 
       } catch (error) {
         console.error('Error accessing camera and microphone:', error);
-        // Handle error, show a message to the user, etc.
       }
     };
 
+    //checking permission camera and microphone
     const checkPermissionsAndInitialize = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -173,21 +222,13 @@ const ExamPanel = () => {
         requestMediaPermissions();
       } catch (error) {
         console.error('Error accessing camera and microphone:', error);
-        // Handle error, show a message to the user, etc.
       }
     };
-    // Check permissions and initialize
     checkPermissionsAndInitialize();
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1);
-    }, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
-
+  //if user leaves page
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       const message = 'You want to leave the page? Your progress may be lost.';
@@ -195,7 +236,7 @@ const ExamPanel = () => {
       return message;
     };
 
-    
+    //if user changes visibility
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         setWarningCount((prevCount) => prevCount + 1);
@@ -222,6 +263,7 @@ const ExamPanel = () => {
     };
   }, []);
 
+  //auto submmit over exccess warning
   useEffect(() => {
     if (warningCount === 10) {
       alert('Automatic submission due to excessive warnings.');
@@ -265,6 +307,7 @@ const ExamPanel = () => {
     }
   }, [timer]);
 
+   //handleFinalSubmit
   const handleFinalSubmit = () => {
     const confirmSubmit = window.confirm('Do you want to submit the exam?');
 
@@ -339,7 +382,6 @@ const ExamPanel = () => {
         camera.start();
       } catch (error) {
         console.error('Error accessing camera and microphone:', error);
-        // Handle error, show a message to the user, etc.
       }
     };
 
@@ -377,17 +419,22 @@ const ExamPanel = () => {
       }else{
         setOneFaceWarning(false);
       }
-      console.log(`Number of faces detected: ${results.multiFaceLandmarks.length}`);
+     // console.log(`Number of faces detected: ${results.multiFaceLandmarks.length}`);
     }
   };
-
-
+////////////////////////////////////////////////////////////////////////////
+ console.log(timeRemainingToStart);
   return (
+    <div>
+    {!timeRemainingToStart ? (<div className='examNotStarted'>Exam Is Not Started Yet !!!! come back in {timeOfStartingExam} Minutes</div>):(  
     <div className={`exam-panel ${isFullScreen ? 'full-screen' : ''}`}>
       {isFullScreen ? (
         <div>
         <div className="header">
-          <div className="timer">Timer: {Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}</div>
+
+        <div className="timer">
+  Timer: {String(remainingMinutes).padStart(2, '0')}:{String(remainingSeconds).padStart(2, '0')} minutes
+</div>
           <div className='warningCount'> Warning count: {warningCount} NoiseCount: {noiseWarningCount} </div>
           <div className="student-info">
             {studentName} - PRN: {studentPrn}
@@ -480,18 +527,21 @@ const ExamPanel = () => {
 
 </div>
       ) : (
-        <div className='before-screen'>
-        
+        <div className='before-screen'>     
         <div className="fullscreen-button">
-          <button onClick={handleFullScreenClick}>Enter Full Screen</button>
-          
+        <br></br>
+          <button  onClick={handleFullScreenClick}>Enter Full Screen</button>  
           <p> Welcome to the exam platform! Before you begin, please ensure a smooth experience by following these instructions. Click on the designated "Enter Full Screen" button to optimize your exam view. Failure to do so may affect your ability to start the exam. Additionally, grant permission for both the camera and microphone when prompted, as these are essential for exam monitoring. Please be advised that the exam will automatically submit if you switch tabs during the test. Ensure a stable and distraction-free
              environment to make the most of your exam session. Good luck!</p>
 
         </div>
         </div>
       )}
+
+      
     </div>
+)}
+   </div>
   );
 };
 
