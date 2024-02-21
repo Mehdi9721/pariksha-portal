@@ -94,6 +94,7 @@ function ViewResult() {
                 <th>Exam Name</th>
                 <th>Exam Date</th>
                 <th>Result Download Link</th>
+                <th>Student Marks</th>
                 <th>Delete Result</th>
               </tr>
             </thead>
@@ -105,6 +106,7 @@ function ViewResult() {
                 <td>{foundResults[0].examName}</td>
                 <td>{foundResults[0].examDate}</td>
                 <td>{foundResults[0].studentResultDownloadLink}</td>
+                <td>{foundResults[0].studentMarks}</td>
                 <td><button  type="button" class="btn btn-danger"    onClick={() => handleDeleteResult(foundResults[0].studentPrn)}>Delete</button></td>
               </tr>
             </tbody>
@@ -113,7 +115,7 @@ function ViewResult() {
         <div>Total Number Of Results: {resultData.length}
           <div><button   type="button" class="btn btn-danger"   style={{ margin: "10px" }}   onClick={handleDeleteAll}>Delete All</button></div>
         </div>
-        <table border={"5px solid black"} class="table table-striped">
+        <table class="table table-striped custom-table">
           <thead>
             <tr>
             
@@ -122,6 +124,7 @@ function ViewResult() {
               <th>Exam Name</th>
               <th>Exam Date</th>
               <th>Result Download Link</th>
+              <th>Student Marks</th>
               <th>Delete Result</th>
             </tr>
           </thead>
@@ -134,6 +137,7 @@ function ViewResult() {
                 <td>{result.examName}</td>
                 <td>{result.examDate}</td>
                 <td>{result.studentResultDownloadLink}</td>
+                <td>{result.studentMarks}</td>
                 <td><button    type="button" class="btn btn-danger"   onClick={() => handleDeleteResult(result.studentPrn)}>Delete</button></td>
               </tr>
             ))}

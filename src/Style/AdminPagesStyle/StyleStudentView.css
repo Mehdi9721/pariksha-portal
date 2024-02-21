@@ -2,7 +2,7 @@
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     margin: 4px;
     font-weight: 600;
-    min-width: 800px;
+    max-width: 100%;
 }
 .StudentViewTable td{
 padding: 10px;
@@ -36,3 +36,27 @@ font-weight: bold;
 .searchBox{
     padding-left: 10px;
 }
+
+
+.custom-table {
+    width: 100%;
+     border-collapse: collapse;
+     text-align: center;
+  }
+  
+  .custom-table th, .custom-table td {
+    border: 2px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .custom-table th {
+    background-color: #f2f2f2; /* Optional: Add a background color to header cells */
+  }
+
+
+  .tableDiv{
+    position: relative;
+    justify-content: center;
+}
+  

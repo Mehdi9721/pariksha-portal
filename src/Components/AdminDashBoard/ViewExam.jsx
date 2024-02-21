@@ -57,44 +57,49 @@ function ViewExam() {
 
   return (
     <>
-      <div className='viewBody'>
+      <div>
         <div className='AddStuTitle'>View Exam Data:</div>
         <br />
-        <button  type="button" class="btn btn-outline-secondary"   style={{ margin: "10px" }} onClick={handleExamData}>
+        <button type="button" class="btn btn-outline-secondary" style={{ margin: "10px" }} onClick={handleExamData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
 
         <br />
         <div>  <h5> <b>  Total Number Of Exams: {examData.length}  </b> </h5>  </div>
-        <table border={"5px solid black"} class="table table-striped">
-          <thead>
-            <tr>
-              <th>Exam Name</th>
-              <th>Exam Schedule</th>
-              <th>Exam Duration(mins)</th>
-              <th>Exam ID</th>
-              <th>Exam Link</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {examData.map((exam) => (
-              <tr key={exam.examId}>
-                <td>{exam.examName}</td>
-                <td>{formatTimestamp(exam.examSchedule)}</td>
-                <td>{exam.examDuration}</td>
-                <td>{exam.examId}</td>
-                <td> http://localhost:3000/studentLogin/{exam.examId}</td>
-                <td>
-                  <button  type="button" class="btn btn-danger"  onClick={() => handleDeleteById(exam.examId)}>
-                    Delete
-                  </button>
-                </td>
+        <div  className='tableDiv' >
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Exam Name</th>
+                <th>Exam Schedule</th>
+                <th>Exam Duration(mins)</th>
+                <th>Exam ID</th>
+                <th>Exam Link</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div><button  type="button" class="btn btn-danger"  onClick={handleDeleteAll}>Delete All</button></div>
+            </thead>
+            <tbody>
+              {examData.map((exam) => (
+                <tr key={exam.examId}>
+                  <td>{exam.examName}</td>
+                  <td>{formatTimestamp(exam.examSchedule)}</td>
+                  <td>{exam.examDuration}</td>
+                  <td>{exam.examId}</td>
+                  <td> http://localhost:3000/studentLogin/{exam.examId}</td>
+                  <td>
+                    <button type="button" class="btn btn-danger" onClick={() => handleDeleteById(exam.examId)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+
+        </div>
+
+        <div><button type="button" class="btn btn-danger" onClick={handleDeleteAll}>Delete All</button></div>
       </div>
     </>
   );
