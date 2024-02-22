@@ -6,7 +6,7 @@ import refreshicon from '../../ImagesAndLogo/refresh.png';
 function ViewResult() {
   const [resultData, setResultData] = useState([]);
   const [searchPRN, setSearchPRN] = useState('');
-  const [foundResults, setFoundResults] = useState({});
+  const [foundResults, setFoundResults] = useState([]);
 
   useEffect(() => {
     handleResultData();
@@ -67,12 +67,10 @@ function ViewResult() {
     <>
       <div className='viewBody'>
         <div className='ResultViewTitle'> <h4><b> View Result of Students </b>  </h4></div>
-        <br />
+        <div className='searchBox'>
         <button type="button" class="btn btn-outline-secondary" onClick={handleResultData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
-        <br></br>
-        <div className='searchBox'>
           <input
             type="text"
             placeholder="Search by PRN"
@@ -125,7 +123,6 @@ function ViewResult() {
               <th>Exam Name</th>
               <th>Exam Date</th>
               <th>Result Download Link</th>
-              <th>Student Marks</th>
               <th>Delete Result</th>
             </tr>
           </thead>
@@ -139,7 +136,6 @@ function ViewResult() {
                 <td>{result.examName}</td>
                 <td>{result.examDate}</td>
                 <td>{result.studentResultDownloadLink}</td>
-                <td>{result.studentMarks}</td>
                 <td><button    type="button" class="btn btn-danger"   onClick={() => handleDeleteResult(result.studentPrn)}>Delete</button></td>
               </tr>
             ))}

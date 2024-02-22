@@ -69,7 +69,7 @@ const CreateExamForm = () => {
 
   return (
     <div>
-      <div className='AddStuTitle'>Create New Exam:</div>
+    
       {successMessage && <div className="successMessage">{successMessage}</div>}
       {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       <form className='FormCreateExam' onSubmit={handleCreateExam}>

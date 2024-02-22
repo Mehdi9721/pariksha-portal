@@ -9,19 +9,8 @@ function ViewQuestions() {
   const [foundQuestions, setFoundQuestions] = useState({});
 
   useEffect(() => {
-    // Fetch questions data when the component mounts
     handleQuestionsData();
   }, []);
-
-//   const handleQuestionsData = async () => {
-//     try {
-//       const response = await axios.get('http://localhost:8080/api/getAllQuestions');
-//       setQuestionsData(response.data);
-//       console.log(response.data);
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   };
 
   const handleDeleteAll = async () => {
     const confirmDelete = window.confirm('Do you want to delete all questions?');
@@ -39,8 +28,6 @@ function ViewQuestions() {
 
   const handleQuestionsData = async () => {
     try {
-      // If searchExamId is present, execute search API call
-      // Otherwise, execute get all questions API call
       const apiUrl = searchExamId
         ? `http://localhost:8080/api/getAllQuestionsByExamId/${searchExamId}`
         : 'http://localhost:8080/api/getAllQuestions';
@@ -53,11 +40,10 @@ function ViewQuestions() {
   };
   
   const handleSearch = async () => {
-    // Reset searchExamId to an empty string if it's not provided
+
     const examIdToSearch = searchExamId.trim() === '' ? '' : searchExamId;
   
     setSearchExamId(examIdToSearch);
-    // Call handleQuestionsData to fetch data based on the new searchExamId
     await handleQuestionsData();
   };
 
@@ -83,12 +69,10 @@ function ViewQuestions() {
     <>
       <div className='viewBody'>
         <div className='ResultViewTitle'> <h4><b> View Questions </b></h4></div>
-        <br />
+        <div className='searchBox'>
         <button type="button" className="btn btn-outline-secondary" onClick={handleQuestionsData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
-        <br></br>
-        <div className='searchBox'>
           <input
             type="text"
             placeholder="Search by Exam ID"

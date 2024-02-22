@@ -1,12 +1,10 @@
-/* Add your custom styles here */
-
 .FormCreateExam {
-    max-width: 400px;
+    width: 700px;
     margin:10px 0 0 80px;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #d9eceb;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 9px;
     box-shadow: -10px 10px 1px rgba(0, 0, 0, 0.1);
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   }
@@ -14,6 +12,8 @@
   .FormCreateExam label {
     display: block;
     margin-bottom: 8px;
+    font-weight: 800;
+    font-size: 19px;
   }
   
    .FormCreateExam input,
@@ -22,6 +22,7 @@
     padding: 8px;
     margin-bottom: 16px;
     box-sizing: border-box;
+    border-radius: 20px;
   }
 
   .FormCreateExam .btn2 {
@@ -70,6 +71,7 @@
 }
 .file{
   cursor: pointer;
+  background-color: rgb(189, 179, 179);
 }
 
 .create-exam-container {

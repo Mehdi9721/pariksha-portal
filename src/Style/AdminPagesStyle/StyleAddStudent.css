@@ -1,10 +1,8 @@
-/* Add your custom styles here */
-
 .tableAddStudent {
-    max-width: 300px;
+    width: 700px;
     margin:20px 0 0 80px;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #d3d1d1;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: -10px 10px 1px rgba(0, 0, 0, 0.1);
@@ -13,6 +11,8 @@
   .tableAddStudent label {
     display: block;
     margin-bottom: 8px;
+    font-weight:700;
+    font-size: 17px;
   }
   
   .tableAddStudent input {
@@ -20,6 +20,7 @@
     padding: 8px;
     margin-bottom: 16px;
     box-sizing: border-box;
+    border-radius: 20px;
   }
   
   .tableAddStudent button {
@@ -54,4 +55,6 @@
   font-size: 17px;
   font-weight: 700;
 }
-  
+  .FileAreaOfAddStudent{
+    margin: 10px;
+  }
