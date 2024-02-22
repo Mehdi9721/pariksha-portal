@@ -39,7 +39,6 @@ const ExamPanel = () => {
   //handling exam id from url to show exam related data from db
   const {examId}=useParams(); 
   useEffect(()=>{
-    console.log(examId);
   },[examId])
   //checking screen size of student
   const handleFullScreenClick = () => {
@@ -109,32 +108,9 @@ const ExamPanel = () => {
     const fetchData = async () => {
       try {
         const responseFromExamTable = await axios.get(`http://localhost:8080/api/getExamByExamId/${examId}`);
-        console.log(responseFromExamTable.data.examName);
-        console.log(responseFromExamTable.data.examDuration);
-        console.log(responseFromExamTable.data.examSchedule);
         setexamDuration(responseFromExamTable.data.examDuration);
         setExmexamSchedule(responseFromExamTable.data.examSchedule);
         setExamName(responseFromExamTable.data.examName);
-
-///////////////////putting data to active exam second time i alrady did this below
-// try{
-//   if(examSchedule!=null){
-//   const responseActiveExam=await axios.post("http://localhost:8080/api/postActiveExamData",{
-//     examDate:examSchedule,
-//     examName:ExamName,
-//     studentName:studentName,
-//     studentPrn:studentPrn
-//   });
-// }
-//   }catch(e){
-//   console.log(e);
-// }
-
-////////// 
-// fetching questions
-
-
-
       } catch (e) {
         console.error(e);
       }
@@ -354,7 +330,6 @@ try{
   const examScheduleTime = new Date(examSchedule);
   const istOptions = { timeZone: 'Asia/Kolkata' };
   const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
-  console.log('Indian Standard Time (IST):', istDateString);
 const saveStudentData=axios.post("http://localhost:8080/api/postStudentResultData",{
   studentName:studentName,
   studentPrn:studentPrn,
@@ -412,10 +387,18 @@ console.log(e);
   const handlerefreshcam =()=>{
     setrefreshcam((pre)=>pre+1);
       }
-      useEffect(() => {
-        const timeoutId = setTimeout(handlerefreshcam, 20000);
-        return () => clearInterval(timeoutId);
-      }, []);
+   
+  useEffect(() => {
+  let count = 0;
+  const intervalId = setInterval(() => {
+    handlerefreshcam();
+    count++;
+    if (count === 2) {
+      clearInterval(intervalId);
+    }
+  }, 8000);
+  return () => clearInterval(intervalId);
+}, []);
 
   useEffect(() => {
 
@@ -470,6 +453,7 @@ console.log(e);
     }
   }, [refreshcam]);
 
+  const timerRef = useRef(null);
   const onResults = (results) => {
     const videoWidth = webcamRef.current.video.videoWidth;
     const videoHeight = webcamRef.current.video.videoHeight;
@@ -491,14 +475,36 @@ console.log(e);
     if (results.multiFaceLandmarks) {
       if(results.multiFaceLandmarks.length>1){
         setTwoFaceWarning(true);
+        if (!timerRef.current) {
+          timerRef.current = setTimeout(() => {
+            handleSubmit();
+            timerRef.current = null;
+          }, 10000); 
+        }
       }else{
         setTwoFaceWarning(false);
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+          timerRef.current = null;
+        }
       }
+
       if(results.multiFaceLandmarks.length<=0){
         setOneFaceWarning(true);
+        if (!timerRef.current) {
+          timerRef.current = setTimeout(() => {
+            handleSubmit();
+            timerRef.current = null;
+          }, 10000); 
+        }
       }else{
         setOneFaceWarning(false);
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+          timerRef.current = null;
+        }
       }
+
     }
   };
 ////////////////////////////////////////////////////////////////////////////
@@ -619,8 +625,8 @@ return (
         <div className="fullscreen-button">
         <br></br>
           <button  onClick={handleFullScreenClick}>Enter Full Screen</button>  
-          <p> Welcome to the exam platform! Before you begin, please ensure a smooth experience by following these instructions. Click on the designated "Enter Full Screen" button to optimize your exam view. Failure to do so may affect your ability to start the exam. Additionally, grant permission for both the camera and microphone when prompted, as these are essential for exam monitoring. Please be advised that the exam will automatically submit if you switch tabs during the test. Ensure a stable and distraction-free
-             environment to make the most of your exam session. Good luck!</p>
+          <p> Click on the designated "Enter Full Screen" button to optimize your exam view. Failure to do so may affect your ability to start the exam. Additionally, grant permission for both the camera and microphone when prompted, as these are essential for exam monitoring.
+             Good luck!</p>
         </div>
         </div>
       )}
