@@ -7,6 +7,7 @@ import ViewResult from './ViewResult';
 import ViewStudent from './ViewStudent';
 import ActiveExams from './ActiveExams';
 import backgroundImage from '../../ImagesAndLogo/pngtree-countdown-to-the-college-entrance-examination-image_790187.jpg';
+import ViewQuestions from './ViewQuestions';
 
 function AdminHome() {
     const [activeButton, setActiveButton] = useState(null);
@@ -25,12 +26,13 @@ function AdminHome() {
                 </div>
                 <div className='centralBody'>
                     <table className='tableAdminPanel'>
-                        <tr><td><button  style={{ margin: '10px' }}   className={activeButton === 'NewExam' ? 'active' : ''} onClick={() => { handleButtonClick('NewExam'); }}> Create New Exam</button></td></tr>
-                        <tr><td><button style={{ margin: '10px' }} className={activeButton === 'ViewExam' ? 'active' : ''} onClick={() => { handleButtonClick('ViewExam'); }}> View Exams</button></td></tr>
-                        <tr><td><button  style={{ margin: '10px' }} className={activeButton === 'ActiveExams' ? 'active' : ''} onClick={() => { handleButtonClick('ActiveExams'); }}> Active Exams</button></td></tr>
-                        <tr><td><button   style={{ margin: '10px' }} className={activeButton === 'AddStu' ? 'active' : ''} onClick={() => { handleButtonClick('AddStu'); }}>Add Students</button></td></tr>
-                        <tr><td><button  style={{ margin: '10px' }} className={activeButton === 'ViewStudent' ? 'active' : ''} onClick={() => { handleButtonClick('ViewStudent'); }}>  View Students</button></td></tr>
-                        <tr><td><button  style={{ margin: '10px' }} className={activeButton === 'ViewResult' ? 'active' : ''} onClick={() => { handleButtonClick('ViewResult'); }}>  View Results</button></td></tr>
+                        <tr><td><button  style={{ margin: '5px' }}   className={activeButton === 'NewExam' ? 'active' : ''} onClick={() => { handleButtonClick('NewExam'); }}> Create New Exam</button></td></tr>
+                        <tr><td><button style={{ margin: '5px' }} className={activeButton === 'ViewExam' ? 'active' : ''} onClick={() => { handleButtonClick('ViewExam'); }}> View Exams</button></td></tr>
+                        <tr><td><button  style={{ margin: '5px' }} className={activeButton === 'ActiveExams' ? 'active' : ''} onClick={() => { handleButtonClick('ActiveExams'); }}> Active Exams</button></td></tr>
+                        <tr><td><button  style={{ margin: '5px' }} className={activeButton === 'ViewQuestions' ? 'active' : ''} onClick={() => { handleButtonClick('ViewQuestions'); }}>View Questions</button></td></tr>
+                        <tr><td><button   style={{ margin: '5px' }} className={activeButton === 'AddStu' ? 'active' : ''} onClick={() => { handleButtonClick('AddStu'); }}>Add Students</button></td></tr>
+                        <tr><td><button  style={{ margin: '5px' }} className={activeButton === 'ViewStudent' ? 'active' : ''} onClick={() => { handleButtonClick('ViewStudent'); }}>  View Students</button></td></tr>
+                        <tr><td><button  style={{ margin: '5px' }} className={activeButton === 'ViewResult' ? 'active' : ''} onClick={() => { handleButtonClick('ViewResult'); }}>  View Results</button></td></tr>
                       
                     </table>
 
@@ -46,6 +48,7 @@ function AdminHome() {
                     {activeButton === 'NewExam' && <CreateExam />}
                     {activeButton === 'ViewExam' && <ViewExam />}
                     {activeButton === 'ActiveExams' && <ActiveExams />}
+                    {activeButton === 'ViewQuestions' && <ViewQuestions />}
                     {activeButton === 'ViewResult' && <ViewResult />}
                     {activeButton === 'ViewStudent' && <ViewStudent />}
                   

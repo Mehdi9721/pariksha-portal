@@ -76,9 +76,9 @@ function ActiveExams() {
                     </table>)}
                 <br />
                 <div>Total Number Of Active Exams: {examData.length}
-                    <div><button type="button" class="btn btn-danger"  onClick={handleDeleteAllExam}>Delete All</button></div>
+                    <div><button type="button" class="btn btn-danger"  style={{ margin: "10px" }} onClick={handleDeleteAllExam}>Delete All</button></div>
                 </div>
-                <table border={"5px solid black"} class="table table-striped">
+                <table border={"5px solid black"} class="table table-bordered  container-fluid">
                     <thead>
                         <tr>
                             <th>Exam Name:</th>
