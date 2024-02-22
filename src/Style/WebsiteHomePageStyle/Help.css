@@ -1,0 +1,38 @@
+.body{
+  background-image:url('../../ImagesAndLogo/pp1.avif');
+}
+
+
+
+.help-container{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.Help{
+  text-align: center;
+  padding: 10px;
+  width:700px;
+  border-radius: 10px; 
+  background-color: #f9f7f7;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-left: 100px;
+  margin-right: 100px;
+
+}
+
+.Help h1 {
+    margin-bottom: 20px;
+    background-color: aquamarine;
+    padding: 10px;
+    margin-left: 0px;
+    width: 100%;
+  }
+  
+  .Help p {
+    margin-bottom: 10px; 
+    font-weight: bold;
+    
+  }

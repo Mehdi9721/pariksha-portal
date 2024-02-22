@@ -3,10 +3,10 @@
    display: flex;
    flex-direction: column;
 align-items: center;
-background-image:url('../../ImagesAndLogo/notebook-pencils-alarm-clock-blue-background-top-view.jpg');
+background-image:url('../../ImagesAndLogo/pp.avif');
 background-size:cover;
 background-repeat: no-repeat;
-height: 900px;
+height: 710px;
 }
 .adminheader{
     display: flex;
@@ -64,13 +64,17 @@ height: 900px;
   position: fixed;
   bottom: 0;
   width: 100%;
-    background-color: black;
-    height: 40px;
+  background-color: rgb(251, 246, 246);
+  height: 40px;
+}
 
-}
 .footerFont{
-    color: white
+    color: rgb(9, 9, 9);
+    position: relative;
+    font-weight: bold;
+    padding-top: 10px;
 }
+
 
 
 .rotating-logo {

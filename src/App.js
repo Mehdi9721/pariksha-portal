@@ -8,6 +8,7 @@ import CameraComponent from './Components/CameraComponent';
 import ExamSuccess from './Components/StudentPanel/ExamSuccess';
 import LoginForm from './Components/WebsiteHomePage/LoginForm';
 import InstructionPage from './Components/StudentPanel/InstructionPage';
+import HelpComponent from './Components/WebsiteHomePage/HelpComponent';
 function App() {
   return (
     <Router>
@@ -19,6 +20,7 @@ function App() {
       <Route path="/ctest" element={<CameraComponent></CameraComponent>}></Route>
       <Route path="/examsuccess" element={<ExamSuccess></ExamSuccess>}></Route>
       <Route path="/studentinstructions/:examId" element={<InstructionPage></InstructionPage>}></Route>
+      <Route path="/HelpComponent" element={<HelpComponent></HelpComponent>}></Route>
       </Routes>
   </Router>
   );
