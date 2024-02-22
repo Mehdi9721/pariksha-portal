@@ -348,7 +348,8 @@ const saveStudentData=axios.post("http://localhost:8080/api/postStudentResultDat
   studentResultDownloadLink:"abc/test",
   studentMarks:correctAnswersCount,
   examName:ExamName,
-  examDate:istDateString
+  examDate:istDateString,
+  examId:examId
 })
 console.log(saveStudentData.data);
 }catch(e){

@@ -20,9 +20,14 @@ const StudentDashboard = () => {
     e.preventDefault();
     try{
       //api for getting student details from prn
-   const response= await axios.get(`http://localhost:8080/api/getStudentByPrn/${studentPrn}`)
+   const response= await axios.get(`http://localhost:8080/api/getStudentByPrn/${studentPrn}`,{
+    params: {
+      examId,
+      studentPrn
+    }
+   })
    const studentName=response.data.studentName;
-   console.log(studentName);
+  
 
    if(response.data.studentPrn===studentPrn){
     //if prn matches redirecting to instruction page
