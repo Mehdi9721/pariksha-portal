@@ -20,7 +20,13 @@ function AdminHome() {
 
     return (
         <>
-            <div className='Container'>
+            <div className='Container' 
+            >
+                     <div>
+                         {showBackgroundImage && (
+                            <img src={backgroundImage} alt="Background" className="background-image" />
+                        )}
+                    </div>
                 <div className='Header'>
                     <h4>Welcome Administrator to Pariksha Portal !!</h4>
                 </div>
@@ -37,11 +43,7 @@ function AdminHome() {
                     </table>
 
 
-                    <div>
-                         {showBackgroundImage && (
-                            <img src={backgroundImage} alt="Background" className="background-image" />
-                        )}
-                    </div>
+               
                 </div>
                 <div className='container2'>
                     {activeButton === 'AddStu' && <AddStudent />}

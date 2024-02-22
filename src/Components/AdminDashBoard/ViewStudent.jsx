@@ -6,7 +6,7 @@ import refreshicon from '../../ImagesAndLogo/refresh.png';
 function ViewStudent() {
   const [stdData, setdata] = useState([]);
   const [searchPRN, setSearchPRN] = useState('');
-  const [foundStudents, setFoundStudents] = useState({});
+  const [foundStudents, setFoundStudents] = useState([]);
 
   useEffect(() => {
     // Fetch student data when the component mounts
@@ -66,13 +66,11 @@ function ViewStudent() {
   return (
     <>
       <div className='viewBody'>
-        <div className='AddStuTitle'>View Student:</div>
-        <br />
+      
+      <div className='searchBox'>
         <button  type="button" class="btn btn-outline-secondary"  onClick={handleStudentData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
-        <br></br>
-        <div className='searchBox'>
           <input
             type="text"
             placeholder="Search by PRN"
@@ -83,6 +81,7 @@ function ViewStudent() {
           <button onClick={resetSearch} type="button" class="btn btn-outline-primary" style={{ margin: "10px" }}>Reset</button>
         </div>
         <br></br>
+      
         {foundStudents.length > 0 && (
           <table border={"5px solid black"} class="table table-striped StudentViewTable">
             <thead>
@@ -106,7 +105,7 @@ function ViewStudent() {
         <div>Total Number Of Students: {stdData.length}
           <div><button onClick={handleDeleteAll} type="button" class="btn btn-danger"  style={{ margin: "10px" }}  >Delete All</button></div>
         </div>
-        <table border={"5px solid black"} class="table table-striped">
+        <table border={"5px solid black"} class="table table-striped StudentViewTable">
           <thead>
             <tr>
               <th>Student Name</th>
@@ -124,7 +123,8 @@ function ViewStudent() {
             ))}
           </tbody>
         </table>
-      </div>
+        </div>
+      
     </>
   );
 }

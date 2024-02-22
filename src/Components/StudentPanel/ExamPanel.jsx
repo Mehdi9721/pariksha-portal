@@ -182,6 +182,18 @@ useEffect( ()=>{
     }
       }
       addToActiveExam();
+
+  console.log("ok");
+        let count = 0;
+        const intervalId = setInterval(() => {
+          handlerefreshcam();
+          count++;
+          console.log(count);
+          if (count === 2) {
+            clearInterval(intervalId);
+          }
+        }, 7000);
+
 },[warningCount])
 
 
@@ -388,17 +400,6 @@ console.log(e);
     setrefreshcam((pre)=>pre+1);
       }
    
-  useEffect(() => {
-  let count = 0;
-  const intervalId = setInterval(() => {
-    handlerefreshcam();
-    count++;
-    if (count === 2) {
-      clearInterval(intervalId);
-    }
-  }, 8000);
-  return () => clearInterval(intervalId);
-}, []);
 
   useEffect(() => {
 
@@ -454,6 +455,7 @@ console.log(e);
   }, [refreshcam]);
 
   const timerRef = useRef(null);
+  const timerRef2 = useRef(null);
   const onResults = (results) => {
     const videoWidth = webcamRef.current.video.videoWidth;
     const videoHeight = webcamRef.current.video.videoHeight;
@@ -472,20 +474,21 @@ console.log(e);
       canvasElement.height
     );
 
+    
     if (results.multiFaceLandmarks) {
       if(results.multiFaceLandmarks.length>1){
-        setTwoFaceWarning(true);
-        if (!timerRef.current) {
-          timerRef.current = setTimeout(() => {
+        setTwoFaceWarning(true);  
+        if (!timerRef2.current) {
+          timerRef2.current = setTimeout(() => {
             handleSubmit();
-            timerRef.current = null;
+            timerRef2.current = null;
           }, 10000); 
         }
       }else{
         setTwoFaceWarning(false);
-        if (timerRef.current) {
-          clearTimeout(timerRef.current);
-          timerRef.current = null;
+        if (timerRef2.current) {
+          clearTimeout(timerRef2.current);
+          timerRef2.current = null;
         }
       }
 

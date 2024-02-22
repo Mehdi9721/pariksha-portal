@@ -68,19 +68,19 @@ function AddStudent() {
 
   return (
     <div>
-      <div className='AddStuTitle'>Student Entry to the DataBase :</div>
+
       {successMessage && <div className="successMessage">{successMessage}</div>}
       {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       <form className='tableAddStudent' onSubmit={handleForm}>
         <label>Enter Student Name:</label>
-        <br />
+       
         <input
           type='text'
           value={studentName}
           onChange={(e) => setStudentName(e.target.value)}
           required />
         <label>Enter Student PRN:</label>
-        <br />
+      
         <input
           type='number'
           value={studentPrn}
@@ -90,7 +90,7 @@ function AddStudent() {
       </form>
       <br></br>
       <br></br>
-      <h6>Or Select File to fill details Automatically!!</h6>
+      <h3>Select File to fill details Automatically!!</h3>
       <div className='FileAreaOfAddStudent'>
         <input type='file'  onChange={handleFileChange }/>
         <button onClick={handleUpload }   type="button" class="btn btn-primary active">Add Students List File</button>

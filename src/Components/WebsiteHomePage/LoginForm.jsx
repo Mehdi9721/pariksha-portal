@@ -38,7 +38,6 @@ const navigate=useNavigate();
   return (
   
     <form className='loginForm' onSubmit={handleSubmit}>
-     {/* Email input */}
   <div className="form-outline mb-4">
     <label htmlFor="username" className="form-label">Email address:</label>
     <input
