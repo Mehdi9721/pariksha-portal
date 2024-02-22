@@ -22,7 +22,7 @@ function Home() {
   };
 
   const handleHelpClick = () => {
-   
+   navigate("/HelpComponent")
   };
   
   const examId = 12;
@@ -39,10 +39,10 @@ function Home() {
           <button className={`btn-websitehome ${showLogin ? 'hidden' : ''}`} onClick={handleLoginClick}>
             {showLogin ? 'Hide' : 'Admin Login'}
           </button>
-          <button className={`btn-websitehome ${showSignup ? 'hidden' : ''}`} onClick={handleSignupClick}>
+          {/* <button className={`btn-websitehome ${showSignup ? 'hidden' : ''}`} onClick={handleSignupClick}>
             {showSignup ? 'Hide' : 'Admin Signup'}
-          </button>
-          <button className='btn-websitehome' onClick={() => { navigate(`/studentLogin/${examId}`) }}>Student Login</button>
+          </button> */}
+          {/* <button className='btn-websitehome' onClick={() => { navigate(`/studentLogin/${examId}`) }}>Student Login</button> */}
           <button className='btn-websitehome' onClick={handleHelpClick}>Help</button>
         </div>
         <div>
@@ -52,8 +52,8 @@ function Home() {
         <div className='footer'>
           <p className='footerFont'>
             !!!! Click For Help And Suggestion  
-            <a href="#">Help</a>  
-            Contact abcd@gmail.com  Mob- +91-1234567890
+            <a href="/HelpComponent">Help</a>  
+            
           </p>
         </div>
       </div>

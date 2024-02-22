@@ -60,9 +60,10 @@
   }
   
   p {
-    margin-top: 16px;
+    margin-top: 5px;
     font-size: 14px;
     color: #888;
+    margin-bottom: 10px;
   }
   .AddStuTitle{
     font-size: 50px;
