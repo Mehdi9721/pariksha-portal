@@ -189,10 +189,10 @@ useEffect( ()=>{
           handlerefreshcam();
           count++;
           console.log(count);
-          if (count === 2) {
+          if (count === 3) {
             clearInterval(intervalId);
           }
-        }, 7000);
+        }, 3000);
 
 },[warningCount])
 
