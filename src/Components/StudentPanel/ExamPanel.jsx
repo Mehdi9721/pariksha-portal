@@ -130,7 +130,7 @@ const location = useLocation();
     };
 const examPaper=async()=>{
   try{
-const examPaperResponse=await axios.get("http://localhost:8080/api/getAllQuestions");
+const examPaperResponse=await axios.get(`http://localhost:8080/api/getAllQuestionsByExamId/${examId}`);
 console.log(examPaperResponse.data);
 setquestionsData(examPaperResponse.data);
   }catch(e){
