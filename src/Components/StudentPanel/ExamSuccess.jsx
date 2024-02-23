@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import '../../Style/StudentPanelStyle/Success.css';
+import { useNavigate } from 'react-router-dom';
 
 function ExamSuccess() {
   const [showPopup, setShowPopup] = useState(true);
   const [showThankYouMessage, setShowThankYouMessage] = useState(false);
-
+const navigate=useNavigate();
   const handleClose = () => {
     setShowPopup(false);
     setShowThankYouMessage(true);
+    setTimeout(() => {
+      navigate("/studentLogin/1");
+    },200);
+  
   };
+
 
   return (
     <>

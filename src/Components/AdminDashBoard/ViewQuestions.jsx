@@ -10,7 +10,7 @@ function ViewQuestions() {
 
   useEffect(() => {
     handleQuestionsData();
-  }, []);
+  }, [questionsData]);
 
   const handleDeleteAll = async () => {
     const confirmDelete = window.confirm('Do you want to delete all questions?');
@@ -34,6 +34,7 @@ function ViewQuestions() {
   
       const response = await axios.get(apiUrl);
       setQuestionsData(response.data);
+      console.log(questionsData[0]);
     } catch (e) {
       console.log(e);
     }
@@ -52,13 +53,13 @@ function ViewQuestions() {
     handleQuestionsData();
   };
 
-  const handleDeleteQuestion = async (examId) => {
-    const confirmDelete = window.confirm(`Do you want to delete the question with Exam ID: ${examId}?`);
+  const handleDeleteQuestion = async (id) => {
+    const confirmDelete = window.confirm(`Do you want to delete the question with Exam ID: ${id}?`);
 
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8080/api/deleteQuestionByExamId/${examId}`);
-        setQuestionsData((prevData) => prevData.filter((question) => question.examId !== examId));
+        await axios.delete(`http://localhost:8080/api/deleteQuestionByExamId/${id}`);
+      //  setQuestionsData((prevData) => prevData.filter((question) => question.examId !== examId));
       } catch (error) {
         console.error('Error deleting question:', error);
       }
@@ -106,7 +107,7 @@ function ViewQuestions() {
                 <td>{foundQuestions[0].optionC}</td>
                 <td>{foundQuestions[0].optionD}</td>
                 <td>{foundQuestions[0].answer}</td>
-                <td><button type="button" className="btn btn-danger" onClick={() => handleDeleteQuestion(foundQuestions[0].examId)}>Delete</button></td>
+                <td><button type="button" className="btn btn-danger" onClick={() => handleDeleteQuestion(foundQuestions[0].id)}>Delete</button></td>
               </tr>
             </tbody>
           </table>)}
@@ -137,7 +138,7 @@ function ViewQuestions() {
                 <td>{question.optionC}</td>
                 <td>{question.optionD}</td>
                 <td>{question.answer}</td>
-                <td><button type="button" className="btn btn-danger" onClick={() => handleDeleteQuestion(question.examId)}>Delete</button></td>
+                <td><button type="button" className="btn btn-danger" onClick={() => handleDeleteQuestion(question.id)}>Delete</button></td>
               </tr>
             ))}
           </tbody>

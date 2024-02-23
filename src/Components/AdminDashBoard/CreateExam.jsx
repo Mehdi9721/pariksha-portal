@@ -45,6 +45,7 @@ const CreateExamForm = () => {
      //sending data for file 
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('examId',examId);
       console.log(file);
       if(file!==null){
         try{
