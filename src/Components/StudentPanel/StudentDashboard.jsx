@@ -1,15 +1,17 @@
+// StudentDashboard.js
 import React, { useEffect, useState } from 'react';
 import '../../Style/StudentPanelStyle/StudentDashboardStyle.css';
 import img from '../../ImagesAndLogo/_7c3d9119-90a8-48d0-99cc-9b1d57e27157.jpeg';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-
+import { useStudentAuth } from "../StudentAuth"
 const StudentDashboard = () => {
   const [studentPrn, setPrn] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { examId } = useParams();
   const navigate = useNavigate();
+  const { studentLogin } = useStudentAuth();
 
   // fetching exam id from url
   useEffect(() => {
@@ -23,20 +25,19 @@ const StudentDashboard = () => {
     e.preventDefault();
     try {
       const x = await axios.get(`http://localhost:8080/api/getStudentResultDataByStudentPrn/${studentPrn}`);
-      console.log(x.data);
       if (x.data != null) {
         setError('This Exam is already completed by you !!!');
       } else {
+        studentLogin(); // Update the student authentication context
         setStatus(true);
       }
     } catch (e) {
       setStatus(true);
-      console.log("bsdk");;
+      console.log("An error occurred during login:", e);
     }
   };
 
   useEffect(() => {
-    console.log(status);
     if (status) {
       const fetchData = async () => {
         try {
@@ -50,7 +51,12 @@ const StudentDashboard = () => {
 
           const studentName = response.data.studentName;
           if (response.data.studentPrn === studentPrn) {
-            navigate(`/studentinstructions/${examId}`, { state: { studentName, studentPrn } });
+console.log(response.data.studentPrn);
+studentLogin(); 
+            setTimeout(() => {
+              navigate(`/studentinstructions/${examId}`, { state: { studentName, studentPrn } });
+            }, 500);
+          
           } else {
             setError('Please check PRN: ');
           }
@@ -62,7 +68,7 @@ const StudentDashboard = () => {
 
       fetchData();
     }
-  }, [status, navigate,handleLogin]);
+  }, [status, navigate, studentPrn, examId]);
 
   return (
     <div className='BodybackgroudImage'>
@@ -88,7 +94,7 @@ const StudentDashboard = () => {
           <div>
             <label htmlFor='password'>Enter Password:</label>
             <input
-              type='number'
+              type='password' // Change type to password
               id='password'
               value={password}
               required

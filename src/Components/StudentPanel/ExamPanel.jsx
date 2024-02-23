@@ -6,7 +6,7 @@ import { FaceMesh } from "@mediapipe/face_mesh";
 import * as cam from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
 import axios from 'axios';
-
+import { useStudentAuth } from '../StudentAuth';
 
 
 const ExamPanel = () => {
@@ -36,8 +36,16 @@ const ExamPanel = () => {
   const [ExamName,setExamName]=useState("");
   const [timeRemainingToStart,stetimmerLessToStart]=useState(false);
   const [questionsData,setquestionsData] = useState([]);
-  //handling exam id from url to show exam related data from db
+  const { isStudentLoggedIn } = useStudentAuth();
+  const navigate = useNavigate();
   const {examId}=useParams(); 
+
+  if (!isStudentLoggedIn) {
+    navigate(`/studentLogin/${examId}`);
+  }
+
+  //handling exam id from url to show exam related data from db
+
   useEffect(()=>{
   },[examId])
   //checking screen size of student
@@ -199,7 +207,7 @@ useEffect( ()=>{
 
 //getting media of user
 
-  const navigate = useNavigate();
+
   let Submitcount=5;
 useEffect(() => {
 

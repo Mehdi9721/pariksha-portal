@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { useAuth } from "../AuthContext";
 const LoginForm = () => {
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginMessage, setLoginMessage] = useState('');
-const navigate=useNavigate();
+
+  const navigate=useNavigate();
+const { login } = useAuth();
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -26,6 +29,7 @@ const navigate=useNavigate();
       } else {
         setLoginMessage('Login successful');
         const adminName = response.data.adminName;
+        login();
         navigate("/adminhomepage");
         // Handle further actions upon successful login
       }

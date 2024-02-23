@@ -8,11 +8,15 @@ import ViewStudent from './ViewStudent';
 import ActiveExams from './ActiveExams';
 import backgroundImage from '../../ImagesAndLogo/pngtree-countdown-to-the-college-entrance-examination-image_790187.jpg';
 import ViewQuestions from './ViewQuestions';
+import { useAuth } from '../AuthContext';
 
 function AdminHome() {
     const [activeButton, setActiveButton] = useState(null);
     const [showBackgroundImage, setShowBackgroundImage] = useState(true);
-
+    const { isLoggedIn } = useAuth();
+    if (!isLoggedIn) {
+        return null;
+      }
     const handleButtonClick = (buttonName) => {
         setActiveButton(buttonName);
         setShowBackgroundImage(false);
