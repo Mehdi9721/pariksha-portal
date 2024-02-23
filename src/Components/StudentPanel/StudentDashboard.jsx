@@ -24,7 +24,8 @@ const StudentDashboard = () => {
     e.preventDefault();
     try {
       const x = await axios.get(`http://localhost:8080/api/getStudentResultDataByStudentPrn/${studentPrn}`);
-      if (x.data != null) {
+
+      if (x.data.studentPrn == studentPrn && x.data.examId==examId) {
         setError('This Exam is already completed by you !!!');
       } else {
         studentLogin(); // Update the student authentication context
