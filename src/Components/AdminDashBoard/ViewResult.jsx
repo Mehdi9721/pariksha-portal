@@ -89,6 +89,7 @@ function ViewResult() {
                 <th>Student Name</th>
                 <th>Student MARKS</th>
                 <th>Exam Name</th>
+                <th>Exam Id</th>
                 <th>Exam Date</th>
                 <th>Result Download Link</th>
                 <th>Student Marks</th>
@@ -102,6 +103,7 @@ function ViewResult() {
                 <td>{foundResults[0].studentName}</td>
                 <td>{foundResults[0].studentMarks}</td>
                 <td>{foundResults[0].examName}</td>
+                <td>{foundResults[0].examId}</td>
                 <td>{foundResults[0].examDate}</td>
                 <td>{foundResults[0].studentResultDownloadLink}</td>
                 <td>{foundResults[0].studentMarks}</td>
@@ -121,6 +123,7 @@ function ViewResult() {
               <th>Student Name</th>
               <th>Student Marks</th>
               <th>Exam Name</th>
+              <th>Exam Id</th>
               <th>Exam Date</th>
               <th>Result Download Link</th>
               <th>Delete Result</th>
@@ -134,6 +137,7 @@ function ViewResult() {
                 <td>{result.studentName}</td>
                 <td>{result.studentMarks}</td>
                 <td>{result.examName}</td>
+                <td>{result.examId}</td>
                 <td>{result.examDate}</td>
                 <td>{result.studentResultDownloadLink}</td>
                 <td><button    type="button" class="btn btn-danger"   onClick={() => handleDeleteResult(result.studentPrn)}>Delete</button></td>

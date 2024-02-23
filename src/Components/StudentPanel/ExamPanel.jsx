@@ -6,11 +6,10 @@ import { FaceMesh } from "@mediapipe/face_mesh";
 import * as cam from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
 import axios from 'axios';
-
+import { useStudentAuth } from '../StudentAuth';
 
 
 const ExamPanel = () => {
-  //getting details of students from navigated link
   const location = useLocation();
   const { state } = location;
   const { studentName, studentPrn } = state || {};
@@ -36,8 +35,16 @@ const ExamPanel = () => {
   const [ExamName,setExamName]=useState("");
   const [timeRemainingToStart,stetimmerLessToStart]=useState(false);
   const [questionsData,setquestionsData] = useState([]);
-  //handling exam id from url to show exam related data from db
+  const { isStudentLoggedIn } = useStudentAuth();
+  const navigate = useNavigate();
   const {examId}=useParams(); 
+
+  if (!isStudentLoggedIn) {
+    navigate(`/studentLogin/${examId}`);
+  }
+
+  //handling exam id from url to show exam related data from db
+
   useEffect(()=>{
   },[examId])
   //checking screen size of student
@@ -189,17 +196,17 @@ useEffect( ()=>{
           handlerefreshcam();
           count++;
           console.log(count);
-          if (count === 2) {
+          if (count === 3) {
             clearInterval(intervalId);
           }
-        }, 7000);
+        }, 3000);
 
 },[warningCount])
 
 
 //getting media of user
 
-  const navigate = useNavigate();
+
   let Submitcount=5;
 useEffect(() => {
 
@@ -348,7 +355,8 @@ const saveStudentData=axios.post("http://localhost:8080/api/postStudentResultDat
   studentResultDownloadLink:"abc/test",
   studentMarks:correctAnswersCount,
   examName:ExamName,
-  examDate:istDateString
+  examDate:istDateString,
+  examId:examId
 })
 console.log(saveStudentData.data);
 }catch(e){

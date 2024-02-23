@@ -9,20 +9,27 @@ import ExamSuccess from './Components/StudentPanel/ExamSuccess';
 import LoginForm from './Components/WebsiteHomePage/LoginForm';
 import InstructionPage from './Components/StudentPanel/InstructionPage';
 import HelpComponent from './Components/WebsiteHomePage/HelpComponent';
+import { AuthProvider } from './Components/AuthContext';
+import { StudentAuthProvider } from './Components/StudentAuth';
 function App() {
   return (
+    <AuthProvider>
+        <StudentAuthProvider>
     <Router>
        <Routes>
+
       <Route path="/" element={<Home></Home>} />
       <Route path="/adminhomepage" element={<AdminHome/>} />
+      <Route path="/HelpComponent" element={<HelpComponent></HelpComponent>}></Route>
       <Route path="/studentLogin/:examId" element={<StudentDashbord></StudentDashbord>} />
       <Route path="/stndexam/:examId" element={<ExamPanel></ExamPanel>}></Route>
       <Route path="/ctest" element={<CameraComponent></CameraComponent>}></Route>
       <Route path="/examsuccess" element={<ExamSuccess></ExamSuccess>}></Route>
       <Route path="/studentinstructions/:examId" element={<InstructionPage></InstructionPage>}></Route>
-      <Route path="/HelpComponent" element={<HelpComponent></HelpComponent>}></Route>
       </Routes>
   </Router>
+  </StudentAuthProvider>
+  </AuthProvider>
   );
 }
 

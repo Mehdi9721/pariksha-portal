@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import "../../Style/StudentPanelStyle/StyleInstructionPage.css";
+import { useStudentAuth } from '../StudentAuth';
+
+
 const InstructionPage = () => {
     const [isChecked, setIsChecked] = useState(false);
     const [inputValue, setInputValue] = useState('');
@@ -8,12 +11,22 @@ const InstructionPage = () => {
     const location = useLocation();
     const { state } = location;
     const { studentName, studentPrn } = state || {};
+    const { isStudentLoggedIn } = useStudentAuth(); 
+    const { examId } = useParams();
+
+    useEffect(() => {
+        console.log(isStudentLoggedIn);
+        if (!isStudentLoggedIn) {
+          navigate(`/studentLogin/${examId}`);
+        }
+
+      }, [isStudentLoggedIn, navigate, examId]);
+
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
     };
+   
 
-    //getting id from param
-    const { examId } = useParams();
      useEffect(()=>{
         console.log('Exam ID:', examId);
      },[examId])

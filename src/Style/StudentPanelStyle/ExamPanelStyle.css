@@ -34,13 +34,14 @@ body {
   border-right: 2px solid #ddd;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .question-list ul {
   list-style: none;
   padding: 0;
   margin: 10px 0;
   display: flex;
-
+  flex-wrap: wrap; 
 }
 .question-list li {
   box-sizing: border-box; 
@@ -70,7 +71,7 @@ body {
   flex-grow: 1;
   background-color: #87ceeb;
   padding: 20px;
-  height:600px;
+  height:500px;
 }
 .question-container  h2{
   font-weight: 700;
