@@ -8,19 +8,17 @@ function ViewResult() {
   const [searchPRN, setSearchPRN] = useState('');
   const [foundResults, setFoundResults] = useState([]);
 
-  useEffect(() => {
-    handleResultData();
-  }, [resultData,searchPRN,foundResults]); 
+
 
   const handleResultData = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/getAllStudentResultData');  
       setResultData(response.data);
-      console.log(response.data);
     } catch (e) {
       console.log(e);
     }
   };
+
 
   const handleDeleteAll = async () => {
     const al = window.confirm('Do you want to delete all students?');
@@ -46,21 +44,23 @@ function ViewResult() {
     handleResultData();
   };
 
+  useEffect(() => {
+    handleResultData();
+  }, [resultData,searchPRN,foundResults]); 
+  
   const handleDeleteResult = async (prn) => {
     const confirmDelete = window.confirm(`Do you want to delete the result with PRN: ${prn}?`);
 
     if (confirmDelete) {
       try {
-        // Make an API call to delete the result
+       
         await axios.delete(`http://localhost:8080/api/deleteStudentResultDataByStudentPrn/${prn}`);  
-
-        // Update the state to reflect the changes
-        setResultData((prevData) => prevData.filter((result) => result.studentPrn !== prn));
       } catch (error) {
         console.error('Error deleting result:', error);
-        // Display an error message to the user
+      
       }
     }
+    
   };
 
   return (

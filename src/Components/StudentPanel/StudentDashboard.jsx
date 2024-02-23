@@ -51,9 +51,12 @@ const StudentDashboard = () => {
           });
 
           const studentName = response.data.studentName;
-          if (response.data.studentPrn === studentPrn) {
-console.log(response.data.studentPrn);
-studentLogin(); 
+
+          if ( (response.data.studentPrn === studentPrn )  ) {               
+            console.log(password + " pass");
+            console.log(response.data.studentPrn +" prn");   
+
+            studentLogin(); 
             setTimeout(() => {
               navigate(`/studentinstructions/${examId}`, { state: { studentName, studentPrn } });
             }, 500);
@@ -63,7 +66,7 @@ studentLogin();
           }
         } catch (e) {
           setError('Please check PRN: ');
-          console.error(e);
+          console.error("check");
         }
       };
 
@@ -92,16 +95,18 @@ studentLogin();
               onChange={(e) => setPrn(e.target.value)}
             />
           </div>
-          <div>
+
+          {/* <div>
             <label htmlFor='password'>Enter Password:</label>
             <input
-              type='password' // Change type to password
+              type='password' 
               id='password'
               value={password}
               required
               onChange={(e) => setPassword(e.target.value)}
             />
-          </div>
+          </div> */}
+          
           <button type='submit'>Login</button>
           {error && <p style={{ color: 'red' }}>{error}</p>}
         </form>

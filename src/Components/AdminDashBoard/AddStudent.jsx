@@ -6,7 +6,6 @@ function AddStudent() {
   const [studentPrn, setStudentPRN] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
   const [file, setFile] = useState(null);
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);

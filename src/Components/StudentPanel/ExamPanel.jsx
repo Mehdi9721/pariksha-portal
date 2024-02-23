@@ -51,6 +51,7 @@ const location = useLocation();
   //handling exam id from url to show exam related data from db
 
   useEffect(()=>{
+    
   },[examId])
   //checking screen size of student
   const handleFullScreenClick = () => {
@@ -527,11 +528,9 @@ console.log(e);
   useEffect(()=>{
     const resultOfstudent=async()=>{
       try{
-
-      
     const res=await axios.get(`http://localhost:8080/api/getStudentResultDataByStudentPrn/${studentPrn}`);
     console.log("ok student result present");
-    if(res.data!=null){
+    if(res.data.examId==examId){
       navigate(`/studentLogin/${examId}`);
     }
   }catch(e){
