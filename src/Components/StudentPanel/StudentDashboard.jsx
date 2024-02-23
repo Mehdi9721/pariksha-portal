@@ -13,12 +13,11 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
   const { studentLogin } = useStudentAuth();
 
-  // fetching exam id from url
   useEffect(() => {
     console.log('Exam ID:', examId);
   }, [examId]);
 
-  // handling login
+
   const [status, setStatus] = useState(false);
 
   const handleLogin = async (e) => {
@@ -31,8 +30,9 @@ const StudentDashboard = () => {
         studentLogin(); // Update the student authentication context
         setStatus(true);
       }
+
     } catch (e) {
-      setStatus(true);
+       setStatus(true);
       console.log("An error occurred during login:", e);
     }
   };
@@ -68,7 +68,7 @@ studentLogin();
 
       fetchData();
     }
-  }, [status, navigate, studentPrn, examId]);
+  }, [status, studentPrn, examId]);
 
   return (
     <div className='BodybackgroudImage'>

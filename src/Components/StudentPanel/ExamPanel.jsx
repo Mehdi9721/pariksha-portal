@@ -10,7 +10,6 @@ import { useStudentAuth } from '../StudentAuth';
 
 
 const ExamPanel = () => {
-  //getting details of students from navigated link
   const location = useLocation();
   const { state } = location;
   const { studentName, studentPrn } = state || {};
