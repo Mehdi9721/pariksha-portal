@@ -9,8 +9,9 @@ import axios from 'axios';
 import { useStudentAuth } from '../StudentAuth';
 
 
+
 const ExamPanel = () => {
-  const location = useLocation();
+const location = useLocation();
   const { state } = location;
   const { studentName, studentPrn } = state || {};
 
@@ -42,6 +43,10 @@ const ExamPanel = () => {
   if (!isStudentLoggedIn) {
     navigate(`/studentLogin/${examId}`);
   }
+
+
+
+
 
   //handling exam id from url to show exam related data from db
 
@@ -358,7 +363,6 @@ const saveStudentData=axios.post("http://localhost:8080/api/postStudentResultDat
   examDate:istDateString,
   examId:examId
 })
-console.log(saveStudentData.data);
 }catch(e){
   console.log(e);
 }
@@ -518,6 +522,26 @@ console.log(e);
 
     }
   };
+
+
+  useEffect(()=>{
+    const resultOfstudent=async()=>{
+      try{
+
+      
+    const res=await axios.get(`http://localhost:8080/api/getStudentResultDataByStudentPrn/${studentPrn}`);
+    console.log("ok student result present");
+    if(res.data!=null){
+      navigate(`/studentLogin/${examId}`);
+    }
+  }catch(e){
+    console.log("no data");
+  }
+    }
+    resultOfstudent();
+    },[warningCount,isStudentLoggedIn,isFullScreen,handleSubmit]);
+
+
 ////////////////////////////////////////////////////////////////////////////
 return (
     <div>
