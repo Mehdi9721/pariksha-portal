@@ -1,9 +1,9 @@
 .FormCreateExam {
     width: 700px;
-    margin:10px 0 0 80px;
+    margin:20px 0 0 80px;
     padding: 20px;
-    background-color: #d9eceb;
-    border: 1px solid #ddd;
+    background-color: #bdc0bf;
+    border: 1px solid #030303;
     border-radius: 9px;
     box-shadow: -10px 10px 1px rgba(0, 0, 0, 0.1);
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -22,7 +22,7 @@
     padding: 8px;
     margin-bottom: 16px;
     box-sizing: border-box;
-    border-radius: 20px;
+    border-radius: 10px;
   }
 
   .FormCreateExam .btn2 {

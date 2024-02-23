@@ -5,10 +5,12 @@ import Signup from "../WebsiteHomePage/SignupForm";
 import "../../Style/WebsiteHomePageStyle/LoginStyle.css";
 import img from "../../ImagesAndLogo/_7c3d9119-90a8-48d0-99cc-9b1d57e27157.jpeg";
 import '../../Style/WebsiteHomePageStyle/StyleWebsiteHome.css'
+import HelpComponent from './HelpComponent';
 
 function Home() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -22,7 +24,8 @@ function Home() {
   };
 
   const handleHelpClick = () => {
-   navigate("/HelpComponent")
+    setShowHelp(!showHelp);
+    setShowLogin(false);
   };
   
   const examId = 12;
@@ -43,11 +46,15 @@ function Home() {
             {showSignup ? 'Hide' : 'Admin Signup'}
           </button> */}
           {/* <button className='btn-websitehome' onClick={() => { navigate(`/studentLogin/${examId}`) }}>Student Login</button> */}
-          <button className='btn-websitehome' onClick={handleHelpClick}>Help</button>
+          {/* <button className='btn-websitehome' onClick={handleHelpClick}>Help</button> */}
+          <button className={`btn-websitehome ${showHelp ? 'hidden' : ''}`} onClick={handleHelpClick}>
+            {showHelp ? 'Hide' : 'Help'}
+          </button>
         </div>
         <div>
           {showLogin && <Login />}
           {showSignup && <Signup />}
+          {showHelp && <HelpComponent/>}
         </div>
         <div className='footer'>
           <p className='footerFont'>
