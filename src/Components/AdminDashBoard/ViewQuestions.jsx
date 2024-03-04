@@ -7,16 +7,21 @@ function ViewQuestions() {
   const [questionsData, setQuestionsData] = useState([]);
   const [searchExamId, setSearchExamId] = useState('');
   const [foundQuestions, setFoundQuestions] = useState({});
-
+  const [searchedQuestions,setsearchedQuestions]=useState([]);
+  
   useEffect(() => {
     handleQuestionsData();
-  }, [questionsData]);
+  }, [questionsData,searchedQuestions]);
 
+  const token=localStorage.getItem('jwtToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
   const handleDeleteAll = async () => {
     const confirmDelete = window.confirm('Do you want to delete all questions?');
     if (confirmDelete) {
       try {
-        await axios.delete('http://localhost:8080/api/deleteAllQuestions');
+        await axios.delete('http://localhost:8080/api/deleteAllQuestions',config);
         handleQuestionsData();
       } catch (e) {
         console.log(e);
@@ -29,12 +34,12 @@ function ViewQuestions() {
   const handleQuestionsData = async () => {
     try {
       const apiUrl = searchExamId
-        ? `http://localhost:8080/api/getAllQuestionsByExamId/${searchExamId}`
+        ? `http://localhost:8080/api/getAllQuestionsByExamId/${searchExamId},`
         : 'http://localhost:8080/api/getAllQuestions';
-  
-      const response = await axios.get(apiUrl);
+
+      const response = await axios.get(apiUrl,config);
       setQuestionsData(response.data);
-      console.log(questionsData[0]);
+    
     } catch (e) {
       console.log(e);
     }
@@ -43,9 +48,11 @@ function ViewQuestions() {
   const handleSearch = async () => {
 
     const examIdToSearch = searchExamId.trim() === '' ? '' : searchExamId;
-  
     setSearchExamId(examIdToSearch);
-    await handleQuestionsData();
+    const sq=await axios.get(`http://localhost:8080/api/getAllQuestionsByExamId/${searchExamId}`,config);
+   
+    setsearchedQuestions(sq.data);
+    console.log(searchedQuestions);
   };
 
   const resetSearch = () => {
@@ -58,14 +65,12 @@ function ViewQuestions() {
 
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8080/api/deleteQuestionByExamId/${id}`);
-      //  setQuestionsData((prevData) => prevData.filter((question) => question.examId !== examId));
+        await axios.delete(`http://localhost:8080/api/deleteQuestionByExamId/${id}`,config);
       } catch (error) {
         console.error('Error deleting question:', error);
       }
     }
   };
-
   return (
     <>
       <div className='viewBody'>
@@ -84,8 +89,8 @@ function ViewQuestions() {
           <button onClick={resetSearch} type="button" className="btn btn-primary" style={{ margin: "10px" }}>Reset</button>
         </div>
         <br></br>
-        {foundQuestions.length > 0 && (
-          <table border={"5px solid black"} className="table table-striped">
+        {searchedQuestions.length > 0 && (
+          <table border={"5px solid black"} className="table table-striped custom-table" style={{ margin: "10px" }} >
             <thead>
               <tr>
                 <th>Exam ID</th>
@@ -99,16 +104,18 @@ function ViewQuestions() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>{foundQuestions[0].examId}</td>
-                <td>{foundQuestions[0].question}</td>
-                <td>{foundQuestions[0].optionA}</td>
-                <td>{foundQuestions[0].optionB}</td>
-                <td>{foundQuestions[0].optionC}</td>
-                <td>{foundQuestions[0].optionD}</td>
-                <td>{foundQuestions[0].answer}</td>
-                <td><button type="button" className="btn btn-danger" onClick={() => handleDeleteQuestion(foundQuestions[0].id)}>Delete</button></td>
+            {searchedQuestions.map((question) => (
+              <tr key={question.id}>
+                <td>{question.examId}</td>
+                <td>{question.question}</td>
+                <td>{question.optionA}</td>
+                <td>{question.optionB}</td>
+                <td>{question.optionC}</td>
+                <td>{question.optionD}</td>
+                <td>{question.answer}</td>
+                <td><button type="button" className="btn btn-danger" onClick={() => handleDeleteQuestion(question.id)}>Delete</button></td>
               </tr>
+            ))}
             </tbody>
           </table>)}
         <br />
@@ -130,7 +137,7 @@ function ViewQuestions() {
           </thead>
           <tbody>
             {questionsData?.map((question) => (
-              <tr key={question.examId}>
+              <tr key={question.id}>
                 <td>{question.examId}</td>
                 <td>{question.question}</td>
                 <td>{question.optionA}</td>

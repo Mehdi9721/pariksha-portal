@@ -11,6 +11,7 @@ import InstructionPage from './Components/StudentPanel/InstructionPage';
 import HelpComponent from './Components/WebsiteHomePage/HelpComponent';
 import { AuthProvider } from './Components/AuthContext';
 import { StudentAuthProvider } from './Components/StudentAuth';
+import SignupForm from './Components/WebsiteHomePage/SignupForm';
 function App() {
   return (
     <AuthProvider>
@@ -26,6 +27,7 @@ function App() {
       <Route path="/ctest" element={<CameraComponent></CameraComponent>}></Route>
       <Route path="/examsuccess" element={<ExamSuccess></ExamSuccess>}></Route>
       <Route path="/studentinstructions/:examId" element={<InstructionPage></InstructionPage>}></Route>
+      <Route path="/adminSignup" element={<SignupForm></SignupForm>}></Route>
       </Routes>
   </Router>
   </StudentAuthProvider>

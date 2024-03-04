@@ -12,10 +12,12 @@ const HelpComponent = () => {
                     For Admin Registration Contact on Email Provided below:<br />
                     <p>mohammadmehdi9721@gmail.com <br />
                         natavesujata@gmail.com<br />
-                        dwarkeshvirkhare@gmail.com</p>
+                        dwarkeshvirkhare@gmail.com<br />
+                        shubham.pokale2001@gmail.com 
+                        </p>
 
                     <div className='img11'>
-                        <img src={img} className='img' />
+                        {/* <img src={img} className='img' /> */}
                         <div className="copyright">
                             &copy; Crafted By 2SD
                         </div>

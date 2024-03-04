@@ -11,13 +11,18 @@ function AddStudent() {
     setFile(event.target.files[0]);
   };
 
+  const token=localStorage.getItem('jwtToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
+
   const handleForm = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:8080/api/saveStudent", {
        studentName,
       studentPrn
-      });
+      },config);
       console.log(response.data);
       setSuccessMessage(`Data of ${studentName} added successfully!`);
       setErrorMessage('');
@@ -32,15 +37,17 @@ function AddStudent() {
         setSuccessMessage('');
       }, 3500);
     }
-  };
-
+  }; 
 
   const handleUpload = () => {
     const formData = new FormData();
     formData.append('file', file);
     if(file!==null){
       try{
-        axios.post('http://localhost:8080/api/upload', formData);
+
+console.log(token +"token");
+        axios.post('http://localhost:8080/api/upload', formData,config);
+
         setSuccessMessage(`Data of Students added successfully!`);
         setErrorMessage('');
         setTimeout(() => {

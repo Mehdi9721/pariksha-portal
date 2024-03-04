@@ -17,6 +17,10 @@ const StudentDashboard = () => {
     console.log('Exam ID:', examId);
   }, [examId]);
 
+  const token=localStorage.getItem('jwtToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
 
   const [status, setStatus] = useState(false);
 
@@ -43,6 +47,7 @@ const StudentDashboard = () => {
       const fetchData = async () => {
         try {
           // API for getting student details from prn
+          console.log("okkkkkkkkkkkkkk");
           const response = await axios.get(`http://localhost:8080/api/getStudentByPrn/${studentPrn}`, {
             params: {
               examId,

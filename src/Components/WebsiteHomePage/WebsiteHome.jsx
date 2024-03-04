@@ -45,6 +45,8 @@ function Home() {
           {/* <button className={`btn-websitehome ${showSignup ? 'hidden' : ''}`} onClick={handleSignupClick}>
             {showSignup ? 'Hide' : 'Admin Signup'}
           </button> */}
+
+          
           {/* <button className='btn-websitehome' onClick={() => { navigate(`/studentLogin/${examId}`) }}>Student Login</button> */}
           {/* <button className='btn-websitehome' onClick={handleHelpClick}>Help</button> */}
           <button className={`btn-websitehome ${showHelp ? 'hidden' : ''}`} onClick={handleHelpClick}>

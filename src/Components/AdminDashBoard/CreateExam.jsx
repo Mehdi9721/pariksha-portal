@@ -19,6 +19,10 @@ const CreateExamForm = () => {
     setFile(event.target.files[0]);
   };
 
+  const token=localStorage.getItem('jwtToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
   ////////////
   const handleCreateExam = async (e) => {
     e.preventDefault();
@@ -40,7 +44,7 @@ const CreateExamForm = () => {
         examName,
         examSchedule: examScheduleString,
         examDuration
-      });
+      },config);
   
      //sending data for file 
       const formData = new FormData();
@@ -49,7 +53,7 @@ const CreateExamForm = () => {
       console.log(file);
       if(file!==null){
         try{
-         axios.post('http://localhost:8080/api/uploadQuestionPaper', formData);
+         axios.post('http://localhost:8080/api/uploadQuestionPaper', formData,config);
         }catch(e){
       console.log(e);
         }

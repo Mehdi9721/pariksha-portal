@@ -6,14 +6,17 @@ function ActiveExams() {
     const [examData, setExamData] = useState([]);
     const [searchExamName, setSearchExamName] = useState('');
     const [foundExams, setFoundExams] = useState({});
-
+    const token=localStorage.getItem('jwtToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
     useEffect(() => {
         handleExamData();
     }, [examData,foundExams]);
 
     const handleExamData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/getAllActiveExamData');
+            const response = await axios.get('http://localhost:8080/api/getAllActiveExamData',config);
             setExamData(response.data);
             console.log(response.data);
         } catch (e) {
@@ -36,7 +39,7 @@ function ActiveExams() {
         if (confirmDelete) {
             try {
                 // Make an API call to delete the exam
-                await axios.delete(`http://localhost:8080/api/deleteAllActiveExamData`);
+                await axios.delete(`http://localhost:8080/api/deleteAllActiveExamData`,config);
             } catch (error) {
                 console.error('Error deleting exam:', error);
             }

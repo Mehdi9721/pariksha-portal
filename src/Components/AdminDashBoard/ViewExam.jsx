@@ -9,10 +9,14 @@ function ViewExam() {
   useEffect(() => {
     handleExamData(); // Fetch data when the component mounts
   }, []);
+  const token=localStorage.getItem('jwtToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
 
   const handleExamData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/getAllExams');
+      const response = await axios.get('http://localhost:8080/api/getAllExams',config);
       setExamData(response.data);
       console.log(response.data);
     } catch (e) {
@@ -24,7 +28,7 @@ function ViewExam() {
     try {
       const confirmDelete = window.confirm('Are you sure you want to delete all Exam Data?');
       if (confirmDelete) {
-        await axios.delete('http://localhost:8080/api/deleteAllExams');
+        await axios.delete('http://localhost:8080/api/deleteAllExams',config);
         console.log('All exams deleted successfully from the database!');
         handleExamData(); // Refresh exam data after successful deletion
       } else {
@@ -39,7 +43,7 @@ function ViewExam() {
     try {
       const confirmDelete = window.confirm(`Are you sure you want to delete the ${examId} Exam Record?`);
       if (confirmDelete) {
-        await axios.delete(`http://localhost:8080/api/deleteExam/${examId}`);
+        await axios.delete(`http://localhost:8080/api/deleteExam/${examId}`,config);
         console.log(`Exam with ID ${examId} deleted successfully.`);
         handleExamData(); // Refresh exam data after successful deletion
       } else {

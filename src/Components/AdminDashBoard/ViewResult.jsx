@@ -8,11 +8,14 @@ function ViewResult() {
   const [searchPRN, setSearchPRN] = useState('');
   const [foundResults, setFoundResults] = useState([]);
 
-
+  const token=localStorage.getItem('jwtToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
 
   const handleResultData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/getAllStudentResultData');  
+      const response = await axios.get('http://localhost:8080/api/getAllStudentResultData',config);  
       setResultData(response.data);
     } catch (e) {
       console.log(e);
@@ -24,7 +27,7 @@ function ViewResult() {
     const al = window.confirm('Do you want to delete all students?');
     if (al) {
       try {
-        await axios.delete('http://localhost:8080/api/deleteAllStudentResultData');
+        await axios.delete('http://localhost:8080/api/deleteAllStudentResultData',config);
       } catch (e) {
         console.log(e);
       }
@@ -54,7 +57,7 @@ function ViewResult() {
     if (confirmDelete) {
       try {
        
-        await axios.delete(`http://localhost:8080/api/deleteStudentResultDataByStudentPrn/${prn}`);  
+        await axios.delete(`http://localhost:8080/api/deleteStudentResultDataByStudentPrn/${prn}`,config);  
       } catch (error) {
         console.error('Error deleting result:', error);
       

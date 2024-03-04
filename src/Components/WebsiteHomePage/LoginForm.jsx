@@ -24,14 +24,20 @@ const { login } = useAuth();
         adminPassword,
       });
 
-      if (response.data === 0) {
+      if (response.data == 0) {
+        console.log("wrong");
         setLoginMessage('Wrong admin or password');
       } else {
         setLoginMessage('Login successful');
-        const adminName = response.data.adminName;
+    
+        const jwtToken = response.data; 
+
+        
+        localStorage.setItem('jwtToken', jwtToken);
+     
         login();
         navigate("/adminhomepage");
-        // Handle further actions upon successful login
+       
       }
     } catch (error) {
       console.error('Error during login:', error);
@@ -76,22 +82,22 @@ const { login } = useAuth();
      
     </div>
   </div>
-      {/* 2 column grid layout for inline styling */}
+   
   <div className="row mb-4">
     <div className="col d-flex justify-content-center">
     
     </div>
 
     <div >
-      {/* Simple link */}
+    {loginMessage && <p>{loginMessage}</p>}
      
       <button type="submit" className="btn btn-primary btn-block mb-4">Sign in</button>
     </div>
   </div>
 
-  {/* Submit button */}
   
-      {loginMessage && <p>{loginMessage}</p>}
+  
+ 
     </form>
     
   );

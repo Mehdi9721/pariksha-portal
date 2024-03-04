@@ -13,9 +13,13 @@ function ViewStudent() {
     handleStudentData();
   }, [stdData, searchPRN, foundStudents]); // Empty dependency array ensures this effect runs only once when the component mounts
 
+  const token=localStorage.getItem('jwtToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
   const handleStudentData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/getAllStudent');
+      const response = await axios.get('http://localhost:8080/api/getAllStudent',config);
       setdata(response.data);
       console.log(response.data);
     } catch (e) {
@@ -27,7 +31,7 @@ function ViewStudent() {
     const al = window.confirm('Do you want to delete all students?');
     if (al) {
       try {
-        const response = await axios.delete('http://localhost:8080/api/deleteAll');
+        const response = await axios.delete('http://localhost:8080/api/deleteAll',config);
       } catch (e) {
         console.log(e);
       }
@@ -52,7 +56,7 @@ function ViewStudent() {
     if (confirmDelete) {
       try {
         // Make an API call to delete the student
-        await axios.delete(`http://localhost:8080/api/deleteStudent/${prn}`);
+        await axios.delete(`http://localhost:8080/api/deleteStudent/${prn}`,config);
 
         // Update the state to reflect the changes
         setdata((prevData) => prevData.filter((std) => std.studentPrn !== prn));
