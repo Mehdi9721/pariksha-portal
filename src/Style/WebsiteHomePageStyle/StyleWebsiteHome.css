@@ -110,5 +110,9 @@ height: 710px;
     transform: translateX(-100%);
   }
 }
+.own{
+  float: right;
+  margin-right: 20px;
+}
 
 

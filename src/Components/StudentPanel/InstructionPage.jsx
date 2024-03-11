@@ -13,7 +13,7 @@ const InstructionPage = () => {
     const { studentName, studentPrn } = state || {};
     const { isStudentLoggedIn } = useStudentAuth(); 
     const { examId } = useParams();
-
+    const { adminId } = useParams();
     useEffect(() => {
         console.log(isStudentLoggedIn);
         if (!isStudentLoggedIn) {
@@ -35,7 +35,7 @@ const InstructionPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (isChecked) {
-            navigate(`/stndexam/${examId}`,{ state: { studentName, studentPrn } }); 
+            navigate(`/stndexam/${examId}/${adminId}`,{ state: { studentName, studentPrn } }); 
         } else {
             alert('Please check the checkbox and provide required information.');
         }

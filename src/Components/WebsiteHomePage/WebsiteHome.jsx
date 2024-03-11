@@ -61,8 +61,9 @@ function Home() {
         <div className='footer'>
           <p className='footerFont'>
             !!!! Click For Help And Suggestion  
-            <a href="/HelpComponent">Help</a>  
-            
+            <a href="/HelpComponent">Help</a> 
+           
+            <a className='own' href='/owner'>Owner Login</a>
           </p>
         </div>
       </div>

@@ -1,37 +1,38 @@
 .Container {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+/* background-image: url("../../ImagesAndLogo//classroom-2093744_1280.jpg"); */
+/* background-repeat: no-repeat;
+background-size: cover; */
 }
 
 .Header {
     width: 100%;
-    height: 50px;
-    color: white;
-    background-color: black;
+    height: 35px;
+    color: rgb(7, 23, 241);
+   font-family: 'Times New Roman', Times, serif;
     font-size: 25px;
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .centralBody {
-    background-color: rgb(219, 219, 219);
     width: 100%;
-    height: 70px;
+    /* height: 90px; */
     display: flex;
+    flex-wrap: wrap;
     overflow: hidden;
     align-items: center;
     justify-content: center;
+    border-bottom: 3px solid black; 
+    backdrop-filter: blur(10px);
 }
 
-.tableAdminPanel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-.tableAdminPanel button {
+.centralBody button {
     max-width: 250px;
     min-width: 100px; 
-    width: 150px;
-    height: 60px;
+    width: 130px;
+    height: 50px;
+    border: 3px solid green;
     border-radius: 20px;
     transition: background-color 0.3s, min-width 0.3s; 
     font-size: 14px;
@@ -43,29 +44,53 @@
     color: white;
 }
 
-.tableAdminPanel button:hover {
+.centralBody button:hover {
     background-color: rgb(10, 10, 10);
-    min-width: 170px; /* Adjust the minimum width on hover */
+    min-width: 150px; 
     color: white;
 }
 
 .Container img.background-image {
     width: 100%;
-    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
     z-index: -1;
 }
 
-.container2 img.background-image {
-    display: none;
-}
-
-.Container.without-background-image img.background-image {
-    display: none;
-}
-
 .container2 {
     display: flex;
+}
+
+.box-container{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    font-size: 15px;
+    color: rgb(0, 0, 0);
+
+}
+.instruction{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 580px;   
+padding: 10px;
+border-radius: 10px;
+font-weight: 700;
+border: 1px solid black;
+/* backdrop-filter: blur(200px); */
+background-color: rgb(207, 204, 204);
+color: rgb(0, 0, 0);
+overflow: scroll;
+}
+.email{
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    font-size: 16px;
+}
+.adminName{
+    color: rgb(7, 41, 11);
+    font-size: 24px;
 }

@@ -8,6 +8,7 @@ const SignupForm = () => {
   const [adminEmail, setEmail] = useState('');
   const [adminPassword, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [ownerKey, setownerKey] = useState('');
 const navigate =useNavigate();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -21,10 +22,9 @@ const navigate =useNavigate();
       adminEmail,
       adminPassword,
     };
-  
+
     try {
-      const response = await axios.post('http://localhost:8080/api/adminSignup', formData);
-      console.log('Server response:', response.data);
+    const response = await axios.post('http://localhost:8080/api/adminSignup', formData);
       setName('');
       setUsername('');
       setEmail('');
@@ -33,6 +33,7 @@ const navigate =useNavigate();
     } catch (error) {
       console.error('Error submitting form:', error);
     }
+
   };
 
   return (
@@ -84,7 +85,7 @@ const navigate =useNavigate();
           style={{ cursor: 'pointer', marginLeft: '5px' }}
           onClick={togglePasswordVisibility}
         >
-          {showPassword ? '🙈' : '👁️'}
+          {showPassword ? '🔓' : '🔒'}
         </span>
       </div>
       <br />

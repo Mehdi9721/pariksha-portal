@@ -1,0 +1,43 @@
+.ownerForm {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .ownerForm h2 {
+    text-align: center;
+  }
+  
+  .ownerForm  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .ownerForm input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+  
+  .ownerForm button {
+    border-radius: 10px;
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .ownerForm button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Optional: Add additional styling for responsiveness */
+  @media screen and (max-width: 600px) {
+     .ownerForm {
+      max-width: 100%;
+    }
+  }
+  

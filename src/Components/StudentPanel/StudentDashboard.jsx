@@ -4,17 +4,22 @@ import '../../Style/StudentPanelStyle/StudentDashboardStyle.css';
 import img from '../../ImagesAndLogo/_7c3d9119-90a8-48d0-99cc-9b1d57e27157.jpeg';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
+
+
 import { useStudentAuth } from "../StudentAuth"
 const StudentDashboard = () => {
   const [studentPrn, setPrn] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { examId } = useParams();
+  const { adminId } = useParams();
   const navigate = useNavigate();
   const { studentLogin } = useStudentAuth();
+  const [load,setLoad]=useState(false);
 
   useEffect(() => {
-    console.log('Exam ID:', examId);
+  
   }, [examId]);
 
   const token=localStorage.getItem('jwtToken');
@@ -27,28 +32,38 @@ const StudentDashboard = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const x = await axios.get(`http://localhost:8080/api/getStudentResultDataByStudentPrn/${studentPrn}`);
+      setLoad(true);
+      console.log("above x");
+console.log(studentPrn);
+console.log(examId);
 
+      const x = await axios.get(`http://localhost:8080/api/getStudentResultDataByStudentPrn/${studentPrn}/${adminId}`);
+      console.log("belo x");
+      console.log(x.data);
+console.log(x);
       if (x.data.studentPrn == studentPrn && x.data.examId==examId) {
+        setLoad(false);
         setError('This Exam is already completed by you !!!');
       } else {
-        studentLogin(); // Update the student authentication context
+        studentLogin(); 
         setStatus(true);
       }
 
     } catch (e) {
        setStatus(true);
+       setLoad(false);
       console.log("An error occurred during login:", e);
     }
   };
 
   useEffect(() => {
     if (status) {
+      setLoad(false);
       const fetchData = async () => {
         try {
           // API for getting student details from prn
-          console.log("okkkkkkkkkkkkkk");
-          const response = await axios.get(`http://localhost:8080/api/getStudentByPrn/${studentPrn}`, {
+          setLoad(true);
+          const response = await axios.get(`http://localhost:8080/api/getStudentByPrn/${studentPrn}/${adminId}`, {
             params: {
               examId,
               studentPrn,
@@ -58,18 +73,18 @@ const StudentDashboard = () => {
           const studentName = response.data.studentName;
 
           if ( (response.data.studentPrn === studentPrn )  ) {               
-            console.log(password + " pass");
-            console.log(response.data.studentPrn +" prn");   
-
+            setLoad(false);
             studentLogin(); 
             setTimeout(() => {
-              navigate(`/studentinstructions/${examId}`, { state: { studentName, studentPrn } });
+              navigate(`/studentinstructions/${examId}/${adminId}`, { state: { studentName, studentPrn } });
             }, 500);
           
           } else {
+            setLoad(false);
             setError('Please check PRN: ');
           }
         } catch (e) {
+          setLoad(false);
           setError('Please check PRN: ');
           console.error("check");
         }
@@ -77,7 +92,7 @@ const StudentDashboard = () => {
 
       fetchData();
     }
-  }, [status, studentPrn, examId]);
+  }, [status,examId]);
 
   return (
     <div className='BodybackgroudImage'>
@@ -86,6 +101,9 @@ const StudentDashboard = () => {
         <div className='BrandName'>Pariksha Portal</div>
       </div>
       <div className='StudentDashboard'>
+
+      {load && (<div className='loading'>Please wait...... {<img src={gif} className='gif' alt="refresh" />} </div> )}
+
         <h3>
           <b>Student Dashboard</b>
         </h3>

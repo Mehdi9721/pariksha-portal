@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import '../../Style/AdminPagesStyle/StyleAddStudent.css';
 import axios from 'axios';
-function AddStudent() {
+import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
+
+function AddStudent({adminEmail,adminId}) {
   const [studentName, setStudentName] = useState('');
   const [studentPrn, setStudentPRN] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [file, setFile] = useState(null);
+  const [load,setLoad]=useState(false);
+  
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
@@ -21,7 +25,8 @@ function AddStudent() {
     try {
       const response = await axios.post("http://localhost:8080/api/saveStudent", {
        studentName,
-      studentPrn
+      studentPrn,
+      adminId
       },config);
       console.log(response.data);
       setSuccessMessage(`Data of ${studentName} added successfully!`);
@@ -42,17 +47,20 @@ function AddStudent() {
   const handleUpload = () => {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('adminId', adminId);
     if(file!==null){
+      setLoad(true);
       try{
 
-console.log(token +"token");
         axios.post('http://localhost:8080/api/upload', formData,config);
 
         setSuccessMessage(`Data of Students added successfully!`);
         setErrorMessage('');
+        setLoad(false);
         setTimeout(() => {
           setSuccessMessage('');
         }, 3500);
+        
       }catch(e){
         setSuccessMessage('');
         setErrorMessage('Error adding student. Please try again.');
@@ -73,11 +81,22 @@ console.log(token +"token");
   }
 
   return (
-    <div>
+    <div className='addStudent-container'>
 
-      {successMessage && <div className="successMessage">{successMessage}</div>}
-      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+{load && (<div className='loading'>
+  <div className='innerOfLoading'>
+               Please wait, we are uploading file...... {<img src={gif} className='gif' alt="refresh" />}
+         </div>
+   </div> )}
+
+      <div className='form-studentAdd'>
+    
+
       <form className='tableAddStudent' onSubmit={handleForm}>
+      
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+    
+
         <label>Enter Student Name:</label>
        
         <input
@@ -94,13 +113,24 @@ console.log(token +"token");
           required />
         <button    class="btn btn-primary active" >Add Student</button>
       </form>
-      <br></br>
-      <br></br>
+</div>  
+      <div className='studentsUpload'>
+        <br></br>
+        {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+        <h2>OR</h2>
       <h3>Select File to fill details Automatically!!</h3>
       <div className='FileAreaOfAddStudent'>
         <input type='file'  onChange={handleFileChange }/>
         <button onClick={handleUpload }   type="button" class="btn btn-primary active">Add Students List File</button>
       </div>
+      <div className='instruction-addStudent'>
+       <h4>Template for excel list:</h4>
+        <p>
+          
+        </p>
+      </div>
+      </div>
+   
     </div>
   );
 }

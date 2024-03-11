@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import '../../Style/AdminPagesStyle/StyleStudentView.css';
+import '../../Style/AdminPagesStyle/StyleViewQuestions.css';
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
+import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
 
-function ViewQuestions() {
+function ViewQuestions({adminEmail}) {
   const [questionsData, setQuestionsData] = useState([]);
   const [searchExamId, setSearchExamId] = useState('');
   const [foundQuestions, setFoundQuestions] = useState({});
   const [searchedQuestions,setsearchedQuestions]=useState([]);
-  
+  const [load,setLoad]=useState(true);
+
   useEffect(() => {
     handleQuestionsData();
   }, [questionsData,searchedQuestions]);
@@ -21,7 +23,7 @@ function ViewQuestions() {
     const confirmDelete = window.confirm('Do you want to delete all questions?');
     if (confirmDelete) {
       try {
-        await axios.delete('http://localhost:8080/api/deleteAllQuestions',config);
+        await axios.delete(`http://localhost:8080/api/deleteAllQuestions/${adminEmail}`,config);
         handleQuestionsData();
       } catch (e) {
         console.log(e);
@@ -33,26 +35,23 @@ function ViewQuestions() {
 
   const handleQuestionsData = async () => {
     try {
-      const apiUrl = searchExamId
-        ? `http://localhost:8080/api/getAllQuestionsByExamId/${searchExamId},`
-        : 'http://localhost:8080/api/getAllQuestions';
+      const apiUrl =`http://localhost:8080/api/getAllQuestions/${adminEmail}`;
 
       const response = await axios.get(apiUrl,config);
       setQuestionsData(response.data);
-    
+      setLoad(false);
     } catch (e) {
       console.log(e);
     }
   };
   
   const handleSearch = async () => {
-
+    setLoad(true);
     const examIdToSearch = searchExamId.trim() === '' ? '' : searchExamId;
     setSearchExamId(examIdToSearch);
     const sq=await axios.get(`http://localhost:8080/api/getAllQuestionsByExamId/${searchExamId}`,config);
-   
     setsearchedQuestions(sq.data);
-    console.log(searchedQuestions);
+    setLoad(false);
   };
 
   const resetSearch = () => {
@@ -65,18 +64,29 @@ function ViewQuestions() {
 
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8080/api/deleteQuestionByExamId/${id}`,config);
+        await axios.delete(`http://localhost:8080/api/deleteQuestionById/${id}`,config);
       } catch (error) {
         console.error('Error deleting question:', error);
       }
     }
   };
+  const handleSearchedDelete=async()=>{
+    const confirmDelete = window.confirm(`Do you want to delete the questions?`);
+    if (confirmDelete) {
+      try {
+        await axios.delete(`http://localhost:8080/api/deleteQuestionByExamId/${searchExamId}`,config);
+        setsearchedQuestions([]);
+      } catch (error) {
+        console.error('Error deleting question:', error);
+      }
+    }
+  }
   return (
     <>
-      <div className='viewBody'>
+      <div className='view-question'>
         <div className='ResultViewTitle'> <h4><b> View Questions </b></h4></div>
         <div className='searchBox'>
-        <button type="button" className="btn btn-outline-secondary" onClick={handleQuestionsData}>
+        <button type="button" className="btn btn-primary" onClick={handleQuestionsData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
           <input
@@ -90,7 +100,16 @@ function ViewQuestions() {
         </div>
         <br></br>
         {searchedQuestions.length > 0 && (
-          <table border={"5px solid black"} className="table table-striped custom-table" style={{ margin: "10px" }} >
+          <div>
+
+               {load && (<div className='loading'>
+               <div className='innerOfLoading'>
+               Please wait, we are loading questions...... {<img src={gif} className='gif' alt="refresh" />}
+         </div></div> )}
+
+             <div><button type="button" className="btn btn-danger" style={{ margin: "10px" }} onClick={handleSearchedDelete}>Delete All Searched Questions</button></div>
+             <span>These are the questions with examId {searchExamId}, on pressing delete all will delete only this id questions and rest of the questions are listed below of this table.</span>
+          <table  className="table table-striped custom-table table-viewQuestion1" style={{ margin: "10px" }} >
             <thead>
               <tr>
                 <th>Exam ID</th>
@@ -100,7 +119,7 @@ function ViewQuestions() {
                 <th>Option C</th>
                 <th>Option D</th>
                 <th>Answer</th>
-                <th>Delete Question</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -117,12 +136,19 @@ function ViewQuestions() {
               </tr>
             ))}
             </tbody>
-          </table>)}
+          </table>
+          </div>)}
         <br />
+
+        {load && (<div className='loading'>
+               <div className='innerOfLoading'>
+               Please wait, we are loading questions...... {<img src={gif} className='gif' alt="refresh" />}
+         </div></div> )}
+
         <div>Total Number Of Questions: {questionsData.length}
           <div><button type="button" className="btn btn-danger" style={{ margin: "10px" }} onClick={handleDeleteAll}>Delete All</button></div>
         </div>
-        <table className="table table-striped custom-table">
+        <table className="table table-striped custom-table table-viewQuestion">
           <thead>
             <tr>
               <th>Exam ID</th>
@@ -132,7 +158,7 @@ function ViewQuestions() {
               <th>Option C</th>
               <th>Option D</th>
               <th>Answer</th>
-              <th>Delete Question</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>

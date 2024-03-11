@@ -11,25 +11,32 @@ import InstructionPage from './Components/StudentPanel/InstructionPage';
 import HelpComponent from './Components/WebsiteHomePage/HelpComponent';
 import { AuthProvider } from './Components/AuthContext';
 import { StudentAuthProvider } from './Components/StudentAuth';
+import {OwnerAuthProvider} from "./Components/OwnerAuth";
 import SignupForm from './Components/WebsiteHomePage/SignupForm';
+import OwnerLogin from './Components/WebsiteHomePage/OwnerLogin';
+import OwnerHome from './Components/Owner/OwnerHome';
 function App() {
   return (
     <AuthProvider>
         <StudentAuthProvider>
+        <OwnerAuthProvider>
     <Router>
        <Routes>
 
       <Route path="/" element={<Home></Home>} />
       <Route path="/adminhomepage" element={<AdminHome/>} />
       <Route path="/HelpComponent" element={<HelpComponent></HelpComponent>}></Route>
-      <Route path="/studentLogin/:examId" element={<StudentDashbord></StudentDashbord>} />
-      <Route path="/stndexam/:examId" element={<ExamPanel></ExamPanel>}></Route>
+      <Route path="/studentLogin/:examId/:adminId" element={<StudentDashbord></StudentDashbord>} />
+      <Route path="/stndexam/:examId/:adminId" element={<ExamPanel></ExamPanel>}></Route>
       <Route path="/ctest" element={<CameraComponent></CameraComponent>}></Route>
       <Route path="/examsuccess" element={<ExamSuccess></ExamSuccess>}></Route>
-      <Route path="/studentinstructions/:examId" element={<InstructionPage></InstructionPage>}></Route>
+      <Route path="/studentinstructions/:examId/:adminId" element={<InstructionPage></InstructionPage>}></Route>
       <Route path="/adminSignup" element={<SignupForm></SignupForm>}></Route>
+      <Route path="/owner" element={<OwnerLogin/>}></Route>
+      <Route path='/ownerHome' element={<OwnerHome></OwnerHome>}></Route>
       </Routes>
   </Router>
+  </OwnerAuthProvider>
   </StudentAuthProvider>
   </AuthProvider>
   );

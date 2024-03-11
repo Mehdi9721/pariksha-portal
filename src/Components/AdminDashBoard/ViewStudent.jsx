@@ -2,26 +2,29 @@ import React, { useEffect, useState } from 'react';
 import '../../Style/AdminPagesStyle/StyleStudentView.css';
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
+import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
 
-function ViewStudent() {
+
+function ViewStudent({adminEmail,adminId}) {
   const [stdData, setdata] = useState([]);
   const [searchPRN, setSearchPRN] = useState('');
   const [foundStudents, setFoundStudents] = useState([]);
-
+  const [load,setLoad]=useState(false);
   useEffect(() => {
     // Fetch student data when the component mounts
     handleStudentData();
-  }, [stdData, searchPRN, foundStudents]); // Empty dependency array ensures this effect runs only once when the component mounts
+  }, [foundStudents]); 
 
   const token=localStorage.getItem('jwtToken');
   const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
   const handleStudentData = async () => {
+    setLoad(true);
     try {
-      const response = await axios.get('http://localhost:8080/api/getAllStudent',config);
+      const response = await axios.get(`http://localhost:8080/api/getAllStudent/${adminId}`,config);
       setdata(response.data);
-      console.log(response.data);
+      setLoad(false);
     } catch (e) {
       console.log(e);
     }
@@ -31,7 +34,8 @@ function ViewStudent() {
     const al = window.confirm('Do you want to delete all students?');
     if (al) {
       try {
-        const response = await axios.delete('http://localhost:8080/api/deleteAll',config);
+        const response = await axios.delete(`http://localhost:8080/api/deleteAll/${adminId}`,config);
+        setdata([]);
       } catch (e) {
         console.log(e);
       }
@@ -42,7 +46,7 @@ function ViewStudent() {
 
   const handleSearch = () => {
     setFoundStudents(stdData.filter((std) => std.studentPrn === searchPRN));
-    console.log(foundStudents[0]);
+ 
   };
 
   const resetSearch = () => {
@@ -55,24 +59,28 @@ function ViewStudent() {
 
     if (confirmDelete) {
       try {
-        // Make an API call to delete the student
+        
         await axios.delete(`http://localhost:8080/api/deleteStudent/${prn}`,config);
-
-        // Update the state to reflect the changes
+setFoundStudents([]);
         setdata((prevData) => prevData.filter((std) => std.studentPrn !== prn));
       } catch (error) {
         console.error('Error deleting student:', error);
-        // Display an error message to the user
       }
     }
   };
 
   return (
     <>
-      <div className='viewBody'>
+      <div className='view-students'>
       
+      {load && (<div className='loading'>
+    <div className='innerOfLoading'>
+               Please wait, we are loading students data...... {<img src={gif} className='gif' alt="refresh" />}
+         </div>
+</div> )}
+
       <div className='searchBox'>
-        <button  type="button" class="btn btn-outline-secondary"  onClick={handleStudentData}>
+        <button  type="button" class="btn btn-primary"  onClick={handleStudentData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
           <input
@@ -81,13 +89,13 @@ function ViewStudent() {
             value={searchPRN}
             onChange={(e) => setSearchPRN(e.target.value)}
           />
-          <button onClick={handleSearch} type="button" class="btn btn-outline-primary"style={{ margin: "10px" }}  >Search</button>
-          <button onClick={resetSearch} type="button" class="btn btn-outline-primary" style={{ margin: "10px" }}>Reset</button>
+          <button onClick={handleSearch} type="button" class="btn btn-primary"style={{ margin: "10px" }}  >Search</button>
+          <button onClick={resetSearch} type="button" class="btn btn-primary" style={{ margin: "10px" }}>Reset</button>
         </div>
         <br></br>
       
         {foundStudents.length > 0 && (
-          <table border={"5px solid black"} class="table table-striped StudentViewTable">
+          <table  class="table table-striped custom-table StudentViewTable">
             <thead>
               <tr>
                 <th>Student Name</th>
@@ -109,7 +117,7 @@ function ViewStudent() {
         <div>Total Number Of Students: {stdData.length}
           <div><button onClick={handleDeleteAll} type="button" class="btn btn-danger"  style={{ margin: "10px" }}  >Delete All</button></div>
         </div>
-        <table border={"5px solid black"} class="table table-striped StudentViewTable">
+        <table  class="table table-striped custom-table StudentViewTable">
           <thead>
             <tr>
               <th>Student Name</th>

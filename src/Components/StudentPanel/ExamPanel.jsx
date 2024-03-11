@@ -36,12 +36,13 @@ const location = useLocation();
   const [ExamName,setExamName]=useState("");
   const [timeRemainingToStart,stetimmerLessToStart]=useState(false);
   const [questionsData,setquestionsData] = useState([]);
+  const submitCount=useRef(0);
   const { isStudentLoggedIn } = useStudentAuth();
   const navigate = useNavigate();
   const {examId}=useParams(); 
-
+  const {adminId}=useParams(); 
   if (!isStudentLoggedIn) {
-    navigate(`/studentLogin/${examId}`);
+    navigate(`/studentLogin/${examId}/${adminId}`);
   }
 
 
@@ -182,11 +183,13 @@ useEffect( ()=>{
         const examScheduleTime = new Date(examSchedule);
         const istOptions = { timeZone: 'Asia/Kolkata' };
         const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
-      const responseActiveExam=await axios.post("http://localhost:8080/api/postActiveExamData",{
+        console.log(adminId+ " admin Id from exam panel");
+      const responseActiveExam=await axios.post(`http://localhost:8080/api/postActiveExamData`,{
         examDate:istDateString,
         examName:ExamName,
         studentName:studentName,
-        studentPrn:studentPrn
+        studentPrn:studentPrn,
+        adminId:adminId
       });
     }
     setDataSent(true);
@@ -286,6 +289,11 @@ useEffect(() => {
       if (document.visibilityState === 'hidden') {
         setWarningCount((prevCount) => prevCount + 1);
         alert('Warning!!!!  Exam Tab was not open');
+        try{
+          const deletActiveStudent=axios.delete(`http://localhost:8080/api/deleteActiveExamByStudentPrn/${studentPrn}`);
+          }catch(e){
+          console.log(e);
+          }
         // changes made
         const timeoutId = setTimeout(() => {
           handleSubmit();
@@ -344,35 +352,42 @@ useEffect(() => {
   const handleSubmit = async() => {
     const correctAnswersCount = questionsData.reduce((count, question, index) => {
       const selectedAnswer = selectedAnswers[index];
-      const correctAnswer = question.answer; // Assuming you have a property named 'correctAnswer' in your question data
+      const correctAnswer = question.answer; 
       if (selectedAnswer === correctAnswer) {
         return count + 1;
       }
       return count;
     }, 0);
-
+    console.log(submitCount.current + " submitCount above if");
+if(submitCount.current<=0){
 try{
+  console.log("ok result");
   const examScheduleTime = new Date(examSchedule);
   const istOptions = { timeZone: 'Asia/Kolkata' };
   const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
-const saveStudentData=axios.post("http://localhost:8080/api/postStudentResultData",{
+const saveStudentData=axios.post(`http://localhost:8080/api/postStudentResultData`,{
   studentName:studentName,
   studentPrn:studentPrn,
   studentResultDownloadLink:"abc/test",
   studentMarks:correctAnswersCount,
   examName:ExamName,
   examDate:istDateString,
-  examId:examId
+  examId:examId,
+  adminId
 })
+submitCount.current=1;
+console.log(submitCount.current + " submitCount");
 }catch(e){
   console.log(e);
 }
+}
+
 try{
 const deletActiveStudent=axios.delete(`http://localhost:8080/api/deleteActiveExamByStudentPrn/${studentPrn}`);
 }catch(e){
 console.log(e);
 }
-    navigate("/examsuccess");
+    navigate(`/examsuccess`,{ state: { examId, adminId } });
   };
 
   useEffect(() => {

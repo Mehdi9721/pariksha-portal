@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../AuthContext";
+
 const LoginForm = () => {
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setPassword] = useState('');
@@ -29,15 +30,13 @@ const { login } = useAuth();
         setLoginMessage('Wrong admin or password');
       } else {
         setLoginMessage('Login successful');
-    
-        const jwtToken = response.data; 
-
-        
+        const jwtToken = response.data.token;
+        const adminId= response.data.adminId;
+        const adminName=response.data.adminName;
         localStorage.setItem('jwtToken', jwtToken);
-     
         login();
-        navigate("/adminhomepage");
        
+        navigate("/adminhomepage",{ state: {adminEmail,adminId,adminName} });
       }
     } catch (error) {
       console.error('Error during login:', error);

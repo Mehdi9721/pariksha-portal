@@ -1,0 +1,43 @@
+
+.viewExam-container{
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(164, 250, 250);
+}
+.tableDiv{
+    display: flex;
+    width: 90%;
+}
+.table-examView{
+    margin-left: 10px;
+   
+}
+.btn{
+    margin-left: 10px;  
+}
+.loading{
+color: rgb(225, 225, 228);
+font-weight:bolder;
+font-size: 19px;
+font-family:'Times New Roman', Times, serif;
+z-index: 1;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100vh;
+backdrop-filter: blur(1.3px);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.innerOfLoading{
+background-color: rgb(0, 0, 0);
+border-radius: 20px;
+border: 3px solid green;
+padding-left: 5px;
+}
+.gif{
+  width: 30px;
+  margin-left: 10px;
+}

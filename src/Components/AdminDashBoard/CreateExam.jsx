@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../../Style/AdminPagesStyle/StyleCreateExam.css';
-
-const CreateExamForm = () => {
+import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
+const CreateExamForm = ({ adminEmail ,adminId}) => {
   const [examName, setExamName] = useState('');
   const [examDate, setExamDate] = useState('');
   const [examTime, setExamTime] = useState('');
@@ -13,7 +13,9 @@ const CreateExamForm = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  //file change
+  const [load,setLoad]=useState(false);
+ 
+
   const [file, setFile] = useState(null);
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -25,6 +27,7 @@ const CreateExamForm = () => {
 };
   ////////////
   const handleCreateExam = async (e) => {
+    setLoad(true);
     e.preventDefault();
     try {
       const examId = Math.random().toString(36).substring(2, 10);
@@ -36,24 +39,26 @@ const CreateExamForm = () => {
       currentDate.setHours(0, 0, 0, 0);
   
       if (selectedDate < currentDate) {
-        alert("Please Enter the Date of either Today's Date or Day After Current Date Only !!");
+        alert("Please Select the Date of either Today's Date or After !!");
         return;
       }
       const response = await axios.post('http://localhost:8080/api/createExam', {
         examId,
         examName,
         examSchedule: examScheduleString,
-        examDuration
+        examDuration,
+        adminEmail
       },config);
   
      //sending data for file 
       const formData = new FormData();
       formData.append('file', file);
       formData.append('examId',examId);
-      console.log(file);
+      formData.append('adminEmail',adminEmail);
       if(file!==null){
         try{
          axios.post('http://localhost:8080/api/uploadQuestionPaper', formData,config);
+         setLoad(false);
         }catch(e){
       console.log(e);
         }
@@ -73,11 +78,17 @@ const CreateExamForm = () => {
 
 
   return (
-    <div>
+    <div className='create-exam-container'>
     
+    
+      <form className='FormCreateExam' onSubmit={handleCreateExam}>
       {successMessage && <div className="successMessage">{successMessage}</div>}
       {errorMessage && <div className="errorMessage">{errorMessage}</div>}
-      <form className='FormCreateExam' onSubmit={handleCreateExam}>
+      {load && (<div className='loading'>
+      <div className='innerOfLoading'>
+      Please wait, we are uploading file...... {<img src={gif} className='gif' alt="refresh" />}
+         </div>     
+         </div> )}
         <label>Exam Name:</label>
         <input type="text" value={examName} onChange={(e) => setExamName(e.target.value)} required />
 
@@ -107,11 +118,11 @@ const CreateExamForm = () => {
         <br></br>
 
         <div>
-          <button className="btn btn-success" >Create Exam</button>
+          <button className="btn2 btn-primary" >Create Exam</button>
         </div>
       </form>
 
-      <p>Generated Exam ID: {examId}</p>
+  
 
       
     </div>

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import '../../Style/AdminPagesStyle/StyleStudentView.css';
+import "../../Style/AdminPagesStyle/StyleViewReult.css"
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
+import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
 
-function ViewResult() {
+
+function ViewResult({adminEmail,adminId}) {
   const [resultData, setResultData] = useState([]);
   const [searchPRN, setSearchPRN] = useState('');
   const [foundResults, setFoundResults] = useState([]);
+  const [load,setLoad]=useState(false);
 
   const token=localStorage.getItem('jwtToken');
   const config = {
@@ -14,11 +17,14 @@ function ViewResult() {
 };
 
   const handleResultData = async () => {
+    setLoad(true);
     try {
-      const response = await axios.get('http://localhost:8080/api/getAllStudentResultData',config);  
+      const response = await axios.get(`http://localhost:8080/api/getAllStudentResultData/${adminId}`,config);  
       setResultData(response.data);
+      setLoad(false);
     } catch (e) {
       console.log(e);
+      setLoad(false);
     }
   };
 
@@ -26,9 +32,13 @@ function ViewResult() {
   const handleDeleteAll = async () => {
     const al = window.confirm('Do you want to delete all students?');
     if (al) {
+      setLoad(true);
       try {
-        await axios.delete('http://localhost:8080/api/deleteAllStudentResultData',config);
+        await axios.delete(`http://localhost:8080/api/deleteAllStudentResultData/${adminId}`,config);
+        setResultData([]);
+        setLoad(false);
       } catch (e) {
+        setLoad(false);
         console.log(e);
       }
     } else {
@@ -39,7 +49,6 @@ function ViewResult() {
 
   const handleSearch = () => {
     setFoundResults(resultData.filter((result) => result.studentPrn === searchPRN));
-    console.log(foundResults[0]);
   };
 
   const resetSearch = () => {
@@ -49,16 +58,19 @@ function ViewResult() {
 
   useEffect(() => {
     handleResultData();
-  }, [resultData,searchPRN,foundResults]); 
+  }, []); 
   
   const handleDeleteResult = async (prn) => {
     const confirmDelete = window.confirm(`Do you want to delete the result with PRN: ${prn}?`);
 
     if (confirmDelete) {
+      setLoad(true);
       try {
-       
-        await axios.delete(`http://localhost:8080/api/deleteStudentResultDataByStudentPrn/${prn}`,config);  
+        await axios.delete(`http://localhost:8080/api/deleteStudentResultDataByStudentPrn/${prn}`,config);
+        setFoundResults([]);
+      setLoad(false);
       } catch (error) {
+      setLoad(false);
         console.error('Error deleting result:', error);
       
       }
@@ -68,10 +80,18 @@ function ViewResult() {
 
   return (
     <>
-      <div className='viewBody'>
+      <div className='viewResult'>
+
+      {load && (<div className='loading'>
+    <div className='innerOfLoading'>
+               Please wait, we are loading results...... {<img src={gif} className='gif' alt="refresh" />}
+         </div>
+</div> )}
+
+
         <div className='ResultViewTitle'> <h4><b> View Result of Students </b>  </h4></div>
         <div className='searchBox'>
-        <button type="button" class="btn btn-outline-secondary" onClick={handleResultData}>
+        <button type="button" class="btn btn-primary" onClick={handleResultData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
           <input
@@ -85,7 +105,7 @@ function ViewResult() {
         </div>
         <br></br>
         {foundResults.length > 0 && (
-          <table border={"5px solid black"} class="table table-striped">
+          <table  class="table-viewresult table table-striped custom-table">
             <thead>
               <tr>
                 <th>Student PRN</th>
@@ -118,7 +138,7 @@ function ViewResult() {
         <div>Total Number Of Results: {resultData.length}
           <div><button   type="button" class="btn btn-danger"   style={{ margin: "10px" }}   onClick={handleDeleteAll}>Delete All</button></div>
         </div>
-        <table class="table table-striped custom-table">
+        <table class="table-viewresult table table-striped custom-table">
           <thead>
             <tr>
             
