@@ -16,6 +16,7 @@ function Home() {
   const handleLoginClick = () => {
     setShowLogin(!showLogin);
     setShowSignup(false); 
+    setShowHelp(false);
   };
 
   const handleSignupClick = () => {

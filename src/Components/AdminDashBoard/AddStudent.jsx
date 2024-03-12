@@ -28,7 +28,6 @@ function AddStudent({adminEmail,adminId}) {
       studentPrn,
       adminId
       },config);
-      console.log(response.data);
       setSuccessMessage(`Data of ${studentName} added successfully!`);
       setErrorMessage('');
       setTimeout(() => {

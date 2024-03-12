@@ -10,6 +10,12 @@ const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [ownerKey, setownerKey] = useState('');
 const navigate =useNavigate();
+const [message,setmessage]=useState("");
+const token=localStorage.getItem('jwtToken');
+const config = {
+  headers: { Authorization: `Bearer ${token}` }
+};
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -24,20 +30,28 @@ const navigate =useNavigate();
     };
 
     try {
-    const response = await axios.post('http://localhost:8080/api/adminSignup', formData);
+    const response = await axios.post('http://localhost:8080/api/adminSignup', formData,config);
       setName('');
       setUsername('');
       setEmail('');
       setPassword('');
-      navigate("/adminhomepage");
+      setmessage("added succesfully");
+      setTimeout(()=>{
+        setmessage("");
+      },3000);
     } catch (error) {
       console.error('Error submitting form:', error);
+      setmessage("some Error");
+      setTimeout(()=>{
+        setmessage("");
+      },3000);
     }
 
   };
 
   return (
     <form className='signupForm' onSubmit={handleSubmit} >
+{message}
       <label htmlFor="name">Name:</label>
       <input
         type="text"

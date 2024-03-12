@@ -1,7 +1,10 @@
 .Owner-Home{
     display: flex;
-    
+    flex-direction: column;
 }
 .table-container{
     margin-left: 20px;
+}
+.table-adminView{
+    width: 60%; 
 }

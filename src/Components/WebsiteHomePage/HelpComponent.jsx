@@ -4,16 +4,18 @@ import img from "../../ImagesAndLogo/Team.jpg";
 
 const HelpComponent = () => {
     return (
-        <div className='body'>
+        <div className='body-help'>
             <div className="help-container1">
                 <div className="Help1">
-                    <h1 className="Help-h1">Contact Details</h1>
-                    
-                    For Admin Registration Contact on Email Provided below:<br />
+                    <h2 className="Help-h1">Contact Details</h2>
+                    For new Admin Registration or To get a new password, Contact on Email Provided below:<br />
+                    (If you want to get a new password kindly write Name, Email and UserName in mail box and wait for 24 hours for password. 
+                   <span className='contact-note'> Please contact us only by using Gmail id that you have given us during  admin registration. </span>
+                    )
                     <p>mohammadmehdi9721@gmail.com <br />
-                        natavesujata@gmail.com<br />
+                        {/* natavesujata@gmail.com<br />
                         dwarkeshvirkhare@gmail.com<br />
-                        shubham.pokale2001@gmail.com 
+                        shubham.pokale2001@gmail.com  */}
                         </p>
 
                     <div className='img11'>

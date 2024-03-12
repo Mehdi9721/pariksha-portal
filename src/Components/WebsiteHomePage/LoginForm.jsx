@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../AuthContext";
+import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
+
 
 const LoginForm = () => {
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginMessage, setLoginMessage] = useState('');
+  const [load,setLoad]=useState(false);
 
   const navigate=useNavigate();
 const { login } = useAuth();
@@ -18,12 +21,13 @@ const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+setLoad(true);
     try {
       const response = await axios.put('http://localhost:8080/api/adminLogin', {
         adminEmail,
         adminPassword,
       });
+setLoad(false);
 
       if (response.data == 0) {
         console.log("wrong");
@@ -35,10 +39,11 @@ const { login } = useAuth();
         const adminName=response.data.adminName;
         localStorage.setItem('jwtToken', jwtToken);
         login();
-       
+      console.log(jwtToken + "token ");
         navigate("/adminhomepage",{ state: {adminEmail,adminId,adminName} });
       }
     } catch (error) {
+      setLoad(false);
       console.error('Error during login:', error);
       setLoginMessage('An error occurred during login');
     }
@@ -47,6 +52,12 @@ const { login } = useAuth();
   return (
   
     <form className='loginForm' onSubmit={handleSubmit}>
+              {load && (<div className='loading'>
+                <div className='innerOfLoading'>
+      Please wait...... {<img src={gif} className='gif' alt="refresh" />}
+         </div>        
+                     </div> )}
+
   <div className="form-outline mb-4">
     <label htmlFor="username" className="form-label">Email address:</label>
     <input
@@ -83,13 +94,8 @@ const { login } = useAuth();
   </div>
    
   <div className="row mb-4">
-    <div className="col d-flex justify-content-center">
-    
-    </div>
-
     <div >
-    {loginMessage && <p>{loginMessage}</p>}
-     
+    {loginMessage && <p>{loginMessage}</p>}   
       <button type="submit" className="btn btn-primary btn-block mb-4">Sign in</button>
     </div>
   </div>
