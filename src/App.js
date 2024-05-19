@@ -15,6 +15,7 @@ import {OwnerAuthProvider} from "./Components/OwnerAuth";
 import SignupForm from './Components/WebsiteHomePage/SignupForm';
 import OwnerLogin from './Components/WebsiteHomePage/OwnerLogin';
 import OwnerHome from './Components/Owner/OwnerHome';
+import ExamTimeOver from './Components/StudentPanel/ExamTimeOver';
 function App() {
   return (
     <AuthProvider>
@@ -30,6 +31,7 @@ function App() {
       <Route path="/stndexam/:examId/:adminId" element={<ExamPanel></ExamPanel>}></Route>
       <Route path="/ctest" element={<CameraComponent></CameraComponent>}></Route>
       <Route path="/examsuccess" element={<ExamSuccess></ExamSuccess>}></Route>
+      <Route path="/examOver" element={<ExamTimeOver></ExamTimeOver>} > </Route>
       <Route path="/studentinstructions/:examId/:adminId" element={<InstructionPage></InstructionPage>}></Route>
       <Route path="/adminSignup" element={<SignupForm></SignupForm>}></Route>
       <Route path="/owner" element={<OwnerLogin/>}></Route>

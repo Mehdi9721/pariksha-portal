@@ -4,116 +4,122 @@ import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
 import "../../Style/AdminPagesStyle/StyleActiveExam.css"
 import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
-
-function ActiveExams({adminEmail,adminId}) {
+import BASE_URL from '../ApiConfig'
+function ActiveExams({ adminEmail, adminId }) {
     const [examData, setExamData] = useState([]);
-    const [searchExamName, setSearchExamName] = useState('');
-    const [foundExams, setFoundExams] = useState([]);
-    const [load,setLoad]=useState(true);
+    const [exams, setExams] = useState([]);
+    const [count, setCount] = useState(0);
+    const [load, setLoad] = useState(true);
 
-    const token=localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('jwtToken');
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  };
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
     useEffect(() => {
         handleExamData();
-    }, [examData,foundExams]);
-
+    }, [count]);
     const handleExamData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/getAllActiveExamData/${adminId}`,config);
+            setLoad(true);
+            const allExams = await axios.get(`${BASE_URL}/getAllExams/${adminEmail}`, config);
+            setExams(allExams.data);
+            
+            const response = await axios.get(`${BASE_URL}/getAllActiveExamData/${adminId}`, config);
             setExamData(response.data);
             setLoad(false);
         } catch (e) {
             console.log(e);
+            setLoad(false);
         }
     };
-    const handleSearch = () => {
-        setFoundExams(examData.filter((exam) => exam.examName === searchExamName));
-        console.log(foundExams[0]);
+
+    const handleRefresh = () => {
+        setCount((prev) => prev + 1);
+    }
+
+    const formatTimestamp = (timestamp) => {
+        const formattedDate = new Date(timestamp).toLocaleString();
+        return formattedDate;
     };
 
-    const resetSearch = () => {
-        setSearchExamName('');
-        handleExamData();
-    };
+    const checksStatus = (examSchedule, examDuration) => {
+        const currentTime = new Date();
+        const examScheduleTime = new Date(examSchedule);
+        const timeDifferenceInSeconds = Math.floor((currentTime - examScheduleTime) / 1000);
+        const examEndTime = new Date(examScheduleTime.getTime() + examDuration * 60000); // Converting duration to milliseconds
 
-    //future
-    // const handleDeleteAllExam = async () => {
-    //     const confirmDelete = window.confirm(`Do you want to delete the  ALL Active exams   Data`);
-
-    //     if (confirmDelete) {
-    //         try {
-    //             // Make an API call to delete the exam
-    //             await axios.delete(`http://localhost:8080/api/deleteAllActiveExamData`,config);
-    //         } catch (error) {
-    //             console.error('Error deleting exam:', error);
-    //         }
-    //     }
-    // };
+        if (currentTime < examScheduleTime) {
+            return <div className="status-upcoming">UPCOMING</div>;
+        } else if (currentTime < examEndTime) {
+            return (<div className='status-active-contain'> 
+                <span className="status-active"> ACTIVE</span>
+                {/* <button className='btn btn-primary'> Active Students</button> */}
+             </div>);
+        } else {
+            return <div className="status-completed">COMPLETED</div>;
+        }
+    }
 
     return (
         <>
-            <div className='activeExamsBody'>
-                <div className='ActiveExamsTitle'><h4><b> Active Students </b>  </h4></div>
-                <br />
-                <button type="button" class="btn btn-primary" onClick={handleExamData}>
-                    Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
-                </button>
-                <br></br>
-             
-                {foundExams.length > 0 && (
-                    <table border={"5px solid black"} class="table-activeExam">
+            <div className='xx'>
+                <div className='activeExamsBody'>
+
+                    <br />
+                    <button type="button" className="btn btn-primary" onClick={handleRefresh}>
+                        Refresh <img src={refreshicon} className='imgref' alt="refresh" />
+                    </button>
+                    <br /><br />
+                    <table className="table table-bordered custom-table  table-activeExam">
+                        <thead>
+                            <tr>
+                                <th>Exam Name:</th>
+                                <th>Exam Status:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {exams?.map((exam) => (
+                                <tr key={exam.examName}>
+                                    <td>{exam.examName}</td>
+                                    <td>
+                                        {checksStatus(exam.examSchedule, exam.examDuration)} 
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    {load && (
+                        <div className='loading'>
+                            <div className='innerOfLoading'>
+                                Please wait, we are loading active students... <img src={gif} className='gif' alt="refresh" />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className='activeStudents'>Number of Active Students:{examData.length}</div>
+                    <table className="table table-bordered custom-table  table-activeExam">
                         <thead>
                             <tr>
                                 <th>Exam Name:</th>
                                 <th>Exam Date:</th>
                                 <th>Student Name:</th>
                                 <th>Student PRN:</th>
-
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{foundExams[0].examName}</td>
-                                <td>{foundExams[0].examDate}</td>
-                                <td>{foundExams[0].studentName}</td>
-                                <td>{foundExams[0].studentPrn}</td>
-                                <td><button>Delete</button></td>
-                            </tr>
+                            {examData?.map((exam) => (
+                                <tr key={exam.examName}>
+                                    <td>{exam.examName}</td>
+                                    <td>{exam.examDate}</td>
+                                    <td>{exam.studentName}</td>
+                                    <td>{exam.studentPrn}</td>
+                                </tr>
+                            ))}
                         </tbody>
-                    </table>)}
-                <br />
-                {load && (<div className='loading'>
-                <div className='innerOfLoading'>
-      Please wait, we are loading active students...... {<img src={gif} className='gif' alt="refresh" />}
-         </div>        
-                     </div> )}
-                <h5>Total Number Of Active Students: {examData.length}
-                    {/* <div><button type="button" class="btn btn-danger"  style={{ margin: "10px" }} onClick={handleDeleteAllExam}>Delete All</button></div> */}
-                </h5>
-                <table  class="table table-bordered custom-table  table-activeExam">
-                    <thead>
-                        <tr>
-                            <th>Exam Name:</th>
-                            <th>Exam Date:</th>
-                            <th>Student Name:</th>
-                            <th>Student PRN:</th>
-                           
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {examData?.map((exam) => (
-                            <tr key={exam.examName}>
-                                <td>{exam.examName}</td>
-                                <td>{exam.examDate}</td>
-                                <td>{exam.studentName}</td>
-                                <td>{exam.studentPrn}</td>
-                               
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
         </>
     );

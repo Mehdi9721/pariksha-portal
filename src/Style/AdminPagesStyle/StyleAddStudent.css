@@ -1,7 +1,7 @@
 .addStudent-container{
-  background-color: rgb(164, 250, 250);
+  background-color: rgb(155, 238, 197);
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 .form-studentAdd{
   z-index: 0;

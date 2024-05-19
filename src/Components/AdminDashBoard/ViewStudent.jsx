@@ -3,15 +3,13 @@ import '../../Style/AdminPagesStyle/StyleStudentView.css';
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
 import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
-
-
+import BASE_URL from '../ApiConfig'
 function ViewStudent({adminEmail,adminId}) {
   const [stdData, setdata] = useState([]);
   const [searchPRN, setSearchPRN] = useState('');
   const [foundStudents, setFoundStudents] = useState([]);
   const [load,setLoad]=useState(false);
   useEffect(() => {
-    // Fetch student data when the component mounts
     handleStudentData();
   }, [foundStudents]); 
 
@@ -22,7 +20,7 @@ function ViewStudent({adminEmail,adminId}) {
   const handleStudentData = async () => {
     setLoad(true);
     try {
-      const response = await axios.get(`http://localhost:8080/api/getAllStudent/${adminId}`,config);
+      const response = await axios.get(`${BASE_URL}/getAllStudent/${adminId}`,config);
       setdata(response.data);
       setLoad(false);
     } catch (e) {
@@ -34,7 +32,7 @@ function ViewStudent({adminEmail,adminId}) {
     const al = window.confirm('Do you want to delete all students?');
     if (al) {
       try {
-        const response = await axios.delete(`http://localhost:8080/api/deleteAll/${adminId}`,config);
+        const response = await axios.delete(`${BASE_URL}/deleteAll/${adminId}`,config);
         setdata([]);
       } catch (e) {
         console.log(e);
@@ -60,7 +58,7 @@ function ViewStudent({adminEmail,adminId}) {
     if (confirmDelete) {
       try {
         
-        await axios.delete(`http://localhost:8080/api/deleteStudent/${prn}`,config);
+        await axios.delete(`${BASE_URL}/deleteStudent/${prn}`,config);
 setFoundStudents([]);
         setdata((prevData) => prevData.filter((std) => std.studentPrn !== prn));
       } catch (error) {
@@ -71,6 +69,7 @@ setFoundStudents([]);
 
   return (
     <>
+    <div className='xx'>
       <div className='view-students'>
       
       {load && (<div className='loading'>
@@ -136,7 +135,7 @@ setFoundStudents([]);
           </tbody>
         </table>
         </div>
-      
+        </div>
     </>
   );
 }

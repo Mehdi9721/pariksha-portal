@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import '../../Style/WebsiteHomePageStyle/StyleSignup.css'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useOwnerAuth } from '../OwnerAuth';
+import BASE_URL from '../ApiConfig';
 const SignupForm = () => {
   const [adminName, setName] = useState('');
   const [adminUserName, setUsername] = useState('');
   const [adminEmail, setEmail] = useState('');
   const [adminPassword, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [ownerKey, setownerKey] = useState('');
-const navigate =useNavigate();
-const [message,setmessage]=useState("");
+  const { isLoggedIn} = useOwnerAuth();
+  const [message,setmessage]=useState("");
+  if (!isLoggedIn) {
+    return null;
+  }
+
 const token=localStorage.getItem('jwtToken');
 const config = {
   headers: { Authorization: `Bearer ${token}` }
@@ -30,7 +34,7 @@ const config = {
     };
 
     try {
-    const response = await axios.post('http://localhost:8080/api/adminSignup', formData,config);
+    const response = await axios.post(`${BASE_URL}/adminSignup`, formData,config);
       setName('');
       setUsername('');
       setEmail('');

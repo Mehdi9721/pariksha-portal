@@ -4,6 +4,7 @@ import img from "../../ImagesAndLogo/_7c3d9119-90a8-48d0-99cc-9b1d57e27157.jpeg"
 import { useOwnerAuth } from "../OwnerAuth";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import BASE_URL from '../ApiConfig';
 
 function OwnerLogin() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ function OwnerLogin() {
   });
   const [loginMessage, setLoginMessage] = useState('');
   const navigate=useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useOwnerAuth();
 
   const handleInputChange = (e) => {
@@ -22,19 +24,24 @@ function OwnerLogin() {
     });
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+
   const handleSubmit =async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put('http://localhost:8080/api/adminLogin', {
+      const response = await axios.put(`${BASE_URL}/adminLogin`, {
         adminEmail:formData.email,
         adminPassword:formData.password,
       });
 
-      if (response.data == 0) {
-        console.log("wrong");
+      if (response.data === 0) {
+       
         setLoginMessage('Wrong admin or password');
       } else {
-        if(response.data.adminName!="Syed Mohammad Mehdi"){
+        if(response.data.adminName!=="Syed Mohammad Mehdi" && response.data.adminUserName!=="mehdi9721"){
           setLoginMessage('Wrong admin');
         }else{
           const jwtToken = response.data.token;
@@ -73,12 +80,20 @@ function OwnerLogin() {
         <label>
           Password:
           <input
-            type="text"
+              type={showPassword ? 'text' : 'password' }
             name="password"
             value={formData.password}
             onChange={handleInputChange}
             required
+
+            
           />
+           <span
+        style={{ cursor: 'pointer', marginLeft: '5px'}}
+        onClick={togglePasswordVisibility}
+      >
+         {showPassword ? '🔓' : '🔒'}
+      </span> 
         </label>
         <br />
         {loginMessage && <p>{loginMessage}</p>}

@@ -231,7 +231,7 @@ box-shadow: 2px -2px  6px black;
   align-items: center;
   font-weight: 800;
   font-size: 30px;
-  animation: blink 1.5s infinite; 
+  animation: blink 2s infinite; 
 }
 @keyframes blink {
   0%, 50%, 100% {
@@ -251,4 +251,8 @@ box-shadow: 2px -2px  6px black;
 }
 .answerInput{
   margin: 10px;
+}
+.before-fullscreen-Warning{
+  color: red;
+  font-weight: 700;
 }

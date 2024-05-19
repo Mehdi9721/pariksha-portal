@@ -15,7 +15,6 @@ const InstructionPage = () => {
     const { examId } = useParams();
     const { adminId } = useParams();
     useEffect(() => {
-        console.log(isStudentLoggedIn);
         if (!isStudentLoggedIn) {
           navigate(`/studentLogin/${examId}`);
         }
@@ -28,7 +27,6 @@ const InstructionPage = () => {
    
 
      useEffect(()=>{
-        console.log('Exam ID:', examId);
      },[examId])
 
     //handling submit

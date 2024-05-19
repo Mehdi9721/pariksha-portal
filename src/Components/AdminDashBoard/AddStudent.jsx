@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../../Style/AdminPagesStyle/StyleAddStudent.css';
 import axios from 'axios';
 import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
-
+import BASE_URL from '../ApiConfig'
 function AddStudent({adminEmail,adminId}) {
   const [studentName, setStudentName] = useState('');
   const [studentPrn, setStudentPRN] = useState('');
@@ -23,7 +23,7 @@ function AddStudent({adminEmail,adminId}) {
   const handleForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/saveStudent", {
+      const response = await axios.post(`${BASE_URL}/saveStudent`, {
        studentName,
       studentPrn,
       adminId
@@ -51,7 +51,7 @@ function AddStudent({adminEmail,adminId}) {
       setLoad(true);
       try{
 
-        axios.post('http://localhost:8080/api/upload', formData,config);
+        axios.post(`${BASE_URL}/upload`, formData,config);
 
         setSuccessMessage(`Data of Students added successfully!`);
         setErrorMessage('');
@@ -120,13 +120,34 @@ function AddStudent({adminEmail,adminId}) {
       <h3>Select File to fill details Automatically!!</h3>
       <div className='FileAreaOfAddStudent'>
         <input type='file'  onChange={handleFileChange }/>
-        <button onClick={handleUpload }   type="button" class="btn btn-primary active">Add Students List File</button>
+        <button onClick={handleUpload }   type="button" class="btn btn-primary active">Add excel file</button>
       </div>
       <div className='instruction-addStudent'>
-       <h4>Template for excel list:</h4>
-        <p>
-          
-        </p>
+       <h3>Template:</h3>
+       <ul>
+  <li>File formate -[ abc.xlsx ]</li>
+  <li>Sheet must contain only single page.</li>
+{/* <li>Skip the row 1 and start from the row 2.</li> */}
+<li>Below table exactly represents how rows and columns must gets filled in sheet.</li>
+</ul>
+<table className='table table-striped custom-table  '>
+  <thead>
+  <tr>
+    <th>Student Name</th>
+    <th>Student Prn</th>
+</tr>
+  </thead>
+  <tbody>
+    <tr>
+<td>Syed Mohammad Mehdi</td>
+<td>123456789</td>
+
+    </tr>
+  </tbody>
+</table>
+Also the excel sheet is available on github repo. (click on view raw to download the sheet) <a href='https://github.com/Mehdi9721/pariksha-portal/blob/master/List%20of%20Students.xlsx ' target='blank'>Link of sheet</a>
+
+
       </div>
       </div>
    

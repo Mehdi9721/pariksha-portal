@@ -1,11 +1,11 @@
 .create-exam-container{
-  background-color: rgb(164, 250, 250);
+  background-color: rgb(155, 238, 197);
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 .FormCreateExam {
     width: 700px;
-    height: 500px;
+    height: 450px;
     margin:20px 0 0 80px;
     padding: 20px;
     background-color: #bdc0bf;
@@ -94,4 +94,8 @@
   flex: 1; /* Allow the image container to grow and take available space */
   height: 50%;
   width: 50%;
+}
+.questionTemplate{
+font-weight: 700;
+
 }

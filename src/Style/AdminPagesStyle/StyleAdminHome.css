@@ -94,3 +94,15 @@ overflow: scroll;
     color: rgb(7, 41, 11);
     font-size: 24px;
 }
+
+.noLogin{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+}
+.buttonHome{
+    background-color: rgb(88, 240, 169);
+    color: black;
+    border-radius: 20px;
+}

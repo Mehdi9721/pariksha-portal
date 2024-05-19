@@ -4,11 +4,12 @@ import axios from 'axios';
 import copy from 'clipboard-copy';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
 import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
+import BASE_URL from '../ApiConfig'
 function ViewExam({adminEmail,adminId}) {
   const [examData, setExamData] = useState([]);
 const [result,setResult]=useState(true);
   useEffect(() => {
-    handleExamData(); // Fetch data when the component mounts
+    handleExamData();
   }, []);
   const token=localStorage.getItem('jwtToken');
   const config = {
@@ -17,7 +18,7 @@ const [result,setResult]=useState(true);
 
   const handleExamData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/getAllExams/${adminEmail}`,config);
+      const response = await axios.get(`${BASE_URL}/getAllExams/${adminEmail}`,config);
       setResult(false);
       setExamData(response.data);
     } catch (e) {
@@ -29,9 +30,8 @@ const [result,setResult]=useState(true);
     try {
       const confirmDelete = window.confirm('Are you sure you want to delete all Exam Data?');
       if (confirmDelete) {
-        await axios.delete(`http://localhost:8080/api/deleteAllExams/${adminEmail}`,config);
-        console.log('All exams deleted successfully from the database!');
-        handleExamData(); // Refresh exam data after successful deletion
+        await axios.delete(`${BASE_URL}/deleteAllExams/${adminEmail}`,config);
+        handleExamData();
       } else {
         console.log("Delete all discarded");
       }
@@ -44,9 +44,10 @@ const [result,setResult]=useState(true);
     try {
       const confirmDelete = window.confirm(`Are you sure you want to delete the ${examId} Exam Record?`);
       if (confirmDelete) {
-        await axios.delete(`http://localhost:8080/api/deleteExam/${examId}`,config);
-        console.log(`Exam with ID ${examId} deleted successfully.`);
-        handleExamData(); // Refresh exam data after successful deletion
+        await axios.delete(`${BASE_URL}/deleteExam/${examId}`,config);
+        await axios.delete(`${BASE_URL}/deleteQuestionByExamId/${examId}`,config);
+       
+        handleExamData(); 
       } else {
         console.log("Delete discarded");
       }
@@ -65,17 +66,22 @@ const [result,setResult]=useState(true);
     alert('URL copied to clipboard!');
   };
 
+
+  const inlineStyles = {
+marginLeft:"10px"
+  };
   return (
     <>
+    <div className='xx'>
       <div className='viewExam-container'>
-        <div className='AddStuTitle'>Exams:</div>
+        <div className='AddStuTitle' style={inlineStyles}>Exams:</div>
         <br />
         <button type="button" class="btn btn-primary" style={{ margin: "10px" }} onClick={handleExamData}>
           Refresh {<img src={refreshicon} className='imgref' alt="refresh" />}
         </button>
 
         <br />
-        <div>  <h5> <b>  Total Number Of Exams: {examData.length}  </b> </h5>  </div>
+        <div style={inlineStyles}>   <b>  Total Number Of Exams: {examData.length}  </b>   </div>
 
         {result && (<div className='loading'>
           <div className='innerOfLoading'>
@@ -90,7 +96,7 @@ const [result,setResult]=useState(true);
               <tr>
                 <th>Exam Name</th>
                 <th>Exam Schedule</th>
-                <th>Exam Duration(mins)</th>
+                <th>Exam Duration</th>
                 <th>Exam ID</th>
                 <th>Exam Link</th>
                 <th>Action</th>
@@ -101,7 +107,7 @@ const [result,setResult]=useState(true);
                 <tr key={exam.examId}>
                   <td>{exam.examName}</td>
                   <td>{formatTimestamp(exam.examSchedule)}</td>
-                  <td>{exam.examDuration}</td>
+                  <td>{exam.examDuration} minutes</td>
                   <td>{exam.examId}</td>
                   <td> http://localhost:3000/studentLogin/{exam.examId}/{adminId}
                   <button
@@ -123,6 +129,7 @@ const [result,setResult]=useState(true);
         </div>
 
         <div><button type="button" class="btn btn-danger" onClick={handleDeleteAll}>Delete All</button></div>
+      </div>
       </div>
     </>
   );

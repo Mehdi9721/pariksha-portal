@@ -1,9 +1,41 @@
 .activeExamsBody{
     width: 100%;
-    height: 100vh;
-    background-color: rgb(164, 250, 250);
+    height: 100%;
+    background-color: rgb(155, 238, 197);
 }
 .table-activeExam{
     margin-left: 10px;
     width: 70%;
+}
+.status-upcoming{
+    border-radius: 30px;
+    padding: 7px;
+    width: 90px;
+    color: rgb(255, 253, 253);
+    background-color: grey;
+}
+.status-active{
+    display: flex;
+    flex-direction: row;
+    border-radius: 30px;
+    padding: 7px;
+    width: 70px;
+    color: rgb(255, 253, 253);
+    background-color: rgb(46, 185, 34);
+}
+.status-active-contain{
+    display: flex;
+}
+.status-completed{
+    border-radius: 30px;
+    padding: 7px;
+    width: 110px;
+    color: rgb(255, 253, 253);
+    font-weight: 700;
+    background-color: rgb(177, 8, 8);
+}
+.activeStudents{
+    margin-left: 10px;
+    font-weight: 700;
+    font-size: 18px;
 }

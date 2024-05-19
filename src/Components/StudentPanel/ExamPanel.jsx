@@ -4,17 +4,14 @@ import { useNavigate, useLocation, useParams  } from 'react-router-dom';
 import * as faceapi from 'face-api.js';
 import { FaceMesh } from "@mediapipe/face_mesh";
 import * as cam from "@mediapipe/camera_utils";
-import Webcam from "react-webcam";
+import Webcam from "react-webcam"
 import axios from 'axios';
 import { useStudentAuth } from '../StudentAuth';
-
-
-
+import BASE_URL from '../ApiConfig';
 const ExamPanel = () => {
 const location = useLocation();
   const { state } = location;
   const { studentName, studentPrn } = state || {};
-
   const videoRef=useRef(); 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -29,6 +26,7 @@ const location = useLocation();
   const [isWebcamReady, setWebcamReady] = useState(false);
   const [refreshcam,setrefreshcam]=useState(0);
   const timeForFullScreen = useRef(null);
+  const counterForFullScreen = useRef(null);
   const [OneFaceWarning,setOneFaceWarning]=useState(false);
   const [TwoFaceWarning,setTwoFaceWarning]=useState(false);
   const [examDuration,setexamDuration]=useState(0);
@@ -36,6 +34,8 @@ const location = useLocation();
   const [ExamName,setExamName]=useState("");
   const [timeRemainingToStart,stetimmerLessToStart]=useState(false);
   const [questionsData,setquestionsData] = useState([]);
+  const [timeCounter,setTimeCounter]=useState(10);
+  const [timeCounter2,setTimeCounter2]=useState(10);
   const submitCount=useRef(0);
   const { isStudentLoggedIn } = useStudentAuth();
   const navigate = useNavigate();
@@ -44,17 +44,6 @@ const location = useLocation();
   if (!isStudentLoggedIn) {
     navigate(`/studentLogin/${examId}/${adminId}`);
   }
-
-
-
-
-
-  //handling exam id from url to show exam related data from db
-
-  useEffect(()=>{
-    
-  },[examId])
-  //checking screen size of student
   const handleFullScreenClick = () => {
     if (!isFullScreen) {
       const elem = document.documentElement;
@@ -85,6 +74,8 @@ const location = useLocation();
       setIsFullScreen(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
     };
     if (isFullScreen) {
+      clearInterval(counterForFullScreen.current);
+      setTimeCounter2(10);
       clearTimeout(timeForFullScreen.current);
     }
     document.addEventListener('fullscreenchange', handleFullScreenChange);
@@ -107,9 +98,15 @@ const location = useLocation();
     if (!isFullScreen && warningCount>0) {
       timeForFullScreen.current = setTimeout(() => {
         handleSubmit();
-      }, 6000);
+      }, 10000);
+
+      counterForFullScreen.current=setInterval(()=>{
+        setTimeCounter2((pre)=>pre-1);
+      },1000)
     }
     return () => {
+      clearInterval(counterForFullScreen.current);
+      setTimeCounter2(10);
       clearTimeout(timeForFullScreen.current);
     };
   }, [isFullScreen]);
@@ -121,7 +118,7 @@ const location = useLocation();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseFromExamTable = await axios.get(`http://localhost:8080/api/getExamByExamId/${examId}`);
+        const responseFromExamTable = await axios.get(`${BASE_URL}/getExamByExamId/${examId}`);
         setexamDuration(responseFromExamTable.data.examDuration);
         setExmexamSchedule(responseFromExamTable.data.examSchedule);
         setExamName(responseFromExamTable.data.examName);
@@ -131,8 +128,8 @@ const location = useLocation();
     };
 const examPaper=async()=>{
   try{
-const examPaperResponse=await axios.get(`http://localhost:8080/api/getAllQuestionsByExamId/${examId}`);
-console.log(examPaperResponse.data);
+const examPaperResponse=await axios.get(`${BASE_URL}/getAllQuestionsByExamId/${examId}`);
+
 setquestionsData(examPaperResponse.data);
   }catch(e){
     console.log(e);
@@ -141,7 +138,7 @@ setquestionsData(examPaperResponse.data);
 }
     examPaper();
     fetchData(); 
-  }, [isFullScreen]);
+  }, []);
 
 
   const [remainingMinutes, setRemainingMinutes] = useState(0);
@@ -158,7 +155,7 @@ const calculateRemainingTime = () => {
       setRemainingSeconds(updatedRemainingTimeInSec % 60);
       // If the remaining time is less than or equal to 0, automatically submit the exam
       if (updatedRemainingTimeInSec <= 0) {
-        handleSubmit();
+        navigate(`/examOver`,{ state: {ExamName } });
       }
 
 //checking if exam is started or not
@@ -183,14 +180,17 @@ useEffect( ()=>{
         const examScheduleTime = new Date(examSchedule);
         const istOptions = { timeZone: 'Asia/Kolkata' };
         const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
-        console.log(adminId+ " admin Id from exam panel");
-      const responseActiveExam=await axios.post(`http://localhost:8080/api/postActiveExamData`,{
-        examDate:istDateString,
-        examName:ExamName,
-        studentName:studentName,
-        studentPrn:studentPrn,
-        adminId:adminId
-      });
+        try {
+          const responseActiveExam = await axios.post(`${BASE_URL}/postActiveExamData`, {
+            examDate: istDateString,
+            examName: ExamName,
+            studentName: studentName,
+            studentPrn: studentPrn,
+            adminId: adminId
+          });
+        } catch (error) {
+          console.error('Error occurred:', error);
+        }
     }
     setDataSent(true);
       }catch(e){
@@ -199,12 +199,11 @@ useEffect( ()=>{
       }
       addToActiveExam();
 
-  console.log("ok");
         let count = 0;
         const intervalId = setInterval(() => {
           handlerefreshcam();
           count++;
-          console.log(count);
+          
           if (count === 3) {
             clearInterval(intervalId);
           }
@@ -214,23 +213,20 @@ useEffect( ()=>{
 
 
 //getting media of user
-
-
-  let Submitcount=5;
 useEffect(() => {
 
   if (!timeRemainingToStart) {
     return; 
   }
-
     const requestMediaPermissions = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+          videoRef.current.srcObject = stream.stream[0];
         }    
         setCameraAllowed(true);
         setMicrophoneAllowed(true);
+      
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const analyser = audioContext.createAnalyser();
         const microphone = audioContext.createMediaStreamSource(stream);
@@ -245,8 +241,9 @@ useEffect(() => {
           const averageAmplitude = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
           const noiseThreshold = 444; // change this on need
           setIsNoiseHigh(averageAmplitude > noiseThreshold);
+         
           if (averageAmplitude > noiseThreshold) {
-            console.log("yes noise is high");
+            
             setNoiseWarningCount((prevCount) => prevCount + 1);
           }
 
@@ -273,7 +270,8 @@ useEffect(() => {
       }
     };
     checkPermissionsAndInitialize();
-  }, []);
+  }, [isFullScreen]);
+
 
 
   //if user leaves page
@@ -290,14 +288,14 @@ useEffect(() => {
         setWarningCount((prevCount) => prevCount + 1);
         alert('Warning!!!!  Exam Tab was not open');
         try{
-          const deletActiveStudent=axios.delete(`http://localhost:8080/api/deleteActiveExamByStudentPrn/${studentPrn}`);
+          const deletActiveStudent=axios.delete(`${BASE_URL}/deleteActiveExamByStudentPrn/${studentPrn}`);
           }catch(e){
           console.log(e);
           }
         // changes made
         const timeoutId = setTimeout(() => {
           handleSubmit();
-        }, 4000);
+        }, 5000);
         const clearTimer = () => {
           clearTimeout(timeoutId);
         };
@@ -358,14 +356,14 @@ useEffect(() => {
       }
       return count;
     }, 0);
-    console.log(submitCount.current + " submitCount above if");
+   
 if(submitCount.current<=0){
 try{
-  console.log("ok result");
+ 
   const examScheduleTime = new Date(examSchedule);
   const istOptions = { timeZone: 'Asia/Kolkata' };
   const istDateString = examScheduleTime.toLocaleString('en-US', istOptions);
-const saveStudentData=axios.post(`http://localhost:8080/api/postStudentResultData`,{
+const saveStudentData=axios.post(`${BASE_URL}/postStudentResultData`,{
   studentName:studentName,
   studentPrn:studentPrn,
   studentResultDownloadLink:"abc/test",
@@ -373,17 +371,18 @@ const saveStudentData=axios.post(`http://localhost:8080/api/postStudentResultDat
   examName:ExamName,
   examDate:istDateString,
   examId:examId,
-  adminId
+  adminId,
+  examId
 })
 submitCount.current=1;
-console.log(submitCount.current + " submitCount");
+
 }catch(e){
   console.log(e);
 }
 }
 
 try{
-const deletActiveStudent=axios.delete(`http://localhost:8080/api/deleteActiveExamByStudentPrn/${studentPrn}`);
+const deletActiveStudent=axios.delete(`${BASE_URL}/deleteActiveExamByStudentPrn/${studentPrn}`);
 }catch(e){
 console.log(e);
 }
@@ -434,7 +433,7 @@ console.log(e);
     if (!timeRemainingToStart) {
       return; 
     }
-
+    try{
     const initializeCameraAndFaceMesh = async () => {
       const faceMesh = new FaceMesh({
         locateFile: (file) => {
@@ -447,9 +446,7 @@ console.log(e);
         minDetectionConfidence: 0.5,
         minTrackingConfidence: 0.5,
       });
-
       faceMesh.onResults(onResults);
-
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setCameraAllowed(true);
@@ -472,6 +469,7 @@ console.log(e);
         });
 
         camera.start();
+        console.log(isCameraAllowed + " camera allownece");
       } catch (error) {
         console.error('Error accessing camera and microphone:', error);
       }
@@ -480,11 +478,21 @@ console.log(e);
     if (webcamRef.current) {
       initializeCameraAndFaceMesh();
     }
-  }, [refreshcam]);
+  }catch(e){
+    console.log(e);
+  }
+  
+  }, [refreshcam,isFullScreen]);
+
+
 
   const timerRef = useRef(null);
   const timerRef2 = useRef(null);
+  const timerCounter = useRef(null);
+  const timerCounter2 = useRef(null);
   const onResults = (results) => {
+    
+    try{
     const videoWidth = webcamRef.current.video.videoWidth;
     const videoHeight = webcamRef.current.video.videoHeight;
   
@@ -502,7 +510,6 @@ console.log(e);
       canvasElement.height
     );
 
-    
     if (results.multiFaceLandmarks) {
       if(results.multiFaceLandmarks.length>1){
         setTwoFaceWarning(true);  
@@ -512,12 +519,24 @@ console.log(e);
             timerRef2.current = null;
           }, 10000); 
         }
+        if(!timerCounter2.current){
+          timerCounter2.current= setInterval(()=>{
+            setTimeCounter((pre)=>pre-1);
+          },1000);
+        }
+
       }else{
         setTwoFaceWarning(false);
         if (timerRef2.current) {
           clearTimeout(timerRef2.current);
           timerRef2.current = null;
         }
+        if(timerCounter2.current){
+          clearInterval(timerCounter2.current);
+          setTimeCounter(10);
+          timerCounter2.current=null;
+      }
+
       }
 
       if(results.multiFaceLandmarks.length<=0){
@@ -526,34 +545,50 @@ console.log(e);
           timerRef.current = setTimeout(() => {
             handleSubmit();
             timerRef.current = null;
-          }, 10000); 
+          }, 10000);
+
         }
+        if(!timerCounter.current){
+          timerCounter.current= setInterval(()=>{
+            setTimeCounter((pre)=>pre-1);
+          },1000);
+        }
+       
+       
       }else{
         setOneFaceWarning(false);
         if (timerRef.current) {
           clearTimeout(timerRef.current);
           timerRef.current = null;
         }
+        if(timerCounter.current){
+          clearInterval(timerCounter.current);
+          setTimeCounter(10);
+          timerCounter.current=null;
+      }
       }
 
     }
+  }catch(e){
+console.log(e);
+  }
   };
 
 
   useEffect(()=>{
     const resultOfstudent=async()=>{
       try{
-    const res=await axios.get(`http://localhost:8080/api/getStudentResultDataByStudentPrn/${studentPrn}`);
-    console.log("ok student result present");
+    const res=await axios.get(`${BASE_URL}/getStudentResultDataByStudentPrn/${studentPrn}`);
+    
     if(res.data.examId==examId){
       navigate(`/studentLogin/${examId}`);
     }
   }catch(e){
-    console.log("no data");
+   console.log(e);
   }
     }
     resultOfstudent();
-    },[warningCount,isStudentLoggedIn,isFullScreen,handleSubmit]);
+    },[]);
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -562,10 +597,13 @@ return (
    
     {!timeRemainingToStart ? (
    isNaN(timeOfStartingExam) ? (<div className='examNotStarted'>There is no exam</div>):(
-    <div className='examNotStarted'>Exam Is Not Started Yet !!!! come back in {timeOfStartingExam} Minutes</div>
+    <div className='examNotStarted'>Exam Is Not Started Yet !!!! come back in {timeOfStartingExam+1} Minutes</div>
    )   
     ):(  
     <div className={`exam-panel ${isFullScreen ? 'full-screen' : ''}`}>
+      
+    {isCameraAllowed ?(<div></div>):(<div> Please allow camera</div>)}
+
       {isFullScreen ? (
         <div>
         <div className="header">
@@ -596,10 +634,10 @@ return (
       </div>
 
 {
-  OneFaceWarning && (<div className='noFace'>Warning!!!!!!! No Face on camera</div>) 
+  OneFaceWarning && (<div className='noFace'>Warning!!!!!!! No Face on camera {timeCounter}</div>) 
 }
 {
-    TwoFaceWarning && (<div className='noFace'>Warning!!!!!!! Multiple Faces on camera</div>) 
+    TwoFaceWarning && (<div className='noFace'>Warning!!!!!!! Multiple Faces on camera {timeCounter}</div>) 
 }
 
 
@@ -672,6 +710,7 @@ return (
       ) : (
         <div className='before-screen'>     
         <div className="fullscreen-button">
+        <div className='before-fullscreen-Warning'>Warning!! : Exam will get auto submitted in {timeCounter2} seconds, Please click on full screen</div>
         <br></br>
           <button  onClick={handleFullScreenClick}>Enter Full Screen</button>  
           <p> Click on the designated "Enter Full Screen" button to optimize your exam view. Failure to do so may affect your ability to start the exam. Additionally, grant permission for both the camera and microphone when prompted, as these are essential for exam monitoring.

@@ -8,7 +8,7 @@ const HelpComponent = () => {
             <div className="help-container1">
                 <div className="Help1">
                     <h2 className="Help-h1">Contact Details</h2>
-                    For new Admin Registration or To get a new password, Contact on Email Provided below:<br />
+                    For new admin registration or to get a new password, Contact on email provided below:<br />
                     (If you want to get a new password kindly write Name, Email and UserName in mail box and wait for 24 hours for password. 
                    <span className='contact-note'> Please contact us only by using Gmail id that you have given us during  admin registration. </span>
                     )

@@ -3,10 +3,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../AuthContext";
 import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
+import BASE_URL from '../ApiConfig';
 
 
 const LoginForm = () => {
-  const [adminEmail, setAdminEmail] = useState('');
+  let [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginMessage, setLoginMessage] = useState('');
@@ -23,13 +24,15 @@ const { login } = useAuth();
     e.preventDefault();
 setLoad(true);
     try {
-      const response = await axios.put('http://localhost:8080/api/adminLogin', {
+      adminEmail=adminEmail.trim();
+console.log(adminEmail + " without trim");
+      const response = await axios.put(`${BASE_URL}/adminLogin`, {
         adminEmail,
         adminPassword,
       });
 setLoad(false);
 
-      if (response.data == 0) {
+      if (response.data === 0) {
         console.log("wrong");
         setLoginMessage('Wrong admin or password');
       } else {
@@ -39,7 +42,6 @@ setLoad(false);
         const adminName=response.data.adminName;
         localStorage.setItem('jwtToken', jwtToken);
         login();
-      console.log(jwtToken + "token ");
         navigate("/adminhomepage",{ state: {adminEmail,adminId,adminName} });
       }
     } catch (error) {

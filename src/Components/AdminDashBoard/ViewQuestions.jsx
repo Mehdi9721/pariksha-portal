@@ -3,14 +3,14 @@ import '../../Style/AdminPagesStyle/StyleViewQuestions.css';
 import axios from 'axios';
 import refreshicon from '../../ImagesAndLogo/refresh.png';
 import gif from "../../ImagesAndLogo/loading-loading-forever.gif";
-
+import BASE_URL from '../ApiConfig'
 function ViewQuestions({adminEmail}) {
   const [questionsData, setQuestionsData] = useState([]);
   const [searchExamId, setSearchExamId] = useState('');
   const [foundQuestions, setFoundQuestions] = useState({});
   const [searchedQuestions,setsearchedQuestions]=useState([]);
   const [load,setLoad]=useState(true);
-
+ 
   useEffect(() => {
     handleQuestionsData();
   }, [questionsData,searchedQuestions]);
@@ -23,7 +23,7 @@ function ViewQuestions({adminEmail}) {
     const confirmDelete = window.confirm('Do you want to delete all questions?');
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8080/api/deleteAllQuestions/${adminEmail}`,config);
+        await axios.delete(`${BASE_URL}/deleteAllQuestions/${adminEmail}`,config);
         handleQuestionsData();
       } catch (e) {
         console.log(e);
@@ -35,7 +35,7 @@ function ViewQuestions({adminEmail}) {
 
   const handleQuestionsData = async () => {
     try {
-      const apiUrl =`http://localhost:8080/api/getAllQuestions/${adminEmail}`;
+      const apiUrl =`${BASE_URL}/getAllQuestions/${adminEmail}`;
 
       const response = await axios.get(apiUrl,config);
       setQuestionsData(response.data);
@@ -49,7 +49,7 @@ function ViewQuestions({adminEmail}) {
     setLoad(true);
     const examIdToSearch = searchExamId.trim() === '' ? '' : searchExamId;
     setSearchExamId(examIdToSearch);
-    const sq=await axios.get(`http://localhost:8080/api/getAllQuestionsByExamId/${searchExamId}`,config);
+    const sq=await axios.get(`${BASE_URL}/getAllQuestionsByExamId/${searchExamId}`,config);
     setsearchedQuestions(sq.data);
     setLoad(false);
   };
@@ -64,7 +64,7 @@ function ViewQuestions({adminEmail}) {
 
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8080/api/deleteQuestionById/${id}`,config);
+        await axios.delete(`${BASE_URL}/deleteQuestionById/${id}`,config);
       } catch (error) {
         console.error('Error deleting question:', error);
       }
@@ -74,7 +74,7 @@ function ViewQuestions({adminEmail}) {
     const confirmDelete = window.confirm(`Do you want to delete the questions?`);
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8080/api/deleteQuestionByExamId/${searchExamId}`,config);
+        await axios.delete(`${BASE_URL}/deleteQuestionByExamId/${searchExamId}`,config);
         setsearchedQuestions([]);
       } catch (error) {
         console.error('Error deleting question:', error);
@@ -83,6 +83,7 @@ function ViewQuestions({adminEmail}) {
   }
   return (
     <>
+    <div className='xx'>
       <div className='view-question'>
         <div className='ResultViewTitle'> <h4><b> View Questions </b></h4></div>
         <div className='searchBox'>
@@ -176,6 +177,7 @@ function ViewQuestions({adminEmail}) {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
     </>
   );

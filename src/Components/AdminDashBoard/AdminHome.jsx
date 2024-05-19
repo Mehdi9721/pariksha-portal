@@ -16,12 +16,19 @@ function AdminHome() {
     const location = useLocation();
     const { state } = location;
     const { adminEmail,adminId,adminName} = state || {};
-
     const [activeButton, setActiveButton] = useState(null);
     const [showBackgroundImage, setShowBackgroundImage] = useState(true);
     const { isLoggedIn,logout } = useAuth();
     if (!isLoggedIn) {
-        return null;
+        return (
+            <div className='noLogin'>
+            <h4> Please login again.......
+            </h4>
+            <div> 
+            <button className='buttonHome' onClick={()=>{navi("/")}}> Home </button>
+            </div>
+            </div>
+        );
       }
     const handleButtonClick = (buttonName) => {
         setActiveButton(buttonName);
@@ -59,7 +66,7 @@ const handleLogOut=()=>{
         <button   style={{ margin: '5px' }} className={activeButton === 'AddStu' ? 'active' : ''} onClick={() => { handleButtonClick('AddStu'); }}>Add Students</button>
         <button  style={{ margin: '5px' }} className={activeButton === 'ViewStudent' ? 'active' : ''} onClick={() => { handleButtonClick('ViewStudent'); }}>  View Students</button>
         <button  style={{ margin: '5px' }} className={activeButton === 'ViewResult' ? 'active' : ''} onClick={() => { handleButtonClick('ViewResult'); }}>  View Results</button>
-        <button  style={{ margin: '5px' }}   className={activeButton === 'LogOut' ? 'active' : ''} onClick={() => { handleLogOut(); }}> LogOut</button>
+        <button  style={{ margin: '5px' }}   className={activeButton === 'LogOut' ? 'active' : ''} onClick={() => { handleLogOut(); }}> Logout</button>
                    
                 </div>
                  <div className='container2'>

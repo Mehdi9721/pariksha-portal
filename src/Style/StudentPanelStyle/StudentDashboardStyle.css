@@ -32,8 +32,8 @@
 }
 
 .StudentDashboard input {
-  padding: 8px;
-  margin-bottom: 15px;
+  padding: 5px;
+  margin-bottom: 13px;
   width: 100%;
   box-sizing: border-box;
   border-radius: 11px;
@@ -107,4 +107,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.loadin{
+  color: white;
+  font-weight: 700;
 }

@@ -10,6 +10,7 @@ export const OwnerAuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    localStorage.removeItem("jwtToken");
     setLoggedIn(false);
   };
 
